@@ -1,0 +1,26 @@
+# Python bytecode and tool caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Packaging and virtual environments
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+
+# Editors and OS files
+.idea/
+.vscode/
+.DS_Store
+
+# NOTE: data/ is intentionally tracked, including raw downloads under
+# data/raw/ and normalised snapshots under data/normalized/.  Do not add
+# data/ to this file.
