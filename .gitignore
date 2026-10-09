@@ -21,6 +21,6 @@ venv/
 .vscode/
 .DS_Store
 
-# NOTE: data/ is intentionally tracked, including raw downloads under
-# data/raw/ and normalised snapshots under data/normalized/.  Do not add
-# data/ to this file.
+# NOTE: data/ and reports/ are intentionally tracked: raw downloads under
+# data/raw/, normalised snapshots under data/normalized/, the manifest, and
+# the generated reports (latest.* and daily/).  Do not add them to this file.

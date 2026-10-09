@@ -1,0 +1,152 @@
+# daily-holdings: fetch yesterday's (T-1) holdings of SOXX, QQQ and IGV,
+# analyse them and commit data/ and reports/ back to the branch.
+#
+# Schedule (all times UTC; GitHub cron is UTC only):
+#   14:10 Mon-Fri  first attempt.  The issuers publish T-1 holdings by about
+#                  13:10 UTC on trading day T (verified 2026-10-09), so this
+#                  runs an hour after that.
+#   18:10 Mon-Fri  retry.  The run is idempotent: a date already stored under
+#                  data/normalized/<ETF>/ is skipped, the manifest is left
+#                  alone when nothing changed, and the reports are rewritten
+#                  only when some ETF stored a new snapshot (or --force was
+#                  given, or reports/latest.* are missing).  So the second
+#                  run only does work, and only commits, when the first one
+#                  failed or the data was late.
+# Cron fires on US market holidays too; the issuers then serve the previous
+# session again and the run stores nothing, writes nothing and exits 0.
+# Scheduled runs only ever execute on the repository's default branch.
+#
+# Manual runs (workflow_dispatch) accept an optional ETF, an as-of date, a
+# backfill range and a force flag.  When backfill_start is given the job runs
+# `backfill` for one ETF instead of the daily `run`.
+#
+# Whatever was fetched successfully is committed BEFORE the job is marked
+# failed, so a red run (exit code 2 or 3 from the tracker) still keeps the
+# data of the ETFs that worked.  The commit step also runs after a timeout
+# or cancellation (all files are written atomically, so a partial backfill
+# is safe to keep and the next run continues from it).  `git pull --rebase`
+# before the push lets a run land next to commits pushed meanwhile; a failed
+# rebase is aborted before the retry so the loop never fights a half-done
+# rebase.  No secrets are needed: the default GITHUB_TOKEN with
+# `contents: write` can push to the branch.
+
+name: daily-holdings
+
+on:
+  schedule:
+    - cron: '10 14 * * 1-5'
+    - cron: '10 18 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      etf:
+        description: 'ETF ticker to process (empty = SOXX, QQQ and IGV)'
+        required: false
+        default: ''
+      as_of:
+        description: 'Holdings date YYYY-MM-DD (empty = latest)'
+        required: false
+        default: ''
+      backfill_start:
+        description: 'Backfill start date YYYY-MM-DD (requires etf and backfill_end)'
+        required: false
+        default: ''
+      backfill_end:
+        description: 'Backfill end date YYYY-MM-DD (inclusive)'
+        required: false
+        default: ''
+      force:
+        description: 'Re-download dates that are already stored'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+# The 18:10 retry (or a manual run) waits for a still-running job instead of
+# racing it for the push.
+concurrency:
+  group: daily-holdings
+  cancel-in-progress: false
+
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install test dependencies
+        run: python3 -m pip install --quiet -r requirements-dev.txt
+
+      - name: Run unit tests
+        run: python3 -m pytest -q
+
+      # Exit codes of the tracker: 0 ok or already up to date, 2 some ETF
+      # failed (the others are stored), 3 nothing analysable, 1 usage error
+      # or crash.  The code is captured here and turned into a job failure
+      # only after the commit step below has saved what did work.
+      - name: Fetch, analyse and report
+        id: run
+        env:
+          INPUT_ETF: ${{ github.event.inputs.etf }}
+          INPUT_AS_OF: ${{ github.event.inputs.as_of }}
+          INPUT_BACKFILL_START: ${{ github.event.inputs.backfill_start }}
+          INPUT_BACKFILL_END: ${{ github.event.inputs.backfill_end }}
+          INPUT_FORCE: ${{ github.event.inputs.force }}
+        run: |
+          set +e
+          args=()
+          if [ -n "$INPUT_ETF" ]; then args+=(--etf "$INPUT_ETF"); fi
+          if [ "$INPUT_FORCE" = "true" ]; then args+=(--force); fi
+          if [ -n "$INPUT_BACKFILL_START" ]; then
+            if [ -z "$INPUT_ETF" ] || [ -z "$INPUT_BACKFILL_END" ]; then
+              echo "backfill needs etf, backfill_start and backfill_end" >&2
+              exit_code=1
+            else
+              python3 -m etf_tracker backfill --root . --start "$INPUT_BACKFILL_START" --end "$INPUT_BACKFILL_END" "${args[@]}"
+              exit_code=$?
+            fi
+          else
+            if [ -n "$INPUT_AS_OF" ]; then args+=(--as-of "$INPUT_AS_OF"); fi
+            python3 -m etf_tracker run --root . "${args[@]}"
+            exit_code=$?
+          fi
+          echo "tracker exit code: $exit_code"
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Commit data and reports
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for d in data reports; do
+            if [ -d "$d" ]; then git add -A -- "$d"; fi
+          done
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+            exit 0
+          fi
+          summary=$(python3 -c "import json,sys; m=json.load(open('data/manifest.json')); print(', '.join(f\"{k} {v.get('latest_as_of')}\" for k,v in sorted(m.get('etfs',{}).items())))" 2>/dev/null || echo "holdings update")
+          git commit -m "data: $summary" -m "Automated daily-holdings run ${GITHUB_RUN_ID}"
+          for attempt in 1 2 3; do
+            if git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME"; then
+              exit 0
+            fi
+            echo "push attempt $attempt failed, retrying"
+            git rebase --abort 2>/dev/null || true
+            sleep 10
+          done
+          echo "could not push after 3 attempts" >&2
+          exit 1
+
+      - name: Fail the job when the tracker reported an error
+        if: steps.run.outputs.exit_code != '0'
+        run: |
+          echo "tracker exit code ${{ steps.run.outputs.exit_code }} (2 = some ETF failed, 3 = nothing analysed, 1 = usage error or crash)" >&2
+          exit 1

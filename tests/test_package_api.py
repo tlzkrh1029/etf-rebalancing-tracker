@@ -13,7 +13,7 @@ from etf_tracker import bridge, decompose, holdings, market_calendar, rules
 
 
 def test_version():
-    assert etf_tracker.__version__ == "0.1.0"
+    assert etf_tracker.__version__ == "0.2.0"
     assert "__version__" in etf_tracker.__all__
 
 
@@ -31,9 +31,52 @@ def test_submodule_attributes_are_modules_not_shadowed():
         ("rules", rules),
         ("decompose", decompose),
         ("bridge", bridge),
+        ("http", etf_tracker.http),
+        ("sources", etf_tracker.sources),
+        ("store", etf_tracker.store),
+        ("analysis", etf_tracker.analysis),
+        ("report", etf_tracker.report),
+        ("pipeline", etf_tracker.pipeline),
     ]:
         assert inspect.ismodule(getattr(etf_tracker, name)), name
         assert getattr(etf_tracker, name) is sys.modules[f"etf_tracker.{name}"], name
+
+
+def test_data_layer_entry_points_are_reexported():
+    """0.2.0: the daily job, backfill, analysis, reports and the fetch registry."""
+    from etf_tracker import analysis, pipeline, report, sources, store
+
+    assert etf_tracker.run_daily is pipeline.run_daily
+    assert etf_tracker.run_backfill is pipeline.run_backfill
+    assert etf_tracker.run_fetch is pipeline.run_fetch
+    assert etf_tracker.run_analysis is pipeline.run_analysis
+    assert etf_tracker.fetch_one is pipeline.fetch_one
+    assert etf_tracker.SOURCES is pipeline.SOURCES
+    assert set(etf_tracker.SOURCES) == {"SOXX", "QQQ", "IGV"}
+    assert etf_tracker.analyze_all is analysis.analyze_all
+    assert etf_tracker.analyze_etf is analysis.analyze_etf
+    # The top-level write_reports is the real writer, not the pipeline wrapper.
+    assert etf_tracker.write_reports is report.write_reports
+    assert etf_tracker.render_markdown is report.render_markdown
+    assert etf_tracker.ingest is store.ingest
+    assert etf_tracker.FetchResult is sources.FetchResult
+    assert etf_tracker.STATUS_OK == "ok"
+    for name in ("run_daily", "run_backfill", "analyze_all", "write_reports", "SOURCES"):
+        assert name in etf_tracker.__all__, name
+
+
+def test_importing_the_package_does_not_import_issuer_modules():
+    """The pipeline resolves sources lazily; the network code stays out of
+    ``import etf_tracker`` so that unit tests and the report step never touch
+    it by accident."""
+    import subprocess
+
+    code = (
+        "import sys, etf_tracker; "
+        "print(sorted(m for m in sys.modules if m.startswith('etf_tracker.sources.')))"
+    )
+    out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=True)
+    assert out.stdout.strip() == "[]", out.stdout
 
 
 def test_decompose_function_is_exposed_as_decompose_snapshots():

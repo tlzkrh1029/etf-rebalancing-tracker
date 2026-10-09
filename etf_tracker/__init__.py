@@ -19,10 +19,30 @@ dates are ``datetime.date`` everywhere):
   decomposition of weight changes between two snapshots.
 * :mod:`etf_tracker.bridge` - adapters from snapshots to rule constituents.
 
+Data layer and daily job (0.2.0):
+
+* :mod:`etf_tracker.http` - minimal urllib GET with the neutral project
+  User-Agent (issuer edges reject browser and crawler UAs).
+* :mod:`etf_tracker.sources` - ``FetchResult`` protocol; the issuer modules
+  :mod:`etf_tracker.sources.ishares` (SOXX, IGV) and
+  :mod:`etf_tracker.sources.invesco` (QQQ) are imported lazily by the
+  pipeline so importing the package never touches the network code.
+* :mod:`etf_tracker.store` - ``data/raw``, ``data/normalized`` and
+  ``data/manifest.json`` on disk; :func:`ingest` is idempotent per date.
+* :mod:`etf_tracker.analysis` - :func:`analyze_etf` / :func:`analyze_all`,
+  the JSON-ready daily analysis dictionary.
+* :mod:`etf_tracker.report` - Korean markdown and JSON reports under
+  ``reports/``.
+* :mod:`etf_tracker.pipeline` - :func:`run_daily`, :func:`run_backfill`,
+  :func:`run_fetch`, :func:`run_analysis` and the fetch registry
+  :data:`SOURCES` (ETF ticker -> source module).
+* :mod:`etf_tracker.cli` - ``python3 -m etf_tracker [run|fetch|backfill|analyze|report]``.
+
 The main entry points are re-exported here.  Note that the *function*
 ``etf_tracker.decompose.decompose`` is exposed at the top level as
 :func:`decompose_snapshots` so that ``etf_tracker.decompose`` keeps naming
-the submodule.
+the submodule, and that :func:`write_reports` is the report module's writer
+(``etf_tracker.pipeline.write_reports`` is a thin wrapper around it).
 """
 
 from __future__ import annotations
@@ -100,7 +120,51 @@ from etf_tracker.rules import (
     rules_for,
 )
 
-__version__ = "0.1.0"
+# Data layer and daily job.  These come after the analysis core because
+# they import from it; none of them imports the issuer modules eagerly.
+from etf_tracker import http, sources, store, analysis, report, pipeline
+from etf_tracker.sources import (
+    STATUS_ERROR,
+    STATUS_NO_DATA,
+    STATUS_OK,
+    STATUS_UNSUPPORTED,
+    FetchResult,
+)
+from etf_tracker.store import (
+    IngestOutcome,
+    has_snapshot,
+    ingest,
+    load_manifest,
+    manifest_path,
+)
+from etf_tracker.analysis import (
+    ANALYSIS_KEYS,
+    NoSnapshotError,
+    analyze_all,
+    analyze_etf,
+)
+from etf_tracker.report import (
+    render_markdown,
+    render_summary_line,
+    report_paths,
+    write_reports,
+)
+from etf_tracker.pipeline import (
+    DEFAULT_ETFS,
+    EXIT_FAILED,
+    EXIT_NOTHING_ANALYSED,
+    EXIT_OK,
+    SOURCES,
+    DailyOutcome,
+    fetch_one,
+    resolve_source,
+    run_analysis,
+    run_backfill,
+    run_daily,
+    run_fetch,
+)
+
+__version__ = "0.2.0"
 
 __all__ = [
     "__version__",
@@ -110,6 +174,12 @@ __all__ = [
     "rules",
     "decompose",
     "bridge",
+    "http",
+    "sources",
+    "store",
+    "analysis",
+    "report",
+    "pipeline",
     # market_calendar
     "SPECIAL_CLOSURES",
     "SPECIAL_OPENS",
@@ -176,4 +246,39 @@ __all__ = [
     "resolve_index_id",
     "constituents_from_snapshot",
     "apply_caps_to_snapshot",
+    # sources
+    "STATUS_OK",
+    "STATUS_NO_DATA",
+    "STATUS_ERROR",
+    "STATUS_UNSUPPORTED",
+    "FetchResult",
+    # store
+    "IngestOutcome",
+    "ingest",
+    "has_snapshot",
+    "load_manifest",
+    "manifest_path",
+    # analysis
+    "ANALYSIS_KEYS",
+    "NoSnapshotError",
+    "analyze_etf",
+    "analyze_all",
+    # report
+    "render_markdown",
+    "render_summary_line",
+    "report_paths",
+    "write_reports",
+    # pipeline
+    "DEFAULT_ETFS",
+    "SOURCES",
+    "EXIT_OK",
+    "EXIT_FAILED",
+    "EXIT_NOTHING_ANALYSED",
+    "DailyOutcome",
+    "resolve_source",
+    "fetch_one",
+    "run_fetch",
+    "run_backfill",
+    "run_analysis",
+    "run_daily",
 ]

@@ -22,7 +22,7 @@ import zlib
 from dataclasses import dataclass, field
 
 DEFAULT_USER_AGENT = (
-    "etf-rebalancing-tracker/0.1 (+https://github.com/tlzkrh1029/etf-rebalancing-tracker)"
+    "etf-rebalancing-tracker/0.2 (+https://github.com/tlzkrh1029/etf-rebalancing-tracker)"
 )
 DEFAULT_TIMEOUT = 60.0
 
