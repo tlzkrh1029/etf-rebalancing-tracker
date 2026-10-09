@@ -121,7 +121,7 @@ python3 -m etf_tracker backfill --root . --etf SOXX --start 2026-09-01 --end 202
 python3 -m etf_tracker --help                       # 하위 명령과 옵션(한국어 도움말)
 ```
 
-공통 옵션: `--root`(기본 `.`), `--etf`(반복 가능, 생략 시 SOXX·QQQ·IGV), `--as-of YYYY-MM-DD`(특정 날짜 요청), `--force`(저장된 날짜도 덮어쓰기), `--today`(분석 기준일, 생략 시 UTC 오늘), `--log-level`, `--json`.
+공통 옵션: `--root`(기본 `.`), `--etf`(반복 가능, 생략 시 SOXX·QQQ·IGV. 수집 대상만 제한하며, 분석과 리포트 파일은 저장소에 스냅샷이 있는 모든 ETF를 항상 포함합니다), `--as-of YYYY-MM-DD`(특정 날짜 요청), `--force`(저장된 날짜도 덮어쓰기), `--today`(분석 기준일, 생략 시 UTC 오늘), `--log-level`, `--json`.
 
 종료 코드: `0` 모든 ETF가 정상이거나 이미 최신, `2` 어떤 ETF의 수집·분석·리포트가 실패(성공한 ETF의 데이터는 이미 저장됨), `3` 분석할 스냅샷이 하나도 없음, `1` 사용법 오류(인자 구문 오류, backfill에서 `--etf`가 하나가 아니거나 종료일이 시작일보다 앞인 경우) 또는 예외로 중단. `no_data`(비거래일, 미공개)와 `unsupported`(Invesco 과거 날짜)는 실패로 보지 않고 리포트의 데이터 경고로만 남깁니다.
 

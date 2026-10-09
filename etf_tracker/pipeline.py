@@ -64,10 +64,12 @@ from typing import Any
 from etf_tracker import market_calendar
 from etf_tracker.analysis import analyze_all, utc_today
 from etf_tracker.sources import STATUS_ERROR, STATUS_UNSUPPORTED, FetchResult
+from etf_tracker.holdings import list_snapshots
 from etf_tracker.store import REASON_ALREADY_STORED, IngestOutcome, has_snapshot, ingest
 
 __all__ = [
     "DEFAULT_ETFS",
+    "report_universe",
     "SOURCES",
     "EXIT_OK",
     "EXIT_FAILED",
@@ -322,6 +324,28 @@ def run_backfill(
     return outcomes
 
 
+def report_universe(root: str | os.PathLike[str], requested: Iterable[str]) -> list[str]:
+    """ETFs that the analysis and the report files must cover.
+
+    Fetching may be restricted (``--etf SOXX``), but ``reports/latest.*``
+    describe every tracked ETF, so a restricted run must never shrink them.
+    The universe is every :data:`DEFAULT_ETFS` member that already has a
+    stored snapshot under ``root`` plus whatever was requested, in
+    :data:`DEFAULT_ETFS` order followed by any extra requested tickers.
+    """
+    req = [_etf_key(e) for e in requested]
+    universe = [e for e in DEFAULT_ETFS if e in req or _has_any_snapshot(root, e)]
+    universe.extend(e for e in req if e not in universe)
+    return universe
+
+
+def _has_any_snapshot(root: str | os.PathLike[str], etf: str) -> bool:
+    try:
+        return bool(list_snapshots(root, etf))
+    except (OSError, ValueError):
+        return False
+
+
 def run_analysis(
     root: str | os.PathLike[str],
     etfs: Iterable[str],
@@ -414,8 +438,11 @@ def run_daily(
 ) -> DailyOutcome:
     """Fetch, analyse and report; never raises for a single ETF's failure.
 
-    One summary line per ETF is logged.  See the module docstring for the
-    exit codes.
+    Only ``etfs`` are fetched, but the analysis and the report files cover
+    :func:`report_universe` (every tracked ETF with stored data plus
+    ``etfs``), so ``--etf SOXX`` never shrinks ``reports/latest.*``.  One
+    summary line per analysed ETF is logged.  See the module docstring for
+    the exit codes.
     """
     etf_list = [_etf_key(e) for e in etfs]
     outcome = DailyOutcome()
@@ -427,8 +454,13 @@ def run_daily(
             failed.append(o.etf)
             outcome.errors.append(f"{o.etf}: fetch {o.reason}")
 
-    outcome.analysis = run_analysis(root, etf_list, today, now=now)
+    analysis_etfs = report_universe(root, etf_list)
+    outcome.analysis = run_analysis(root, analysis_etfs, today, now=now)
     for etf, message in outcome.analysis.get("errors", {}).items():
+        if etf not in etf_list:
+            # Not requested in this run: keep it out of the exit code, but say so.
+            log.warning("%s: analysis skipped (%s)", etf, message)
+            continue
         if etf not in failed:
             failed.append(etf)
         outcome.errors.append(f"{etf}: analysis {message}")
@@ -455,7 +487,7 @@ def run_daily(
     else:
         outcome.exit_code = EXIT_OK
 
-    _log_summary(outcome, etf_list)
+    _log_summary(outcome, analysis_etfs)
     return outcome
 
 

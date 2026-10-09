@@ -40,6 +40,7 @@ from typing import Any, NoReturn
 from etf_tracker import pipeline
 from etf_tracker.pipeline import (
     DEFAULT_ETFS,
+    report_universe,
     EXIT_FAILED,
     EXIT_NOTHING_ANALYSED,
     EXIT_OK,
@@ -248,7 +249,8 @@ def _cmd_analyze(ns: argparse.Namespace, out: Any) -> int:
 
 
 def _cmd_report(ns: argparse.Namespace, out: Any) -> int:
-    analysis = run_analysis(Path(ns.root), _etfs(ns), today=ns.today)
+    # Report files always describe every tracked ETF with stored data.
+    analysis = run_analysis(Path(ns.root), report_universe(Path(ns.root), _etfs(ns)), today=ns.today)
     report_failed = False
     if analysis.get("etfs"):
         try:
