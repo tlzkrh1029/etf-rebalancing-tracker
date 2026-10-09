@@ -1,29 +1,48 @@
-probe run (UTC): 20261009T124227Z
-runner egress ip: 20.64.204.250
+probe v2 run (UTC): 20261009T140156Z
+runner egress ip: 20.84.158.48
+curl: curl 8.5.0 (x86_64-pc-linux-gnu) libcurl/8.5.0 OpenSSL/3.0.13 zlib/1.3 brotli/1.1.0 zstd/1.5.5 libidn2/2.3.7 libpsl/0.21.2 (+libidn2/2.3.7) libssh/0.10.6/openssl/zlib nghttp2/1.59.0 librtmp/2.3 OpenLDAP/2.6.10
 
-== SOXX_ishares
-   url:   https://www.ishares.com/us/products/239705/ishares-phlx-semiconductor-etf/1467271812596.ajax?fileType=csv&fileName=SOXX_holdings&dataType=fund
-   http:  200  type: text/csv;charset=UTF-8  bytes: 1480242  looks-like: HTML
-   title: <title>iShares Semiconductor ETF | SOXX</title>
+== SOXX_blackrock_fund_document
+   http: 200  type: text/csv  bytes: 6397  looks-like: CSV
+   as-of line: Fund Holdings as of,"Oct 08, 2026"
+   holding rows: 34
+     | Ticker,Name,Sector,Asset Class,Market Value,Weight (%),Notional Value,Quantity,Price,Location,Exchange,Currency,FX Rate,Market Currency,Accrual Date
+     | "AMD","ADVANCED MICRO DEVICES","Information Technology","Equity","4,386,401,421.20","9.50","4,386,401,421.20","7,067,090.00","620.68","United States","NASDAQ","
 
-== IGV_ishares
-   url:   https://www.ishares.com/us/products/239771/ishares-north-american-tech-software-etf/1467271812596.ajax?fileType=csv&fileName=IGV_holdings&dataType=fund
-   http:  200  type: text/csv;charset=UTF-8  bytes: 1476016  looks-like: HTML
-   title: <title>iShares Expanded Tech-Software Sector ETF | IGV</title>
+== IGV_blackrock_fund_document
+   http: 200  type: text/csv  bytes: 18919  looks-like: CSV
+   as-of line: Fund Holdings as of,"Oct 08, 2026"
+   holding rows: 111
+     | Ticker,Name,Sector,Asset Class,Market Value,Weight (%),Notional Value,Quantity,Price,Location,Exchange,Currency,FX Rate,Market Currency,Accrual Date
+     | "PANW","PALO ALTO NETWORKS","Information Technology","Equity","1,386,376,718.00","9.41","1,386,376,718.00","3,478,988.00","398.50","United States","NASDAQ","USD
 
-== QQQ_invesco
-   url:   https://www.invesco.com/us/financial-products/etfs/holdings/main/holdings/0?audienceType=Investor&action=download&ticker=QQQ
-   http:  406  type: ?  bytes: 0  looks-like: EMPTY
+== SOXX_blackrock_fund_document_asof20261001
+   http: 200  type: text/csv  bytes: 6397  looks-like: CSV
+   as-of line: Fund Holdings as of,"Oct 01, 2026"
+   holding rows: 34
+     | Ticker,Name,Sector,Asset Class,Market Value,Weight (%),Notional Value,Quantity,Price,Location,Exchange,Currency,FX Rate,Market Currency,Accrual Date
+     | "INTC","INTEL CORPORATION","Information Technology","Equity","4,508,718,240.00","9.44","4,508,718,240.00","37,572,652.00","120.00","United States","NASDAQ","USD
 
-== QQQ_invesco_page
-   url:   https://www.invesco.com/us/en/etf/invesco-qqq-trust-series-1.html
-   http:  406  type: ?  bytes: 0  looks-like: EMPTY
+== SOXX_ishares_product_data_json
+   http: 200  type: application/json  bytes: 32089  looks-like: JSON
+   head: {"productId":239705,"portfolioType":"ISHARES_FUND_DATA","currencyCode":"USD","fundName":"iShares Semiconductor ETF","componentsByNameMap":{"holdings":{"componentId":"holdings","properties":{"downloadHeader":"true","downloadHeaderData":"inceptionDate,sharesOutstanding,percentStock,percentBond,percent
 
-== QQQ_qqqsite_page
-   url:   https://www.invesco.com/qqq-etf/en/holdings.html
-   http:  406  type: ?  bytes: 0  looks-like: EMPTY
+== QQQ_dng_api_default_ua
+   http: 200  type: text/plain;charset=UTF-8  bytes: 26843  looks-like: JSON
+   head: { "cusip": "QQQ", "effectiveDate": "2026-10-08", "effectiveBusinessDate": "2026-10-08", "totalNumberOfHoldings": 105, "holdings": [ { "ticker": "NVDA", "issuerName": "NVIDIA Corp", "units": 181071668, "percentageOfTotalNetAssets": 8.334285, "securityTypeName": "Common Stock", "cusip": "67066G104", "
 
-== SOXX via python urllib (client fingerprint comparison)
-   http: 200  type: text/csv;charset=UTF-8  bytes: 1480242  looks-like: HTML
+== QQQ_dng_api_project_ua
+   http: 200  type: text/plain;charset=UTF-8  bytes: 26843  looks-like: JSON
+   head: { "cusip": "QQQ", "effectiveDate": "2026-10-08", "effectiveBusinessDate": "2026-10-08", "totalNumberOfHoldings": 105, "holdings": [ { "ticker": "NVDA", "issuerName": "NVIDIA Corp", "units": 181071668, "percentageOfTotalNetAssets": 8.334285, "securityTypeName": "Common Stock", "cusip": "67066G104", "
+
+== QQQ_dng_api_mozilla_ua
+   http: 406  type: ?  bytes: 0  looks-like: EMPTY
+
+== QQQ_dng_api_fundDetails
+   http: 200  type: text/plain;charset=UTF-8  bytes: 519  looks-like: JSON
+   head: { "cusip": "QQQ", "effectiveDate": "2026-10-08", "effectiveBusinessDate": "2026-10-08", "currencyCode": "USD", "totalNoOfHoldings": 101, "totalNoOfHoldingsEffectiveDate": "2026-10-08", "shareclassTotalNetAssets": 500688014927.97, "shareclassTotalNetAssetsEffectiveDate": "2026-10-08", "30dayAverageTr
+
+== QQQ via python urllib default UA
+   http: 200 bytes: 26843 effectiveDate: 2026-10-08 holdings: 105
 
 done
