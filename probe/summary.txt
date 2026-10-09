@@ -1,0 +1,29 @@
+probe run (UTC): 20261009T124227Z
+runner egress ip: 20.64.204.250
+
+== SOXX_ishares
+   url:   https://www.ishares.com/us/products/239705/ishares-phlx-semiconductor-etf/1467271812596.ajax?fileType=csv&fileName=SOXX_holdings&dataType=fund
+   http:  200  type: text/csv;charset=UTF-8  bytes: 1480242  looks-like: HTML
+   title: <title>iShares Semiconductor ETF | SOXX</title>
+
+== IGV_ishares
+   url:   https://www.ishares.com/us/products/239771/ishares-north-american-tech-software-etf/1467271812596.ajax?fileType=csv&fileName=IGV_holdings&dataType=fund
+   http:  200  type: text/csv;charset=UTF-8  bytes: 1476016  looks-like: HTML
+   title: <title>iShares Expanded Tech-Software Sector ETF | IGV</title>
+
+== QQQ_invesco
+   url:   https://www.invesco.com/us/financial-products/etfs/holdings/main/holdings/0?audienceType=Investor&action=download&ticker=QQQ
+   http:  406  type: ?  bytes: 0  looks-like: EMPTY
+
+== QQQ_invesco_page
+   url:   https://www.invesco.com/us/en/etf/invesco-qqq-trust-series-1.html
+   http:  406  type: ?  bytes: 0  looks-like: EMPTY
+
+== QQQ_qqqsite_page
+   url:   https://www.invesco.com/qqq-etf/en/holdings.html
+   http:  406  type: ?  bytes: 0  looks-like: EMPTY
+
+== SOXX via python urllib (client fingerprint comparison)
+   http: 200  type: text/csv;charset=UTF-8  bytes: 1480242  looks-like: HTML
+
+done
