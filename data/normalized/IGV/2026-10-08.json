@@ -44,13 +44,13 @@
       "WFFUT"
     ],
     "validation_warnings": [],
-    "url": "https://www.blackrock.com/varnish-api/blk-one01-product-data/product-data/api/v1/get-fund-document?appType=PRODUCT_PAGE&appSubType=ISHARES&targetSite=us-ishares&locale=en_US&userType=individual&component=holdings&portfolioId=239771&asOfDate=20261008",
-    "downloaded_at": "2026-10-09T15:39:48+00:00",
+    "url": "https://www.blackrock.com/varnish-api/blk-one01-product-data/product-data/api/v1/get-fund-document?appType=PRODUCT_PAGE&appSubType=ISHARES&targetSite=us-ishares&locale=en_US&userType=individual&component=holdings&portfolioId=239771",
+    "downloaded_at": "2026-10-10T11:08:13+00:00",
     "http_status": 200,
     "content_type": "text/csv",
     "portfolio_id": "239771",
     "route": "csv",
-    "requested_as_of": "2026-10-08"
+    "requested_as_of": null
   },
   "holdings": [
     {
