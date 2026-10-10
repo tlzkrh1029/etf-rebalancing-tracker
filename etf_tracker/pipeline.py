@@ -20,7 +20,8 @@ Every step is a plain function returning plain data so the CLI
   repeated transport errors;
 * :func:`run_analysis` -- :func:`etf_tracker.analysis.analyze_all`;
 * :func:`write_reports` -- hand the analysis to :mod:`etf_tracker.report`
-  when that module is available;
+  when that module is available, then refresh the dashboard files
+  ``reports/history.json`` and ``reports/summary.json`` (best effort);
 * :func:`run_daily` -- all of the above with the exit code the workflow
   turns into a red or green run.
 
@@ -40,7 +41,8 @@ leaves the manifest alone when the state is unchanged, and
 * at least one ETF stored a new snapshot (any ETF refreshes every report,
   because the reports are one document), or
 * ``force`` was given, or
-* the latest report files are missing from ``reports/``.
+* the latest report files or ``reports/summary.json`` are missing from
+  ``reports/``.
 
 Otherwise ``reports/latest.*`` keep describing the last run that brought
 new data (their ``today``/``generated_utc`` say when that was), no dated
@@ -66,6 +68,7 @@ from etf_tracker.analysis import analyze_all, utc_today
 from etf_tracker.sources import STATUS_ERROR, STATUS_UNSUPPORTED, FetchResult
 from etf_tracker.holdings import list_snapshots
 from etf_tracker.store import REASON_ALREADY_STORED, IngestOutcome, has_snapshot, ingest
+from etf_tracker.summary import summary_path
 
 __all__ = [
     "DEFAULT_ETFS",
@@ -361,7 +364,10 @@ def write_reports(root: str | os.PathLike[str], analysis: Mapping[str, Any]) -> 
     """Delegate to ``etf_tracker.report.write_reports(root, analysis)``.
 
     The report module is optional: when it cannot be imported a warning is
-    logged and no files are written.  Exceptions it raises propagate.
+    logged and no files are written.  Exceptions it raises propagate.  After
+    the reports, ``reports/history.json`` and ``reports/summary.json`` are
+    refreshed best effort (logged, never raised); the returned paths are the
+    report module's only.
     """
     try:
         report = importlib.import_module("etf_tracker.report")
@@ -374,6 +380,7 @@ def write_reports(root: str | os.PathLike[str], analysis: Mapping[str, Any]) -> 
         return []
     paths = writer(Path(root), dict(analysis))
     _write_history(root, analysis)
+    _write_summary(root, analysis)
     return [Path(p) for p in (paths or [])]
 
 
@@ -394,6 +401,22 @@ def _write_history(root: str | os.PathLike[str], analysis: Mapping[str, Any]) ->
         return write_history(root, etfs, now=now)
     except Exception as exc:  # noqa: BLE001 - history is a convenience layer
         log.warning("history not written: %s: %s", type(exc).__name__, exc)
+        return None
+
+
+def _write_summary(root: str | os.PathLike[str], analysis: Mapping[str, Any]) -> Path | None:
+    """Refresh ``reports/summary.json`` alongside the reports (best effort).
+
+    The summary is a pure function of the analysis and stamped with its
+    ``generated_utc`` only, so identical inputs give identical bytes.  A
+    failure is logged, never raised: the daily reports are already written.
+    """
+    try:
+        from etf_tracker.summary import write_summary
+
+        return write_summary(root, analysis)
+    except Exception as exc:  # noqa: BLE001 - the summary is a convenience layer
+        log.warning("summary not written: %s: %s", type(exc).__name__, exc)
         return None
 
 
@@ -428,13 +451,16 @@ def reports_needed(
     """Decide whether :func:`run_daily` should (re)write the reports.
 
     Returns ``(needed, reason)``; see the module docstring for the policy.
+    ``reports/summary.json`` counts as a report file: the dashboard reads it,
+    so a run that finds it missing rewrites the set even without new data.
     """
     stored = [e for e in stored_etfs]
     if force:
         return True, "forced"
     if stored:
         return True, "new snapshot stored for " + ", ".join(stored)
-    missing = [p for p in _latest_report_paths(root, analysis) if not p.is_file()]
+    expected = _latest_report_paths(root, analysis) + [summary_path(root)]
+    missing = [p for p in expected if not p.is_file()]
     if missing:
         return True, "no report on disk: " + ", ".join(p.name for p in missing)
     return False, "no new snapshot; existing reports kept"

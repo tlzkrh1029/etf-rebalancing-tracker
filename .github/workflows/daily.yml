@@ -9,7 +9,8 @@
 #                  data/normalized/<ETF>/ is skipped, the manifest is left
 #                  alone when nothing changed, and the reports are rewritten
 #                  only when some ETF stored a new snapshot (or --force was
-#                  given, or reports/latest.* are missing).  So the second
+#                  given, or reports/latest.* or reports/summary.json are
+#                  missing).  So the second
 #                  run only does work, and only commits, when the first one
 #                  failed or the data was late.
 # Cron fires on US market holidays too; the issuers then serve the previous
