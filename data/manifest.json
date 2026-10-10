@@ -11,10 +11,10 @@
     },
     "QQQ": {
       "equity_count": 101,
-      "last_fetch_utc": "2026-10-10T11:08:13Z",
+      "last_fetch_utc": "2026-10-10T11:15:21Z",
       "last_message": "stored",
       "last_status": "ok",
-      "latest_as_of": "2026-10-10",
+      "latest_as_of": "2026-10-09",
       "row_count": 106,
       "source": "invesco-dng-api"
     },
@@ -28,5 +28,5 @@
       "source": "blackrock-fund-document-csv"
     }
   },
-  "updated_utc": "2026-10-10T11:08:13Z"
+  "updated_utc": "2026-10-10T11:15:21Z"
 }

@@ -1,12 +1,13 @@
 {
   "etf": "QQQ",
-  "as_of": "2026-10-10",
+  "as_of": "2026-10-09",
   "source": "invesco-dng-api",
   "meta": {
     "source": "invesco-dng-api",
     "etf": "QQQ",
     "effective_date": "2026-10-10",
     "effective_business_date": "2026-10-09",
+    "as_of_basis": "effectiveBusinessDate",
     "fund_identifier": "QQQ",
     "total_number_of_holdings": 106,
     "row_count": 106,
@@ -39,21 +40,19 @@
     "null_weight_tickers": [
       "USDPDV"
     ],
-    "url": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/QQQ/holdings/fund?idType=ticker&productType=ETF&cb=1791630491",
+    "url": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/QQQ/holdings/fund?idType=ticker&productType=ETF&cb=1791630920",
     "source_urls": {
-      "holdings": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/QQQ/holdings/fund?idType=ticker&productType=ETF&cb=1791630491",
-      "fund_details": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/QQQ?idType=ticker&variationType=fundDetails&productType=ETF&cb=1791630491"
+      "holdings": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/QQQ/holdings/fund?idType=ticker&productType=ETF&cb=1791630920",
+      "fund_details": "https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/QQQ?idType=ticker&variationType=fundDetails&productType=ETF&cb=1791630920"
     },
-    "warnings": [
-      "fundDetails total net assets are as of 2026-10-09 while holdings are as of 2026-10-10; derived market values use the fundDetails total"
-    ],
+    "warnings": [],
     "user_agent": "project",
-    "downloaded_at": "2026-10-10T11:08:11.890778+00:00"
+    "downloaded_at": "2026-10-10T11:15:20.284012+00:00"
   },
   "holdings": [
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "NVDA",
       "name": "NVIDIA Corp",
       "asset_class": "equity",
@@ -69,7 +68,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "AAPL",
       "name": "Apple Inc",
       "asset_class": "equity",
@@ -85,7 +84,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "MSFT",
       "name": "Microsoft Corp",
       "asset_class": "equity",
@@ -101,7 +100,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "MU",
       "name": "Micron Technology Inc",
       "asset_class": "equity",
@@ -117,7 +116,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "AMZN",
       "name": "Amazon.com Inc",
       "asset_class": "equity",
@@ -133,7 +132,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "AMD",
       "name": "Advanced Micro Devices Inc",
       "asset_class": "equity",
@@ -149,7 +148,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "META",
       "name": "Meta Platforms Inc",
       "asset_class": "equity",
@@ -165,7 +164,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "GOOGL",
       "name": "Alphabet Inc Class A",
       "asset_class": "equity",
@@ -181,7 +180,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "TSLA",
       "name": "Tesla Inc",
       "asset_class": "equity",
@@ -197,7 +196,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "SPCX",
       "name": "Space Exploration Technologies Corp",
       "asset_class": "equity",
@@ -213,7 +212,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "GOOG",
       "name": "Alphabet Inc Class C",
       "asset_class": "equity",
@@ -229,7 +228,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "AVGO",
       "name": "Broadcom Inc",
       "asset_class": "equity",
@@ -245,7 +244,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "INTC",
       "name": "Intel Corp",
       "asset_class": "equity",
@@ -261,7 +260,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "WMT",
       "name": "Walmart Inc",
       "asset_class": "equity",
@@ -277,7 +276,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "PLTR",
       "name": "Palantir Technologies Inc",
       "asset_class": "equity",
@@ -293,7 +292,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "CSCO",
       "name": "Cisco Systems Inc",
       "asset_class": "equity",
@@ -309,7 +308,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "COST",
       "name": "Costco Wholesale Corp",
       "asset_class": "equity",
@@ -325,7 +324,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "AMAT",
       "name": "Applied Materials Inc",
       "asset_class": "equity",
@@ -341,7 +340,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "LRCX",
       "name": "Lam Research Corp",
       "asset_class": "equity",
@@ -357,7 +356,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "PANW",
       "name": "Palo Alto Networks Inc",
       "asset_class": "equity",
@@ -373,7 +372,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "NFLX",
       "name": "Netflix Inc",
       "asset_class": "equity",
@@ -389,7 +388,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "CRWD",
       "name": "Crowdstrike Holdings Inc",
       "asset_class": "equity",
@@ -405,7 +404,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "TXN",
       "name": "Texas Instruments Inc",
       "asset_class": "equity",
@@ -421,7 +420,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "KLAC",
       "name": "KLA Corp",
       "asset_class": "equity",
@@ -437,7 +436,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "MRVL",
       "name": "Marvell Technology Inc",
       "asset_class": "equity",
@@ -453,7 +452,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "SNDK",
       "name": "Sandisk Corp",
       "asset_class": "equity",
@@ -469,7 +468,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "AMGN",
       "name": "Amgen Inc",
       "asset_class": "equity",
@@ -485,7 +484,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "LIN",
       "name": "Linde PLC",
       "asset_class": "equity",
@@ -501,7 +500,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "SHOP",
       "name": "Shopify Inc",
       "asset_class": "equity",
@@ -517,7 +516,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ADI",
       "name": "Analog Devices Inc",
       "asset_class": "equity",
@@ -533,7 +532,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "GILD",
       "name": "Gilead Sciences Inc",
       "asset_class": "equity",
@@ -549,7 +548,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "QCOM",
       "name": "QUALCOMM Inc",
       "asset_class": "equity",
@@ -565,7 +564,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "STX",
       "name": "Seagate Technology Holdings PLC",
       "asset_class": "equity",
@@ -581,7 +580,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "PEP",
       "name": "PepsiCo Inc",
       "asset_class": "equity",
@@ -597,7 +596,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ASML",
       "name": "ASML Holding NV",
       "asset_class": "equity",
@@ -613,7 +612,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "TMUS",
       "name": "T-Mobile US Inc",
       "asset_class": "equity",
@@ -629,7 +628,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ISRG",
       "name": "Intuitive Surgical Inc",
       "asset_class": "equity",
@@ -645,7 +644,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "WDC",
       "name": "Western Digital Corp",
       "asset_class": "equity",
@@ -661,7 +660,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "FTNT",
       "name": "Fortinet Inc",
       "asset_class": "equity",
@@ -677,7 +676,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "VRTX",
       "name": "Vertex Pharmaceuticals Inc",
       "asset_class": "equity",
@@ -693,7 +692,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "BKNG",
       "name": "Booking Holdings Inc",
       "asset_class": "equity",
@@ -709,7 +708,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ARM",
       "name": "ARM Holdings PLC",
       "asset_class": "equity",
@@ -725,7 +724,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ADP",
       "name": "Automatic Data Processing Inc",
       "asset_class": "equity",
@@ -741,7 +740,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "CEG",
       "name": "Constellation Energy Corp",
       "asset_class": "equity",
@@ -757,7 +756,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "SBUX",
       "name": "Starbucks Corp",
       "asset_class": "equity",
@@ -773,7 +772,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "LITE",
       "name": "Lumentum Holdings Inc",
       "asset_class": "equity",
@@ -789,7 +788,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "DDOG",
       "name": "Datadog Inc",
       "asset_class": "equity",
@@ -805,7 +804,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "SNPS",
       "name": "Synopsys Inc",
       "asset_class": "equity",
@@ -821,7 +820,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "CDNS",
       "name": "Cadence Design Systems Inc",
       "asset_class": "equity",
@@ -837,7 +836,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ADBE",
       "name": "Adobe Inc",
       "asset_class": "equity",
@@ -853,7 +852,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "MELI",
       "name": "MercadoLibre Inc",
       "asset_class": "equity",
@@ -869,7 +868,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "MAR",
       "name": "Marriott International Inc/MD",
       "asset_class": "equity",
@@ -885,7 +884,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "MRNA",
       "name": "Moderna Inc",
       "asset_class": "equity",
@@ -901,7 +900,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "CSX",
       "name": "CSX Corp",
       "asset_class": "equity",
@@ -917,7 +916,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "MNST",
       "name": "Monster Beverage Corp",
       "asset_class": "equity",
@@ -933,7 +932,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "APP",
       "name": "AppLovin Corp",
       "asset_class": "equity",
@@ -949,7 +948,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "INTU",
       "name": "Intuit Inc",
       "asset_class": "equity",
@@ -965,7 +964,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "CTAS",
       "name": "Cintas Corp",
       "asset_class": "equity",
@@ -981,7 +980,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "DASH",
       "name": "DoorDash Inc",
       "asset_class": "equity",
@@ -997,7 +996,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "MDLZ",
       "name": "Mondelez International Inc",
       "asset_class": "equity",
@@ -1013,7 +1012,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "REGN",
       "name": "Regeneron Pharmaceuticals Inc",
       "asset_class": "equity",
@@ -1029,7 +1028,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "CMCSA",
       "name": "Comcast Corp",
       "asset_class": "equity",
@@ -1045,7 +1044,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ROST",
       "name": "Ross Stores Inc",
       "asset_class": "equity",
@@ -1061,7 +1060,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ORLY",
       "name": "O'Reilly Automotive Inc",
       "asset_class": "equity",
@@ -1077,7 +1076,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ABNB",
       "name": "Airbnb Inc",
       "asset_class": "equity",
@@ -1093,7 +1092,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "MPWR",
       "name": "Monolithic Power Systems Inc",
       "asset_class": "equity",
@@ -1109,7 +1108,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "AEP",
       "name": "American Electric Power Co Inc",
       "asset_class": "equity",
@@ -1125,7 +1124,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "HON",
       "name": "Honeywell International Inc",
       "asset_class": "equity",
@@ -1141,7 +1140,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "TER",
       "name": "Teradyne Inc",
       "asset_class": "equity",
@@ -1157,7 +1156,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ALAB",
       "name": "Astera Labs Inc",
       "asset_class": "equity",
@@ -1173,7 +1172,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "FAST",
       "name": "Fastenal Co",
       "asset_class": "equity",
@@ -1189,7 +1188,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "NXPI",
       "name": "NXP Semiconductors NV",
       "asset_class": "equity",
@@ -1205,7 +1204,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "PCAR",
       "name": "PACCAR Inc",
       "asset_class": "equity",
@@ -1221,7 +1220,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "BKR",
       "name": "Baker Hughes Co",
       "asset_class": "equity",
@@ -1237,7 +1236,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "MSTR",
       "name": "Strategy Inc",
       "asset_class": "equity",
@@ -1253,7 +1252,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "PDD",
       "name": "PDD Holdings Inc",
       "asset_class": "equity",
@@ -1269,7 +1268,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "FANG",
       "name": "Diamondback Energy Inc",
       "asset_class": "equity",
@@ -1285,7 +1284,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "NBIS",
       "name": "Nebius Group NV",
       "asset_class": "equity",
@@ -1301,7 +1300,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "HONA",
       "name": "Honeywell Aerospace Inc",
       "asset_class": "equity",
@@ -1317,7 +1316,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ADSK",
       "name": "Autodesk Inc",
       "asset_class": "equity",
@@ -1333,7 +1332,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "PYPL",
       "name": "PayPal Holdings Inc",
       "asset_class": "equity",
@@ -1349,7 +1348,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "XEL",
       "name": "Xcel Energy Inc",
       "asset_class": "equity",
@@ -1365,7 +1364,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "CCEP",
       "name": "Coca-Cola Europacific Partners PLC",
       "asset_class": "equity",
@@ -1381,7 +1380,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "KDP",
       "name": "Keurig Dr Pepper Inc",
       "asset_class": "equity",
@@ -1397,7 +1396,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "EXC",
       "name": "Exelon Corp",
       "asset_class": "equity",
@@ -1413,7 +1412,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "MCHP",
       "name": "Microchip Technology Inc",
       "asset_class": "equity",
@@ -1429,7 +1428,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "RKLB",
       "name": "Rocket Lab Corp",
       "asset_class": "equity",
@@ -1445,7 +1444,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "IDXX",
       "name": "IDEXX Laboratories Inc",
       "asset_class": "equity",
@@ -1461,7 +1460,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "TTWO",
       "name": "Take-Two Interactive Software Inc",
       "asset_class": "equity",
@@ -1477,7 +1476,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "TRI",
       "name": "Thomson Reuters Corp",
       "asset_class": "equity",
@@ -1493,7 +1492,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ODFL",
       "name": "Old Dominion Freight Line Inc",
       "asset_class": "equity",
@@ -1509,7 +1508,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "CRWV",
       "name": "CoreWeave Inc",
       "asset_class": "equity",
@@ -1525,7 +1524,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "PAYX",
       "name": "Paychex Inc",
       "asset_class": "equity",
@@ -1541,7 +1540,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "FER",
       "name": "Ferrovial NV",
       "asset_class": "equity",
@@ -1557,7 +1556,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "WDAY",
       "name": "Workday Inc",
       "asset_class": "equity",
@@ -1573,7 +1572,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ROP",
       "name": "Roper Technologies Inc",
       "asset_class": "equity",
@@ -1589,7 +1588,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "AXON",
       "name": "Axon Enterprise Inc",
       "asset_class": "equity",
@@ -1605,7 +1604,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "NQZ6",
       "name": "CME E-Mini NASDAQ 100 Index Future",
       "asset_class": "derivative",
@@ -1621,7 +1620,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "USD",
       "name": "CASH & EQUIVALENTS",
       "asset_class": "cash",
@@ -1637,7 +1636,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "DXCM",
       "name": "Dexcom Inc",
       "asset_class": "equity",
@@ -1653,7 +1652,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "ALNY",
       "name": "Alnylam Pharmaceuticals Inc",
       "asset_class": "equity",
@@ -1669,7 +1668,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "GEHC",
       "name": "GE HealthCare Technologies Inc",
       "asset_class": "equity",
@@ -1685,7 +1684,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "CPRT",
       "name": "Copart Inc",
       "asset_class": "equity",
@@ -1701,7 +1700,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "_CASH_COLLATERAL",
       "name": "CASH COLLATERAL",
       "asset_class": "cash",
@@ -1717,7 +1716,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "_CONTRA_FUTURE_FUTURE_DEC_18_26",
       "name": "CONTRA FUTURE FUTURE DEC 18 26",
       "asset_class": "cash",
@@ -1733,7 +1732,7 @@
     },
     {
       "etf": "QQQ",
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-09",
       "ticker": "USDPDV",
       "name": "USD Pending Dividends",
       "asset_class": "other",

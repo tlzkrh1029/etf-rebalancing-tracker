@@ -1485,7 +1485,7 @@
    ]
   },
   "QQQ": {
-   "as_of": "2026-10-10",
+   "as_of": "2026-10-09",
    "caps": {
     "binding_constraints": [],
     "breaches": [],
@@ -1522,7 +1522,7 @@
     }
    },
    "decomposition": {
-    "curr_as_of": "2026-10-10",
+    "curr_as_of": "2026-10-09",
     "mode": "shares_and_prices",
     "n_changes": 106,
     "notable": [
@@ -2522,9 +2522,7 @@
    ],
    "prev_as_of": "2026-10-08",
    "source": "invesco-dng-api",
-   "warnings": [
-    "source warnings: fundDetails total net assets are as of 2026-10-09 while holdings are as of 2026-10-10; derived market values use the fundDetails total"
-   ]
+   "warnings": []
   },
   "SOXX": {
    "as_of": "2026-10-08",
@@ -3190,6 +3188,6 @@
    ]
   }
  },
- "generated_utc": "2026-10-10T11:08:13Z",
+ "generated_utc": "2026-10-10T11:15:21Z",
  "today": "2026-10-10"
 }

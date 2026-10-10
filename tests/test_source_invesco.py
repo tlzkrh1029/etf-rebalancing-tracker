@@ -347,6 +347,58 @@ def test_parse_warns_when_fund_details_date_differs():
     assert snap.by_ticker()["NVDA"].price is not None
 
 
+def test_as_of_is_the_effective_business_date_when_the_file_is_dated_ahead_of_it():
+    # The file published before the open on trading day T is dated T while its
+    # positions and the fund total are priced at the T-1 close (observed
+    # 2026-10-10 11:08 UTC: effectiveDate 2026-10-10, effectiveBusinessDate
+    # 2026-10-09, shareclassTotalNetAssetsEffectiveDate 2026-10-09).
+    details = json.loads(FUND_DETAILS_BYTES)
+    details["effectiveDate"] = "2026-10-10"
+    details["shareclassTotalNetAssetsEffectiveDate"] = "2026-10-09"
+    body = _holdings_doc(effectiveDate="2026-10-10", effectiveBusinessDate="2026-10-09")
+    snap = invesco.parse_holdings_json(body, json.dumps(details).encode(), "QQQ", today=date(2026, 10, 10))
+    assert snap.as_of == date(2026, 10, 9)
+    assert snap.meta["effective_date"] == "2026-10-10"
+    assert snap.meta["effective_business_date"] == "2026-10-09"
+    assert snap.meta["as_of_basis"] == "effectiveBusinessDate"
+    assert snap.meta["fund_details_effective_date"] == "2026-10-09"
+    # the pricing dates agree, so no date-mismatch warning
+    assert not any("fundDetails total net assets are as of" in w for w in snap.meta["warnings"])
+    assert snap.by_ticker()["NVDA"].price is not None
+
+
+def test_as_of_is_the_effective_date_when_both_dates_agree():
+    snap = parse_fixture()
+    assert snap.as_of == date(2026, 10, 8)
+    assert snap.meta["effective_date"] == snap.meta["effective_business_date"] == "2026-10-08"
+    assert snap.meta["as_of_basis"] == "effectiveBusinessDate"
+
+
+def test_as_of_without_an_effective_business_date_is_the_effective_date():
+    doc = json.loads(HOLDINGS_BYTES)
+    doc.pop("effectiveBusinessDate", None)
+    snap = invesco.parse_holdings_json(json.dumps(doc).encode(), FUND_DETAILS_BYTES, "QQQ", today=TODAY)
+    assert snap.as_of == date(2026, 10, 8)
+    assert snap.meta["effective_business_date"] is None and snap.meta["as_of_basis"] == "effectiveDate"
+    assert not any("effectiveBusinessDate" in w for w in snap.meta["warnings"])
+
+
+@pytest.mark.parametrize(
+    "business, fragment",
+    [
+        ("2026-10-11", "is after effectiveDate"),
+        ("10/09/2026", "is not 'YYYY-MM-DD'"),
+    ],
+)
+def test_as_of_falls_back_to_the_effective_date_with_a_warning(business, fragment):
+    body = _holdings_doc(effectiveDate="2026-10-10", effectiveBusinessDate=business)
+    snap = invesco.parse_holdings_json(body, FUND_DETAILS_BYTES, "QQQ", today=date(2026, 10, 10))
+    assert snap.as_of == date(2026, 10, 10)
+    assert snap.meta["as_of_basis"] == "effectiveDate"
+    assert snap.meta["effective_business_date"] == business
+    assert any(fragment in w and "falls back to effectiveDate" in w for w in snap.meta["warnings"])
+
+
 # ---------------------------------------------------------------------------
 # parse_holdings_json: defensive handling of bad input
 # ---------------------------------------------------------------------------

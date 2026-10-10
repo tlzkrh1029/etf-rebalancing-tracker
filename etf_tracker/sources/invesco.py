@@ -27,6 +27,16 @@ Edge behaviour verified on 2026-10-09 (see ``probe/summary.txt``):
   :data:`~etf_tracker.sources.STATUS_UNSUPPORTED`; a request for a date after
   the served one yields :data:`~etf_tracker.sources.STATUS_NO_DATA` (not yet
   published).
+* The document carries two dates.  ``effectiveBusinessDate`` is the close
+  the positions and the fundDetails total net assets are priced at (T-1 on
+  trading day T); ``effectiveDate`` is the day the list is effective for.
+  Observed 2026-10-10 11:08 UTC: ``effectiveDate`` 2026-10-10 with
+  ``effectiveBusinessDate`` 2026-10-09 (``shareclassTotalNetAssetsEffectiveDate``
+  2026-10-09 too), while the file seen on 2026-10-09 13:05 UTC carried
+  2026-10-08 for both.  ``Snapshot.as_of`` is therefore
+  ``effectiveBusinessDate`` whenever it is present, well-formed and not after
+  ``effectiveDate``; otherwise ``effectiveDate`` with a warning.  ``meta``
+  keeps both raw dates and ``as_of_basis`` names the field used.
 
 Security-type mapping (``securityTypeName`` / ``securityTypeCode``):
 ``Common Stock``/``COM`` -> equity; ``American Depository Receipt``
@@ -362,6 +372,32 @@ def _resolve_total_net_assets(
     return None, None
 
 
+def _resolve_as_of(effective_date: date, business_raw: Any) -> tuple[date, str, list[str]]:
+    """Pick the snapshot date: ``effectiveBusinessDate`` when usable, else ``effectiveDate``.
+
+    Returns ``(as_of, basis, warnings)`` where ``basis`` is the name of the
+    field used.  A missing or empty ``effectiveBusinessDate`` falls back
+    silently; a malformed one, or one after ``effectiveDate``, falls back
+    with a warning (the pricing date can never be later than the day the
+    list is effective for).
+    """
+    raw = _text(business_raw)
+    if not raw:
+        return effective_date, "effectiveDate", []
+    business = _parse_date(raw)
+    if business is None:
+        return effective_date, "effectiveDate", [
+            f"holdings: effectiveBusinessDate {raw!r} is not 'YYYY-MM-DD'; as_of falls back to "
+            f"effectiveDate {effective_date.isoformat()}"
+        ]
+    if business > effective_date:
+        return effective_date, "effectiveDate", [
+            f"holdings: effectiveBusinessDate {business.isoformat()} is after effectiveDate "
+            f"{effective_date.isoformat()}; as_of falls back to effectiveDate"
+        ]
+    return business, "effectiveBusinessDate", []
+
+
 def _check_as_of_range(as_of: date, today: date | None = None) -> None:
     today = date.today() if today is None else today
     if as_of < EARLIEST_AS_OF:
@@ -398,6 +434,10 @@ def parse_holdings_json(
     is left ``None``: share-class grouping (GOOGL/GOOG) is applied by
     :mod:`etf_tracker.bridge` through ``rules.SHARE_CLASS_GROUPS``.
 
+    ``Snapshot.as_of`` is ``effectiveBusinessDate`` (the pricing close) when
+    the document carries a usable one, else ``effectiveDate``; see the module
+    docstring.  ``meta['as_of_basis']`` names the field used.
+
     Raises ``ValueError`` when the body is not the expected document (bad
     JSON, missing/invalid ``effectiveDate``, no ``holdings`` list, empty or
     oversized list).
@@ -405,9 +445,11 @@ def parse_holdings_json(
     etf = etf.strip().upper()
     data = _load_json(holdings_bytes, "holdings")
 
-    as_of = _parse_date(data.get("effectiveDate"))
-    if as_of is None:
+    effective_date = _parse_date(data.get("effectiveDate"))
+    if effective_date is None:
         raise ValueError("holdings: effectiveDate missing or not 'YYYY-MM-DD'")
+    _check_as_of_range(effective_date, today)
+    as_of, as_of_basis, date_warnings = _resolve_as_of(effective_date, data.get("effectiveBusinessDate"))
     _check_as_of_range(as_of, today)
 
     rows = data.get("holdings")
@@ -418,7 +460,7 @@ def parse_holdings_json(
     if len(rows) > MAX_ROWS:
         raise ValueError(f"holdings: {len(rows)} rows exceed the {MAX_ROWS} row bound")
 
-    warnings: list[str] = []
+    warnings: list[str] = list(date_warnings)
     identifier = _text(data.get("ticker") or data.get("cusip")) or None
     if identifier and identifier.upper() != etf:
         warnings.append(f"holdings document identifies itself as {identifier!r}, expected {etf}")
@@ -533,8 +575,9 @@ def parse_holdings_json(
     meta: dict[str, Any] = {
         "source": SOURCE,
         "etf": etf,
-        "effective_date": as_of.isoformat(),
+        "effective_date": effective_date.isoformat(),
         "effective_business_date": _text(data.get("effectiveBusinessDate")) or None,
+        "as_of_basis": as_of_basis,
         "fund_identifier": identifier,
         "total_number_of_holdings": declared,
         "row_count": len(holdings),
