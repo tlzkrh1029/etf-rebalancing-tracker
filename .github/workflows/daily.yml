@@ -63,6 +63,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 # The 18:10 retry (or a manual run) waits for a still-running job instead of
 # racing it for the push.
@@ -122,6 +123,7 @@ jobs:
           exit 0
 
       - name: Commit data and reports
+        id: commit
         if: always()
         run: |
           git config user.name "github-actions[bot]"
@@ -137,6 +139,7 @@ jobs:
           git commit -m "data: $summary" -m "Automated daily-holdings run ${GITHUB_RUN_ID}"
           for attempt in 1 2 3; do
             if git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME"; then
+              echo "pushed=true" >> "$GITHUB_OUTPUT"
               exit 0
             fi
             echo "push attempt $attempt failed, retrying"
@@ -145,6 +148,14 @@ jobs:
           done
           echo "could not push after 3 attempts" >&2
           exit 1
+
+      # Pushes made with GITHUB_TOKEN do not trigger push workflows, so the
+      # Pages deployment is dispatched explicitly after a data commit.
+      - name: Redeploy the dashboard to GitHub Pages
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref "$GITHUB_REF_NAME" || echo "pages dispatch failed (is Pages enabled?)"
 
       - name: Fail the job when the tracker reported an error
         if: steps.run.outputs.exit_code != '0'

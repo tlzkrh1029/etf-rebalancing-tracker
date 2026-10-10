@@ -1,4 +1,4 @@
-<title>ETF 리밸런스 트래커</title>
+<!doctype html>\n<html lang="ko">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%232f5d9e%27/%3E%3Cpath d=%27M7 22 L13 15 L18 19 L25 9%27 fill=%27none%27 stroke=%27white%27 stroke-width=%273%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">\n<title>ETF 리밸런스 트래커</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
 <style>
@@ -141,7 +141,7 @@ svg{display:block;width:100%;height:auto;max-width:100%} .tl text,.ch text{font-
 .md table{font-size:13px;margin:0 0 12px} .md code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:var(--surface2);padding:1px 4px;border-radius:3px} .md hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 .md a{color:var(--accent)}
 </style>
-<div class="wrap">
+</head>\n<body>\n<div class="wrap">
   <header class="top">
     <div><h1>ETF 리밸런스 트래커</h1><div class="meta" id="meta">데이터를 불러오는 중입니다.</div></div>
     <div class="src" id="src"><span class="st">연결 확인 중</span></div>
@@ -595,3 +595,5 @@ function renderAll() {
 let resizeTimer; window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { if (DATA.summary) renderTrack(); }, 200); }, { passive: true });
 boot();
 </script>
+</body>
+</html>

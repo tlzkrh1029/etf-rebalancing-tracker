@@ -1,0 +1,64 @@
+# pages: publish the dashboard (site/index.html) together with the current
+# reports/ files to GitHub Pages. Runs on every push that touches the site or
+# the reports, and on demand. The daily-holdings workflow also dispatches it
+# after committing new data, because pushes made with GITHUB_TOKEN do not
+# trigger push workflows by themselves.
+#
+# One-time setup: Settings -> Pages -> Build and deployment -> Source:
+# "GitHub Actions". The configure-pages step also tries to enable it.
+
+name: pages
+
+on:
+  push:
+    branches: ['**']
+    paths:
+      - 'site/**'
+      - 'reports/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble the site
+        run: |
+          set -eu
+          rm -rf _site && mkdir -p _site/reports/briefing
+          cp site/index.html _site/index.html
+          cp reports/summary.json reports/history.json reports/latest.json _site/reports/
+          cp reports/briefing/*.md _site/reports/briefing/ 2>/dev/null || true
+          # list of dated briefings for the page's picker (Pages has no directory listing)
+          ls _site/reports/briefing/*.md 2>/dev/null | xargs -n1 basename | grep -v '^latest.md$' | python3 -c 'import sys, json; print(json.dumps(sorted([l.strip() for l in sys.stdin if l.strip()], reverse=True)))' > _site/reports/briefing/index.json
+          touch _site/.nojekyll
+          echo "site contents:" && find _site -type f | sort
+
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
