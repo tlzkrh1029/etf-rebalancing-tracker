@@ -4122,20 +4122,20 @@
           "announcement_date": null,
           "effective_date": "2026-12-21",
           "effective_trade_date": "2026-12-18",
-          "kind": "quarterly_rebalance",
-          "notes": "Quarterly re-capping (8.5% single, 4.5%/45% aggregate); index shares computed from closing prices on the Thursday before the second Friday; applied after the close on the third Friday. Announcement rule not published.",
-          "reference_date": "2026-12-10",
-          "trading_days_to_reference": 43,
+          "kind": "semiannual_reconstitution",
+          "notes": "Semi-annual membership reconstitution; eligibility as of the last trading day of the prior month; effective with the quarterly rebalance (pricing reference 2026-12-10).",
+          "reference_date": "2026-11-30",
+          "trading_days_to_reference": 35,
           "trading_days_to_trade": 49
         },
         {
           "announcement_date": null,
           "effective_date": "2026-12-21",
           "effective_trade_date": "2026-12-18",
-          "kind": "semiannual_reconstitution",
-          "notes": "Semi-annual membership reconstitution; eligibility as of the last trading day of the prior month; effective with the quarterly rebalance (pricing reference 2026-12-10).",
-          "reference_date": "2026-11-30",
-          "trading_days_to_reference": 35,
+          "kind": "quarterly_rebalance",
+          "notes": "Quarterly re-capping (8.5% single, 4.5%/45% aggregate); index shares computed from closing prices on the Thursday before the second Friday; applied after the close on the third Friday. Announcement rule not published.",
+          "reference_date": "2026-12-10",
+          "trading_days_to_reference": 43,
           "trading_days_to_trade": 49
         },
         {
@@ -9128,6 +9128,6 @@
       ]
     }
   },
-  "generated_utc": "2026-10-10T11:15:21Z",
+  "generated_utc": "2026-10-10T12:31:01Z",
   "today": "2026-10-10"
 }

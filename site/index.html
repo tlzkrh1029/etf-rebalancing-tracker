@@ -109,7 +109,8 @@ footer{margin-top:28px;font-size:12px;color:var(--muted);line-height:1.6} footer
 .lede{color:var(--fg2);margin:0 0 6px;max-width:72ch}
 .tw{overflow-x:auto}
 table{border-collapse:collapse;width:100%;font-size:13px}
-th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle;word-break:keep-all}
+@media (max-width:640px){.tw td,.tw th{white-space:nowrap}}  /* the wrapper scrolls sideways; never one character per line */
 th{font-weight:600;color:var(--fg2);font-size:12px;white-space:nowrap;background:var(--surface2)}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 tbody tr:hover td{background:var(--surface2)}
@@ -469,7 +470,7 @@ function decompTable(e) {
   const ff = d.summary && d.summary.fund_flow; const flow = ff && ff.implied_flow_usd_from_scale_factor; const act = notable(e);
   return `<p class="lede">${esc(d.prev_as_of)} → ${esc(d.curr_as_of)}. 비중 변화를 가격 효과(drift)와 주식수 효과(trade)로 나눕니다. k=${fmt.k(d.scale_factor)}이므로 전일 대비 약 ${fmt.pct(Math.abs(d.scale_factor - 1))}${flow != null ? ` (${fmt.usd(Math.abs(flow))} 상당)` : ''}의 ${d.scale_factor < 1 ? '환매(자금 유출)' : '설정(자금 유입)'}이 있었던 것으로 추정됩니다.</p>
   <div class="tw"><table><thead><tr><th>종목</th><th class="num">비중</th><th class="num">전일</th><th class="num">변화</th><th class="num">가격 효과</th><th class="num">주식수 효과</th><th>변화 (왼쪽 음, 오른쪽 양)</th><th>분류</th></tr></thead><tbody>${rows.map(c => `<tr><td><b>${esc(c.ticker)}</b></td><td class="num">${fmt.pct(c.w_curr)}</td><td class="num">${fmt.pct(c.w_prev)}</td><td class="num">${fmt.pp(c.total_change)}</td><td class="num">${fmt.pp(c.drift)}</td><td class="num">${fmt.pp(c.trade)}</td><td>${dbar(c.total_change, scale)}</td><td>${esc(CLS[c.classification] || c.classification)}</td></tr>`).join('')}</tbody></table></div>
-  <h3>실제 매매로 분류된 종목</h3>${act.length ? `<ul class="plain">${act.map(c => `<li><b>${esc(c.ticker)}</b> ${esc(CLS[c.classification] || c.classification)} · 주식수 ${fmt.int(c.shares_prev)} → ${fmt.int(c.shares_curr)} (${c.rel_share_change != null ? (c.rel_share_change >= 0 ? '+' : '') + (c.rel_share_change * 100).toFixed(1) + '%' : '-'}) · 주식수 효과 ${fmt.pp(c.trade)}</li>`).join('')}</ul>` : '<p class="empty">없음. 주식수 변화는 설정·환매에 따른 공통 배율 안에 있습니다.</p>'}`;
+  <h3>실제 매매로 분류된 종목</h3>${d.n_notable > (d.notable || []).length ? `<div class="note">눈여겨볼 변화 ${d.n_notable}건 중 주식수 효과가 큰 ${(d.notable || []).length}건만 요약 파일에 담았습니다. 전체 목록은 reports/latest.json과 당일 리포트에 있습니다.</div>` : ''}${act.length ? `<ul class="plain">${act.map(c => `<li><b>${esc(c.ticker)}</b> ${esc(CLS[c.classification] || c.classification)} · 주식수 ${fmt.int(c.shares_prev)} → ${fmt.int(c.shares_curr)} (${c.rel_share_change != null ? (c.rel_share_change >= 0 ? '+' : '') + (c.rel_share_change * 100).toFixed(1) + '%' : '-'}) · 주식수 효과 ${fmt.pp(c.trade)}</li>`).join('')}</ul>` : '<p class="empty">없음. 주식수 변화는 설정·환매에 따른 공통 배율 안에 있습니다.</p>'}`;
 }
 function notePanel(etf, e) {
   const rows = metricRows(etf, e); const st = worstStatus(rows); const sp = e.caps && e.caps.special_rebalance; const br = (e.caps && e.caps.breaches) || [];
@@ -501,6 +502,8 @@ function renderNote() {
 }
 
 /* ===== render: track ===== */
+// approximate rendered width of an 11px label: CJK glyphs are square, Latin digits and letters about 0.6em
+function textW(t) { let w = 0; for (const ch of String(t)) w += /[\u1100-\u11FF\u3000-\u9FFF\uAC00-\uD7AF\uFF00-\uFFEF]/.test(ch) ? 11.5 : 6.8; return w; }
 function timeline(d) {
   const today = d.today; const events = [];
   for (const etf of ETFS) { const e = d.etfs[etf]; if (!e) continue; for (const ev of (e.next_events || []).slice(0, 1)) { events.push({ etf, date: ev.reference_date, kind: 'ref', days: ev.trading_days_to_reference }); if (ev.announcement_date) events.push({ etf, date: ev.announcement_date, kind: 'ann' }); events.push({ etf, date: ev.effective_trade_date, kind: 'trade', days: ev.trading_days_to_trade }); } }
@@ -512,7 +515,7 @@ function timeline(d) {
   const x = dd => L + (dayDiff(today, dd) / total) * (W - L - R);
   const kindLabel = { ref: '참조일', ann: '발표', trade: '매매일(종가)' }; const col = k => k === 'trade' ? 'var(--over)' : (k === 'ref' ? 'var(--accent)' : 'var(--muted)');
   let svg = `<svg class="tl" viewBox="0 0 ${W} ${H}" role="img" aria-label="다가오는 리밸런스 이벤트 타임라인"><line x1="${L}" y1="${y}" x2="${W - R}" y2="${y}" stroke="var(--axis)" stroke-width="2"/><circle cx="${L}" cy="${y}" r="5" fill="var(--fg)"/><text x="${L}" y="${y + 24}" font-size="11" fill="var(--fg2)" text-anchor="start">오늘 ${esc(today)}</text>`;
-  const t0 = parseDate(today); for (let m = 0; m < 4; m++) { const dt = new Date(Date.UTC(t0.getUTCFullYear(), t0.getUTCMonth() + m + 1, 1)); const iso = dt.toISOString().slice(0, 10); if (dayDiff(today, iso) > total) break; const xx = x(iso); svg += `<line x1="${xx.toFixed(1)}" y1="${y - 5}" x2="${xx.toFixed(1)}" y2="${y + 5}" stroke="var(--axis)"/><text x="${xx.toFixed(1)}" y="${y + 24}" font-size="10" fill="var(--muted)" text-anchor="middle">${dt.getUTCMonth() + 1}월</text>`; }
+  const t0 = parseDate(today); for (let m = 0; m < 4; m++) { const dt = new Date(Date.UTC(t0.getUTCFullYear(), t0.getUTCMonth() + m + 1, 1)); const iso = dt.toISOString().slice(0, 10); if (dayDiff(today, iso) > total) break; const xx = x(iso); if (xx - 12 < L + textW('오늘 ' + today) + 6) continue; svg += `<line x1="${xx.toFixed(1)}" y1="${y - 5}" x2="${xx.toFixed(1)}" y2="${y + 5}" stroke="var(--axis)"/><text x="${xx.toFixed(1)}" y="${y + 24}" font-size="10" fill="var(--muted)" text-anchor="middle">${dt.getUTCMonth() + 1}월</text>`; }
   let lastX = -99, lane = 0;
   items.forEach((it, i) => { const xx = x(it.date); lane = (xx - lastX < 22) ? lane + 1 : 0; lastX = xx; const ny = y - 16 - lane * 16; svg += `<line x1="${xx.toFixed(1)}" y1="${ny + 6}" x2="${xx.toFixed(1)}" y2="${y}" stroke="${col(it.kind)}" stroke-width="1.5"/><circle cx="${xx.toFixed(1)}" cy="${y}" r="${it.kind === 'trade' ? 6 : 5}" fill="${col(it.kind)}" stroke="var(--surface)" stroke-width="2"/><circle cx="${xx.toFixed(1)}" cy="${ny}" r="8" fill="var(--surface)" stroke="${col(it.kind)}" stroke-width="1.5"/><text x="${xx.toFixed(1)}" y="${ny + 3.5}" font-size="10" font-weight="700" fill="var(--fg)" text-anchor="middle">${i + 1}</text>`; });
   svg += '</svg>';
@@ -520,7 +523,12 @@ function timeline(d) {
 }
 function lineChart(el, cfg) {
   const { dates, series, caps = [], fmtY = v => fmt.pct(v, 1), title = '' } = cfg;
-  const W = Math.max(320, el.clientWidth || 700), H = Math.round(Math.min(360, Math.max(220, W * 0.42))); const L = 52, R = 104, T = 14, B = 30;
+  const W = Math.max(320, el.clientWidth || 700), H = Math.round(Math.min(360, Math.max(220, W * 0.42)));
+  // the right margin holds the end labels and cap labels: size it from the widest one so nothing is clipped
+  const maxR = Math.floor(W * 0.45); const needFor = texts => Math.ceil(Math.max(0, ...texts.map(textW)) * 1.05) + 12;
+  let shortLabels = false, need = needFor([...series.slice(0, 4).map(s => series.length > 1 ? `${s.name} 99.9%` : '99.99%'), ...caps.map(c => c.label)]);
+  if (need > maxR) { shortLabels = true; need = needFor([...series.slice(0, 4).map(() => '99.9%'), ...caps.map(c => c.label)]); }  // narrow screen: the legend names the series
+  const L = 52, R = Math.min(maxR, Math.max(64, need)), T = 14, B = 30;
   const vals = [...series.flatMap(s => s.values.filter(v => v != null)), ...caps.map(c => c.value)]; if (!vals.length) { el.innerHTML = '<p class="empty">표시할 값이 없습니다.</p>'; return; }
   let lo = Math.min(...vals), hi = Math.max(...vals); const pad = (hi - lo) * 0.12 || 0.005; lo = Math.max(0, lo - pad); hi = hi + pad;
   const n = dates.length; const x = i => L + (n > 1 ? (i / (n - 1)) * (W - L - R) : (W - L - R) / 2); const y = v => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
@@ -530,7 +538,7 @@ function lineChart(el, cfg) {
   if (lastTick !== n - 1 && (x(n - 1) - x(lastTick)) >= 44) xl += `<text x="${x(n - 1).toFixed(1)}" y="${H - 8}" font-size="11" fill="var(--muted)" text-anchor="middle">${fmt.md(dates[n - 1])}</text>`;
   let capsSvg = ''; for (const c of caps) capsSvg += `<line x1="${L}" y1="${y(c.value).toFixed(1)}" x2="${W - R}" y2="${y(c.value).toFixed(1)}" stroke="var(--cap)" stroke-width="1.5" stroke-dasharray="6 4"/><text x="${W - R + 6}" y="${(y(c.value) + 4).toFixed(1)}" font-size="11" fill="var(--fg2)">${esc(c.label)}</text>`;
   let lines = '', ends = ''; const endLabels = [];
-  series.forEach((s, si) => { const col = `var(${s.color})`; let dpath = '', started = false; s.values.forEach((v, i) => { if (v == null) { started = false; return; } dpath += (started ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1); started = true; }); lines += `<path d="${dpath}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`; const last = s.values.map((v, i) => [v, i]).filter(p => p[0] != null).pop(); if (last) { ends += `<circle cx="${x(last[1]).toFixed(1)}" cy="${y(last[0]).toFixed(1)}" r="4.5" fill="${col}" stroke="var(--surface)" stroke-width="2"/>`; if (si < 4) endLabels.push({ y: y(last[0]), text: series.length > 1 ? `${s.name} ${fmt.pct(last[0], 1)}` : fmt.pct(last[0], 2) }); } });
+  series.forEach((s, si) => { const col = `var(${s.color})`; let dpath = '', started = false; s.values.forEach((v, i) => { if (v == null) { started = false; return; } dpath += (started ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1); started = true; }); lines += `<path d="${dpath}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`; const last = s.values.map((v, i) => [v, i]).filter(p => p[0] != null).pop(); if (last) { ends += `<circle cx="${x(last[1]).toFixed(1)}" cy="${y(last[0]).toFixed(1)}" r="4.5" fill="${col}" stroke="var(--surface)" stroke-width="2"/>`; if (si < 4) endLabels.push({ y: y(last[0]), text: series.length > 1 && !shortLabels ? `${s.name} ${fmt.pct(last[0], 1)}` : (series.length > 1 ? fmt.pct(last[0], 1) : fmt.pct(last[0], 2)) }); } });
   endLabels.sort((a, b) => a.y - b.y); for (let i = 1; i < endLabels.length; i++) if (endLabels[i].y - endLabels[i - 1].y < 13) endLabels[i].y = endLabels[i - 1].y + 13;
   const collide = caps.some(c => endLabels.some(l => Math.abs(l.y - y(c.value)) < 13));
   const labels = collide ? '' : endLabels.map(l => `<text x="${W - R + 6}" y="${(l.y + 4).toFixed(1)}" font-size="11" font-weight="700" fill="var(--fg)">${esc(l.text)}</text>`).join('');
