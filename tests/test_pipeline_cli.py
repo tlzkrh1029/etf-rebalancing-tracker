@@ -747,7 +747,7 @@ def test_daily_workflow_structure_when_yaml_is_available():
     on = wf.get("on", wf.get(True))  # PyYAML reads the bare key `on` as boolean True
     assert [c["cron"] for c in on["schedule"]] == ["10 14 * * 1-5", "10 18 * * 1-5"]
     assert set(on["workflow_dispatch"]["inputs"]) == {"etf", "as_of", "backfill_start", "backfill_end", "force"}
-    assert wf["permissions"] == {"contents": "write"}
+    assert wf["permissions"] == {"contents": "write", "actions": "write"}  # actions: write dispatches the Pages deploy
     assert wf["concurrency"] == {"group": "daily-holdings", "cancel-in-progress": False}
     job = wf["jobs"]["daily"]
     assert job["runs-on"] == "ubuntu-latest"
@@ -759,11 +759,14 @@ def test_daily_workflow_structure_when_yaml_is_available():
         "Run unit tests",
         "Fetch, analyse and report",
         "Commit data and reports",
+        "Redeploy the dashboard to GitHub Pages",
         "Fail the job when the tracker reported an error",
     ]
     by_name = {(s.get("name") or s.get("uses")): s for s in job["steps"]}
     assert by_name["Fetch, analyse and report"]["id"] == "run"
     assert by_name["Commit data and reports"]["if"] == "always()"
+    assert by_name["Commit data and reports"]["id"] == "commit"
+    assert by_name["Redeploy the dashboard to GitHub Pages"]["if"] == "steps.commit.outputs.pushed == 'true'"
     assert by_name["Fail the job when the tracker reported an error"]["if"] == "steps.run.outputs.exit_code != '0'"
     assert by_name["actions/setup-python@v5"]["with"]["python-version"] == "3.12"
     run_script = by_name["Fetch, analyse and report"]["run"]
