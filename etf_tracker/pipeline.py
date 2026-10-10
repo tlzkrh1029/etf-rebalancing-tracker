@@ -56,7 +56,7 @@ import os
 import time
 from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass, field
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from pathlib import Path
 from types import ModuleType
 from typing import Any
@@ -388,7 +388,10 @@ def _write_history(root: str | os.PathLike[str], analysis: Mapping[str, Any]) ->
         from etf_tracker.history import write_history
 
         etfs = list(DEFAULT_ETFS) + [e for e in analysis.get("etfs", {}) if e not in DEFAULT_ETFS]
-        return write_history(root, etfs)
+        # Stamp the history with the analysis time so identical inputs give identical files.
+        stamp = analysis.get("generated_utc")
+        now = datetime.strptime(str(stamp), "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc) if stamp else None
+        return write_history(root, etfs, now=now)
     except Exception as exc:  # noqa: BLE001 - history is a convenience layer
         log.warning("history not written: %s: %s", type(exc).__name__, exc)
         return None
