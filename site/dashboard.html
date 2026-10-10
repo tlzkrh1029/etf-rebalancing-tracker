@@ -287,12 +287,15 @@ function extractText(result) {
   if (result.payload && typeof result.payload === 'object') return JSON.stringify(result.payload);
   return null;
 }
+/* Some runtimes flatten an embedded resource into text with a "[Resource from ...]" prefix; strip it. */
+function stripResourcePrefix(text) { return String(text).replace(/^\s*\[Resource from [^\]]*\]\s*/, ''); }
+function parseJsonText(text) { const s = stripResourcePrefix(text); try { return JSON.parse(s); } catch (e) { const i = s.indexOf('{'); if (i > 0) return JSON.parse(s.slice(i)); throw e; } }
 function applyFile(name, text, meta) {
   if (text == null) return false;
   try {
-    if (name === 'summary') DATA.summary = JSON.parse(text);
-    else if (name === 'history') DATA.history = JSON.parse(text);
-    else if (name === 'brief') DATA.brief = text;
+    if (name === 'summary') DATA.summary = parseJsonText(text);
+    else if (name === 'history') DATA.history = parseJsonText(text);
+    else if (name === 'brief') DATA.brief = stripResourcePrefix(text);
   } catch (e) { DATA.errors[name] = '파일 형식 오류: ' + e.message; return false; }
   delete DATA.errors[name];
   if (meta) { DATA.source = meta.source; if (meta.storedAt) DATA.storedAt = meta.storedAt; }
