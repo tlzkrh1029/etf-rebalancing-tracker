@@ -157,7 +157,7 @@ svg{display:block;width:100%;height:auto;max-width:100%} .tl text,.ch text{font-
   <section class="panel" id="panel-track" role="tabpanel" hidden><div class="state">데이터를 기다리는 중입니다.</div></section>
   <section class="panel" id="panel-brief" role="tabpanel" hidden><div class="state">브리핑을 기다리는 중입니다.</div></section>
   <footer>
-    <div>데이터: iShares와 Invesco가 공개한 ETF 보유 내역(전 거래일 기준)을 GitHub Actions가 매일 수집해 <a href="https://github.com/tlzkrh1029/etf-rebalancing-tracker" target="_blank" rel="noopener">etf-rebalancing-tracker</a> 저장소에 커밋합니다. 이 페이지는 열릴 때 GitHub 커넥터로 저장소의 reports/summary.json, history.json, briefing/latest.md를 읽고, 커넥터를 쓸 수 없으면 발행 시점의 사본을 보여줍니다.</div>
+    <div>데이터: iShares와 Invesco가 공개한 ETF 보유 내역(전 거래일 기준)을 GitHub Actions가 매일 수집해 <a href="https://github.com/tlzkrh1029/etf-rebalancing-tracker" target="_blank" rel="noopener">etf-rebalancing-tracker</a> 저장소에 커밋합니다. 이 페이지는 저장소의 reports/summary.json, history.json, briefing/latest.md 사본을 담아 매일 다시 발행되며, GitHub 커넥터가 연결된 계정에서는 열릴 때 저장소를 직접 읽습니다.</div>
     <div>상한 점검과 강제 매매표의 비중은 주식만으로 재정규화한 ETF 비중, 분해표의 비중은 현금과 파생상품을 포함한 펀드 비중이며 둘 다 지수 비중의 근사치입니다. 추정 금액은 비중 변화에 순자산을 곱한 값입니다. 규칙 출처는 저장소의 docs/methodology.md입니다.</div>
   </footer>
 </div>
@@ -378,7 +378,7 @@ function renderHeader() {
   const errs = Object.values(DATA.errors);
   let s = '';
   if (DATA.source === 'live') s = `<span class="st live">GitHub 저장소 실시간${DATA.storedAt ? ' · 확인 ' + esc(fmt.time(DATA.storedAt)) : ''}</span>`;
-  else if (DATA.source === 'copy') s = `<span class="st copy">발행 시점 사본</span><span>${esc(DATA.copyReason || '')} 발행 당시의 파일을 보여줍니다.</span>`;
+  else if (DATA.source === 'copy') s = `<span class="st copy">데이터 기준 ${esc((d.generated_utc || '').slice(0, 16).replace('T', ' '))} UTC</span><span>저장소 리포트의 사본을 매일 갱신해 발행합니다.</span>`;
   else s = '<span class="st">데이터 출처 확인 중</span>';
   if (errs.length) s += `<span class="st err">${esc(errs[0])}</span>`;
   if (DATA.mcp) s += '<button type="button" id="btn-refresh">다시 읽기</button>';
