@@ -373,7 +373,25 @@ def write_reports(root: str | os.PathLike[str], analysis: Mapping[str, Any]) -> 
         log.warning("etf_tracker.report has no write_reports(); no reports written")
         return []
     paths = writer(Path(root), dict(analysis))
+    _write_history(root, analysis)
     return [Path(p) for p in (paths or [])]
+
+
+def _write_history(root: str | os.PathLike[str], analysis: Mapping[str, Any]) -> Path | None:
+    """Refresh ``reports/history.json`` alongside the reports (best effort).
+
+    The history covers every ETF in the analysis plus the default set, so a
+    restricted run never shrinks it.  A failure is logged, never raised: the
+    daily reports are already written at this point.
+    """
+    try:
+        from etf_tracker.history import write_history
+
+        etfs = list(DEFAULT_ETFS) + [e for e in analysis.get("etfs", {}) if e not in DEFAULT_ETFS]
+        return write_history(root, etfs)
+    except Exception as exc:  # noqa: BLE001 - history is a convenience layer
+        log.warning("history not written: %s: %s", type(exc).__name__, exc)
+        return None
 
 
 def _latest_report_paths(root: str | os.PathLike[str], analysis: Mapping[str, Any]) -> list[Path]:
