@@ -257,3 +257,7 @@ ETF_TRACKER_NETWORK_TESTS=1 python3 -m pytest -q -k live   # 발행사 API를 �
 - 워크플로는 미국 휴장일에도 실행되며(저장 없이 종료), 발행사가 공개를 늦추면 18:10 UTC 재시도까지 기다립니다. 그 뒤에도 없으면 다음 날 실행이 하루치를 건너뛴 상태로 저장하므로, 빠진 날짜는 `backfill`로 채울 수 있습니다(iShares만).
 
 다음 이벤트(세 지수 공통 매매일 2026-12-18): SOXX 분기 리밸런스(참조 2026-11-30, 발표 2026-12-04), QQQ 연간 재구성(참조 2026-11-30, 발표 2026-12-11, 효력 2026-12-21), IGV 반기 재구성(재구성 참조 2026-11-30, 가격 참조 2026-12-10). 2026-10-09 기준 참조일까지 35거래일, 매매일까지 49거래일입니다.
+
+## 6. 대시보드 (클로드 아티팩트)
+
+`site/dashboard.html`을 claude.ai 아티팩트로 발행한 대시보드가 결과를 보여줍니다. 주소는 https://claude.ai/artifact/Em7XgPghM7nNAmoHVCFczz 이고 소유자 계정으로만 열립니다. 페이지는 열릴 때 GitHub 커넥터로 `reports/summary.json`, `reports/history.json`, `reports/briefing/latest.md`를 읽으므로, Actions가 커밋한 최신 데이터와 예약 작업이 커밋한 브리핑이 다시 발행하지 않아도 반영됩니다. 자세한 내용은 `site/README.md`, 브리핑 작성 규칙과 예약 작업 지시문은 `docs/briefing.md`에 있습니다.

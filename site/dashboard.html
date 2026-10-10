@@ -1,0 +1,582 @@
+<title>ETF 리밸런스 트래커</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one sticky tab bar (보드 · 노트 · 트랙 · 브리핑) over a single data load. Status lives in meters and pills; charts share one series palette. */
+:root{
+  --bg:#f3f4f6; --surface:#ffffff; --surface2:#f8f9fb; --fg:#17202a; --fg2:#4b5563; --muted:#8a919c; --line:#e2e5ea; --line2:#b9c2cd; --track:#e9ecf1; --grid:#e5e7eb; --axis:#c7ccd4;
+  --accent:#2f5d9e; --accent-soft:#e3ebf7;
+  --ok:#0ca30c; --near:#c98500; --over:#d03b3b; --near-bg:#fff4d6; --over-bg:#fde7e7; --ok-bg:#e4f5e4; --info-bg:#eef0f3;
+  --sell:#d03b3b; --buy:#2f5d9e; --cap:#d03b3b;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
+  --font:"IBM Plex Sans KR",system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111418; --surface:#1a1f26; --surface2:#1f252d; --fg:#eceff3; --fg2:#b6bec9; --muted:#7f8893; --line:#2a313a; --line2:#3b4552; --track:#262d36; --grid:#262c34; --axis:#3a424c;
+  --accent:#6f9ee0; --accent-soft:#1f2c40; --near:#e0a63a; --over:#e66767; --ok:#2fbd2f; --near-bg:#3a2f12; --over-bg:#3d1f1f; --ok-bg:#163a16; --info-bg:#232a33; --sell:#e66767; --buy:#6f9ee0; --cap:#e66767;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#2fbd2f; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#111418; --surface:#1a1f26; --surface2:#1f252d; --fg:#eceff3; --fg2:#b6bec9; --muted:#7f8893; --line:#2a313a; --line2:#3b4552; --track:#262d36; --grid:#262c34; --axis:#3a424c;
+  --accent:#6f9ee0; --accent-soft:#1f2c40; --near:#e0a63a; --over:#e66767; --ok:#2fbd2f; --near-bg:#3a2f12; --over-bg:#3d1f1f; --ok-bg:#163a16; --info-bg:#232a33; --sell:#e66767; --buy:#6f9ee0; --cap:#e66767;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#2fbd2f; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:14px;line-height:1.5;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-block:16px 48px;padding-inline:16px}
+header.top{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px;margin-bottom:10px}
+h1{font-size:21px;font-weight:600;margin:0;letter-spacing:-0.01em}
+.meta{color:var(--fg2);font-size:13px}
+.src{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.src .st{display:inline-flex;align-items:center;gap:5px}
+.src .st::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.src .st.live::before{background:var(--ok)} .src .st.copy::before{background:var(--near)} .src .st.err::before{background:var(--over)}
+.src button{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--fg2);font:inherit;font-size:12px;border-radius:6px;padding:2px 8px;cursor:pointer}
+.src button:hover{border-color:var(--line2)} .src button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:4px;border-bottom:1px solid var(--line);margin:0 0 16px;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{appearance:none;border:0;background:none;font:inherit;font-weight:500;color:var(--fg2);padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap;border-radius:4px 4px 0 0}
+.tab:hover{background:var(--surface2)} .tab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent);font-weight:600}
+.tab .n{display:inline-block;min-width:18px;padding:0 6px;border-radius:999px;font-size:11px;margin-left:6px;background:var(--line);color:var(--fg2);font-weight:600}
+.tab .n.over{background:var(--over-bg);color:var(--over)} .tab .n.near{background:var(--near-bg);color:var(--near)} .tab .n.ok{background:var(--ok-bg);color:var(--ok)}
+.panel[hidden]{display:none}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:500;border:1px solid var(--line);background:var(--surface);color:var(--fg2);white-space:nowrap}
+.pill b{color:var(--fg);font-weight:600}
+.pill.over{background:var(--over-bg);border-color:transparent;color:var(--fg)} .pill.near{background:var(--near-bg);border-color:transparent;color:var(--fg)} .pill.ok{background:var(--ok-bg);border-color:transparent;color:var(--fg)} .pill.info{background:var(--info-bg);border-color:transparent}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);display:inline-block}
+.over .dot{background:var(--over)} .near .dot{background:var(--near)} .ok .dot{background:var(--ok)}
+.st{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:500}
+.st.over{color:var(--over)} .st.near{color:var(--near)} .st.ok{color:var(--ok)} .st.info{color:var(--muted)}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:1px 8px;border-radius:4px;white-space:nowrap}
+.tag.over{background:var(--over-bg);color:var(--over)} .tag.near{background:var(--near-bg);color:var(--near)} .tag.ok{background:var(--ok-bg);color:var(--ok)} .tag.info{background:var(--info-bg);color:var(--muted)}
+.label{font-size:12px;color:var(--muted);letter-spacing:0.02em}
+.empty{color:var(--muted);font-size:13px}
+.note{font-size:12px;color:var(--fg2);margin:6px 0 0}
+details summary{cursor:pointer;font-size:12px;color:var(--muted)}
+ul.plain{margin:4px 0 0;padding-left:18px;color:var(--fg2)} ul.plain li{margin:2px 0}
+.state{padding:40px 16px;text-align:center;color:var(--fg2)} .state.err{color:var(--over)}
+footer{margin-top:28px;font-size:12px;color:var(--muted);line-height:1.6} footer a{color:var(--accent)}
+/* ---- board ---- */
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,2fr);gap:16px;margin-bottom:16px}
+@media (max-width:760px){.hero{grid-template-columns:1fr}}
+.hero .big{font-size:54px;font-weight:600;line-height:1;letter-spacing:-0.02em;margin:6px 0 2px}
+.hero .big small{font-size:18px;font-weight:500;color:var(--fg2);margin-left:6px;letter-spacing:0}
+.refs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:560px){.refs{grid-template-columns:1fr}}
+.ref{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface2)}
+.ref .d{font-size:18px;font-weight:600;font-variant-numeric:tabular-nums} .ref .s{color:var(--fg2);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:1000px){.grid{grid-template-columns:1fr}}
+.etf-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
+.etf-head h2{font-size:20px;margin:0;font-weight:600} .etf-head .idx{font-size:12px;color:var(--muted);line-height:1.3}
+.sec{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.sec h3{font-size:12px;color:var(--muted);font-weight:500;margin:0 0 8px;letter-spacing:0.04em}
+.meter{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center;margin-bottom:9px}
+.meter .n{font-size:13px;color:var(--fg2)} .meter .v{font-variant-numeric:tabular-nums;font-weight:600;text-align:right;white-space:nowrap}
+.meter .v small{font-weight:500;font-size:11px;margin-left:4px}
+.track{grid-column:1/-1;position:relative;height:8px;border-radius:4px;background:var(--track)}
+.fill{position:absolute;left:0;top:0;height:8px;border-radius:4px 2px 2px 4px;background:var(--accent)}
+.fill.over{background:var(--over)} .fill.near{background:var(--near)}
+.lim{position:absolute;top:-3px;width:2px;height:14px;background:var(--fg);opacity:.75}
+.lim-l{position:absolute;top:12px;font-size:10px;color:var(--muted);transform:translateX(-50%);white-space:nowrap;max-width:100%}
+.lim-l.right{left:auto!important;right:0;transform:none;text-align:right} .lim-l.left{left:0!important;transform:none}
+.meter.has-lim{margin-bottom:22px}
+.count{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:var(--fg2)} .count b{color:var(--fg);font-variant-numeric:tabular-nums}
+.breach{margin:0;padding:0;list-style:none;font-size:13px}
+.breach li{padding:3px 0 3px 12px;position:relative;color:var(--fg2)} .breach li::before{content:"";position:absolute;left:0;top:10px;width:6px;height:6px;border-radius:50%;background:var(--over)} .breach b{color:var(--fg)}
+.bars{display:grid;grid-template-columns:3.2em minmax(0,1fr) 5.4em;gap:4px 8px;align-items:center;font-size:12px}
+.bars .t{font-weight:600} .bars .b{height:14px;border-radius:0 4px 4px 0;background:var(--buy);min-width:2px} .bars .b.sell{background:var(--sell)}
+.bars .r{text-align:right;font-variant-numeric:tabular-nums;color:var(--fg2);white-space:nowrap}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px} @media (max-width:420px){.two{grid-template-columns:1fr}}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:13px;margin:0} .kv dt{color:var(--muted)} .kv dd{margin:0;font-variant-numeric:tabular-nums}
+.warn{font-size:12px;color:var(--fg2);margin:6px 0 0;padding-left:16px}
+@media (prefers-reduced-motion:no-preference){.fill{transition:width .5s ease}}
+/* ---- note ---- */
+.subtabs{display:flex;gap:4px;flex-wrap:wrap;margin:0 0 14px}
+.subtab{appearance:none;border:1px solid var(--line);background:var(--surface);font:inherit;font-size:13px;color:var(--fg2);padding:5px 12px;border-radius:999px;cursor:pointer}
+.subtab:hover{border-color:var(--line2)} .subtab:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.subtab[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:16px;min-width:0}
+.sheet h2{font-size:19px;font-weight:600;margin:0 0 4px}
+.sheet h3{font-size:12px;font-weight:600;letter-spacing:0.04em;color:var(--muted);margin:18px 0 8px}
+.lede{color:var(--fg2);margin:0 0 6px;max-width:72ch}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-weight:600;color:var(--fg2);font-size:12px;white-space:nowrap;background:var(--surface2)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tbody tr:hover td{background:var(--surface2)}
+.bar{position:relative;height:10px;background:var(--track);border-radius:2px;min-width:140px}
+.bar i{position:absolute;left:0;top:0;height:10px;background:var(--accent);border-radius:0 3px 3px 0} .bar i.over{background:var(--over)} .bar i.near{background:var(--near)}
+.bar b{position:absolute;top:-3px;width:2px;height:16px;background:var(--fg);opacity:.7}
+.dbar{position:relative;height:10px;min-width:160px} .dbar .mid{position:absolute;left:50%;top:-2px;width:1px;height:14px;background:var(--line2)}
+.dbar i{position:absolute;top:0;height:10px;border-radius:2px} .dbar i.neg{background:var(--sell);right:50%} .dbar i.pos{background:var(--buy);left:50%}
+.sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px} @media (max-width:760px){.sum{grid-template-columns:1fr}}
+.sum .box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;border-top:3px solid var(--accent);min-width:0}
+.sum .box.over{border-top-color:var(--over)} .sum .box.near{border-top-color:var(--near)} .sum .box.ok{border-top-color:var(--ok)}
+.sum .etf{font-size:20px;font-weight:600} .sum .hl{margin:6px 0 4px;font-size:13px} .sum .sub{color:var(--muted);font-size:12px}
+/* ---- track ---- */
+.tpanel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;min-width:0}
+.tpanel h2{margin:0 0 2px;font-size:18px;font-weight:600} .tpanel .sub{color:var(--fg2);font-size:13px;margin-bottom:10px}
+svg{display:block;width:100%;height:auto;max-width:100%} .tl text,.ch text{font-family:var(--font)}
+.tl-list{margin:4px 0 0;padding-left:22px;columns:2;column-gap:24px;font-size:13px;color:var(--fg2)} .tl-list li{break-inside:avoid;margin:2px 0} .tl-list b{color:var(--fg);font-variant-numeric:tabular-nums} .tl-list .d{color:var(--muted);font-size:12px}
+@media (max-width:600px){.tl-list{columns:1}}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--fg2);margin:6px 0 2px} .legend span{display:inline-flex;align-items:center;gap:6px} .legend i{width:14px;height:3px;border-radius:2px;display:inline-block} .legend i.cap{height:0;border-top:2px dashed var(--cap)}
+.row{display:grid;grid-template-columns:minmax(0,2fr) minmax(260px,1fr);gap:16px;align-items:start} @media (max-width:860px){.row{grid-template-columns:1fr}}
+.side h3{font-size:12px;color:var(--muted);font-weight:500;margin:10px 0 6px;letter-spacing:0.04em} .side h3:first-child{margin-top:0}
+.kpi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px} .kpi div{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--surface2)} .kpi .l{font-size:11px;color:var(--muted)} .kpi .v{font-size:18px;font-weight:600} .kpi .v small{font-size:11px;font-weight:500;margin-left:4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px} .chip{font-size:12px;padding:3px 8px;border-radius:6px;border:1px solid var(--line);background:var(--surface2);font-variant-numeric:tabular-nums}
+.chip.sell{border-color:transparent;background:var(--over-bg)} .chip.buy{border-color:transparent;background:var(--accent-soft)} .chip b{font-weight:600}
+.chartbox{position:relative} .ctitle{margin:10px 0 2px;font-weight:600;font-size:13px}
+.tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,.15);white-space:nowrap;z-index:2;color:var(--fg)}
+.tip .d{color:var(--muted);margin-bottom:2px} .tip div span{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.ch-table table{font-size:12px} .ch-table th,.ch-table td{padding:4px 8px;text-align:right} .ch-table th:first-child,.ch-table td:first-child{text-align:left}
+/* ---- brief ---- */
+.brief{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px 24px;max-width:860px;min-width:0}
+.brief .bmeta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted);margin-bottom:12px;align-items:center}
+.brief .bmeta select{font:inherit;font-size:12px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg);padding:2px 6px}
+.md{line-height:1.7;max-width:70ch} .md h1{font-size:22px;margin:0 0 10px} .md h2{font-size:17px;margin:20px 0 8px;padding-top:12px;border-top:1px solid var(--line)} .md h3{font-size:14px;margin:14px 0 6px}
+.md p{margin:0 0 10px} .md ul,.md ol{margin:0 0 10px;padding-left:22px} .md li{margin:3px 0} .md blockquote{margin:0 0 10px;padding:6px 12px;border-left:3px solid var(--line2);color:var(--fg2)}
+.md table{font-size:13px;margin:0 0 12px} .md code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:var(--surface2);padding:1px 4px;border-radius:3px} .md hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+.md a{color:var(--accent)}
+</style>
+<div class="wrap">
+  <header class="top">
+    <div><h1>ETF 리밸런스 트래커</h1><div class="meta" id="meta">데이터를 불러오는 중입니다.</div></div>
+    <div class="src" id="src"><span class="st">연결 확인 중</span></div>
+  </header>
+  <nav class="tabs" role="tablist" id="tabs">
+    <button class="tab" role="tab" data-tab="board" aria-selected="false">보드</button>
+    <button class="tab" role="tab" data-tab="note" aria-selected="false">노트</button>
+    <button class="tab" role="tab" data-tab="track" aria-selected="false">트랙</button>
+    <button class="tab" role="tab" data-tab="brief" aria-selected="false">브리핑</button>
+  </nav>
+  <section class="panel" id="panel-board" role="tabpanel" hidden><div class="state">데이터를 기다리는 중입니다.</div></section>
+  <section class="panel" id="panel-note" role="tabpanel" hidden><div class="state">데이터를 기다리는 중입니다.</div></section>
+  <section class="panel" id="panel-track" role="tabpanel" hidden><div class="state">데이터를 기다리는 중입니다.</div></section>
+  <section class="panel" id="panel-brief" role="tabpanel" hidden><div class="state">브리핑을 기다리는 중입니다.</div></section>
+  <footer>
+    <div>데이터: iShares와 Invesco가 공개한 ETF 보유 내역(전 거래일 기준)을 GitHub Actions가 매일 수집해 <a href="https://github.com/tlzkrh1029/etf-rebalancing-tracker" target="_blank" rel="noopener">etf-rebalancing-tracker</a> 저장소에 커밋합니다. 이 페이지는 열릴 때 GitHub 커넥터로 저장소의 reports/summary.json, history.json, briefing/latest.md를 읽고, 커넥터를 쓸 수 없으면 발행 시점의 사본을 보여줍니다.</div>
+    <div>상한 점검과 강제 매매표의 비중은 주식만으로 재정규화한 ETF 비중, 분해표의 비중은 현금과 파생상품을 포함한 펀드 비중이며 둘 다 지수 비중의 근사치입니다. 추정 금액은 비중 변화에 순자산을 곱한 값입니다. 규칙 출처는 저장소의 docs/methodology.md입니다.</div>
+  </footer>
+</div>
+<script>
+/* ===== shared: constants, formatting, data access ===== */
+const REPO = { owner: 'tlzkrh1029', repo: 'etf-rebalancing-tracker', ref: 'refs/heads/claude/exciting-allen-9b4nx6' };
+const SERVER = 'github';
+const FILES = { summary: 'reports/summary.json', history: 'reports/history.json', brief: 'reports/briefing/latest.md', briefDir: 'reports/briefing/' };
+const LOCAL = { summary: './data/summary.json', history: './data/history.json', brief: './data/briefing.md' };
+const ETFS = ['SOXX', 'QQQ', 'IGV'];
+const INDEX_NAME = { SOXX: 'NYSE Semiconductor Index', QQQ: 'Nasdaq-100 Index', IGV: 'S&P North American Expanded Technology Software Index' };
+const KIND = { quarterly_rebalance: '분기 리밸런스', annual_reconstitution: '연간 재구성', semiannual_reconstitution: '반기 재구성', special_rebalance: '특별 리밸런스' };
+const CLS = { flow_only: '자금 흐름만', active_trade: '실제 매매', entry: '신규 편입', exit: '제외', corporate_action_suspect: '기업행동 의심' };
+const FALLBACK_LIMITS = {
+  SOXX: { single_cap: 0.08, outside_top5_cap: 0.04, adr_cap: 0.10 },
+  QQQ: { company_trigger: 0.24, company_cap: 0.20, cohort_threshold: 0.045, cohort_trigger: 0.48, cohort_target: 0.40, security_trigger: 0.15, security_cap: 0.14 },
+  IGV: { single_cap: 0.085, cohort_threshold: 0.045, cohort_cap: 0.45 },
+};
+const SERIES = ['--s1', '--s2', '--s3', '--s4', '--s5', '--s6'];
+const fmt = {
+  pct: (x, d = 2) => (x == null ? '-' : (x * 100).toFixed(d) + '%'),
+  pp: (x, d = 2) => (x == null ? '-' : (x >= 0 ? '+' : '') + (x * 100).toFixed(d) + 'pp'),
+  ppAbs: (x, d = 2) => (x == null ? '-' : (Math.abs(x) * 100).toFixed(d) + 'pp'),
+  usd: (x) => { if (x == null) return '-'; const a = Math.abs(x), s = x < 0 ? '-' : ''; if (a >= 1e9) return s + (a / 1e9).toFixed(2) + 'B USD'; if (a >= 1e6) return s + (a / 1e6).toFixed(1) + 'M USD'; return s + Math.round(a).toLocaleString('en-US') + ' USD'; },
+  int: (x) => (x == null ? '-' : Math.round(x).toLocaleString('en-US')),
+  k: (x) => (x == null ? '-' : x.toFixed(4)),
+  md: (s) => (s ? s.slice(5).replace('-', '/') : '-'),
+  lim: (x) => (x == null ? '-' : (x * 100).toFixed((x * 100) % 1 ? 1 : 0) + '%'),
+  time: (ms) => { if (!ms) return ''; const d = new Date(ms); const p = n => String(n).padStart(2, '0'); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`; },
+};
+function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function statusOf(value, limit, kind) {
+  if (value == null) return { code: 'info', label: '자료 없음', icon: '·' };
+  if (limit == null) return { code: 'info', label: '참고', icon: '·' };
+  if (kind === 'count') return value > 0 ? { code: 'over', label: `초과 ${value}종목`, icon: '▲' } : { code: 'ok', label: '정상', icon: '✓' };
+  const room = limit - value;
+  if (room < 0) return { code: 'over', label: '초과 ' + fmt.ppAbs(room), icon: '▲' };
+  if (room <= 0.0025) return { code: 'near', label: '경계 ' + fmt.ppAbs(room), icon: '●' };
+  return { code: 'ok', label: '여유 ' + fmt.ppAbs(room), icon: '✓' };
+}
+function limitsFor(etf) { const h = DATA.history && DATA.history.etfs && DATA.history.etfs[etf]; return Object.assign({}, FALLBACK_LIMITS[etf] || {}, (h && h.limits) || {}); }
+function metricRows(etf, e) {
+  const m = (e.caps && e.caps.metrics) || {}; const limits = limitsFor(etf); const rows = [];
+  if (etf === 'SOXX') {
+    rows.push({ key: 'max_weight', label: '최대 종목 비중', value: m.max_weight, limit: limits.single_cap, kind: 'pct' });
+    rows.push({ key: 'adr_sum', label: 'ADR 합계 비중', value: m.adr_sum, limit: limits.adr_cap, kind: 'pct' });
+    rows.push({ key: 'names_over_4_outside_top5', label: '상위 5 밖 4% 초과 종목 수', value: m.names_over_4_outside_top5, limit: 0, kind: 'count', unit: '종목' });
+    rows.push({ key: 'names_over_8', label: '8% 초과 종목 수', value: m.names_over_8, limit: 0, kind: 'count', unit: '종목' });
+    rows.push({ key: 'top5_sum', label: '상위 5 종목 합계', value: m.top5_sum, limit: null, kind: 'pct' });
+  } else if (etf === 'QQQ') {
+    rows.push({ key: 'max_company_weight', label: '최대 회사 비중', value: m.max_company_weight, limit: limits.company_trigger, kind: 'pct', trigger: true, target: limits.company_cap });
+    rows.push({ key: 'sum_over_4_5', label: '4.5% 초과 회사 합계', value: m.sum_over_4_5, limit: limits.cohort_trigger, kind: 'pct', trigger: true, target: limits.cohort_target });
+    rows.push({ key: 'names_over_4_5', label: '4.5% 초과 회사 수', value: m.names_over_4_5, limit: null, kind: 'count', unit: '개 회사' });
+    if (e.caps && e.caps.event_type === 'annual_reconstitution') {
+      rows.push({ key: 'max_security_weight', label: '최대 증권 비중 (12월 전용)', value: m.max_security_weight, limit: limits.security_trigger, kind: 'pct', target: limits.security_cap });
+      rows.push({ key: 'top5_security_sum', label: '상위 5 증권 합계 (12월 전용)', value: m.top5_security_sum, limit: 0.40, kind: 'pct', target: 0.385 });
+    }
+  } else {
+    rows.push({ key: 'max_weight', label: '최대 회사 비중', value: m.max_weight, limit: limits.single_cap, kind: 'pct' });
+    rows.push({ key: 'sum_over_4_5', label: '4.5% 초과 회사 합계', value: m.sum_over_4_5, limit: limits.cohort_cap, kind: 'pct' });
+    rows.push({ key: 'names_over_4_5', label: '4.5% 초과 회사 수', value: m.names_over_4_5, limit: null, kind: 'count', unit: '개 회사' });
+  }
+  rows.forEach(r => { r.status = statusOf(r.value, r.limit, r.kind); });
+  return rows;
+}
+function worstStatus(rows) { const o = { over: 3, near: 2, ok: 1, info: 0 }; return rows.reduce((w, r) => (o[r.status.code] > o[w.code] ? r.status : w), { code: 'info', label: '자료 없음', icon: '·' }); }
+function describeRule(rule) { const map = { soxx_single_cap_8: '8% 초과', soxx_outside_top5_cap_4: '상위 5 밖 4% 초과', soxx_adr_cap_10: 'ADR 합계 10% 초과', igv_single_cap_8_5: '8.5% 초과', igv_aggregate_45: '4.5% 초과 합계 45% 초과' }; return map[rule] || String(rule).replace(/_/g, ' '); }
+function headline(e) { const b = (e.caps && e.caps.breaches) || []; if (!b.length) return '상한 위반 없음'; return b.map(x => `${esc(x.tickers.join(', '))} (${esc(describeRule(x.rule))})`).join(' · '); }
+function eqMap(e) { if (!e._eq) { e._eq = {}; for (const h of (e.equities || [])) e._eq[h.ticker] = h; } return e._eq; }
+function forcedList(e, which, n = 5) {
+  const list = ((e.caps || {})[which] || []).slice(); list.sort((a, b) => (which === 'forced_sellers' ? a[1] - b[1] : b[1] - a[1]));
+  const tna = e.fund && e.fund.total_net_assets; const eq = eqMap(e);
+  return { total: list.length, rows: list.slice(0, n).map(([t, d]) => ({ ticker: t, delta: d, usd: tna ? d * tna : null, current: eq[t] ? eq[t].weight_eq : null })) };
+}
+function topChanges(e) { const d = e.decomposition; return (d && d.top_changes) || []; }
+function notable(e) { const d = e.decomposition; return ((d && d.notable) || []).filter(c => c.asset_class === 'equity'); }
+function minDays(field) { let best = null; for (const etf of ETFS) { const e = DATA.summary.etfs[etf]; if (!e || !e.next_events || !e.next_events[0]) continue; const v = e.next_events[0][field]; if (v != null && (best == null || v < best)) best = v; } return best; }
+function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function parseDate(s) { const [y, m, d] = s.split('-').map(Number); return new Date(Date.UTC(y, m - 1, d)); }
+function dayDiff(a, b) { return Math.round((parseDate(b) - parseDate(a)) / 86400000); }
+
+/* ===== tiny markdown renderer (headings, lists, tables, quotes, inline bold/em/code/links); HTML is escaped first ===== */
+function inlineMd(s) {
+  s = esc(s);
+  s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+  s = s.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
+  s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  return s;
+}
+function renderMd(text) {
+  const lines = String(text || '').replace(/\r\n?/g, '\n').split('\n'); const out = []; let i = 0;
+  const flushPara = (buf) => { if (buf.length) out.push('<p>' + buf.map(inlineMd).join('<br>') + '</p>'); };
+  let para = [];
+  while (i < lines.length) {
+    const ln = lines[i];
+    if (/^\s*$/.test(ln)) { flushPara(para); para = []; i++; continue; }
+    let m;
+    if ((m = ln.match(/^(#{1,3})\s+(.*)$/))) { flushPara(para); para = []; out.push(`<h${m[1].length}>${inlineMd(m[2])}</h${m[1].length}>`); i++; continue; }
+    if (/^\s*(-{3,}|\*{3,})\s*$/.test(ln)) { flushPara(para); para = []; out.push('<hr>'); i++; continue; }
+    if (/^\s*>/.test(ln)) { flushPara(para); para = []; const q = []; while (i < lines.length && /^\s*>/.test(lines[i])) { q.push(lines[i].replace(/^\s*>\s?/, '')); i++; } out.push('<blockquote>' + q.map(inlineMd).join('<br>') + '</blockquote>'); continue; }
+    if (/^\s*\|/.test(ln) && i + 1 < lines.length && /^\s*\|?\s*:?-{2,}/.test(lines[i + 1])) {
+      flushPara(para); para = []; const cells = l => l.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim());
+      const head = cells(ln); i += 2; const rows = [];
+      while (i < lines.length && /^\s*\|/.test(lines[i])) { rows.push(cells(lines[i])); i++; }
+      out.push(`<div class="tw"><table><thead><tr>${head.map(c => `<th>${inlineMd(c)}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td class="${/^[-+]?[\d.,]+\s*(%|pp|USD|주|개|거래일)?$/.test(c) ? 'num' : ''}">${inlineMd(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`); continue;
+    }
+    if (/^\s*([-*+]|\d+\.)\s+/.test(ln)) {
+      flushPara(para); para = []; const ordered = /^\s*\d+\./.test(ln); const items = [];
+      while (i < lines.length && /^\s*([-*+]|\d+\.)\s+/.test(lines[i])) { let item = lines[i].replace(/^\s*([-*+]|\d+\.)\s+/, ''); i++; while (i < lines.length && /^\s{2,}\S/.test(lines[i]) && !/^\s*([-*+]|\d+\.)\s+/.test(lines[i])) { item += ' ' + lines[i].trim(); i++; } items.push(item); }
+      out.push(`<${ordered ? 'ol' : 'ul'}>${items.map(it => `<li>${inlineMd(it)}</li>`).join('')}</${ordered ? 'ol' : 'ul'}>`); continue;
+    }
+    para.push(ln); i++;
+  }
+  flushPara(para);
+  return out.join('\n');
+}
+
+/* ===== data store and loading ===== */
+const DATA = { summary: null, history: null, brief: null, briefName: null, source: 'none', storedAt: null, mcp: null, errors: {} };
+const UNSUBS = [];
+function extractText(result) {
+  if (!result) return null;
+  const blocks = Array.isArray(result.content) ? result.content : [];
+  for (const b of blocks) { if (b && b.type === 'resource' && b.resource) { if (typeof b.resource.text === 'string') return b.resource.text; if (typeof b.resource.blob === 'string') { try { return new TextDecoder().decode(Uint8Array.from(atob(b.resource.blob), c => c.charCodeAt(0))); } catch (e) { /* fall through */ } } } }
+  for (const b of blocks) { if (b && b.type === 'text' && typeof b.text === 'string' && !/^successfully downloaded/i.test(b.text)) return b.text; }
+  if (typeof result.payload === 'string' && !/^successfully downloaded/i.test(result.payload)) return result.payload;
+  if (result.payload && typeof result.payload === 'object') return JSON.stringify(result.payload);
+  return null;
+}
+function applyFile(name, text, meta) {
+  if (text == null) return false;
+  try {
+    if (name === 'summary') DATA.summary = JSON.parse(text);
+    else if (name === 'history') DATA.history = JSON.parse(text);
+    else if (name === 'brief') DATA.brief = text;
+  } catch (e) { DATA.errors[name] = '파일 형식 오류: ' + e.message; return false; }
+  delete DATA.errors[name];
+  if (meta) { DATA.source = meta.source; if (meta.storedAt) DATA.storedAt = meta.storedAt; }
+  return true;
+}
+function errorCopy(err) {
+  const s = err && err.server ? err.server : 'GitHub';
+  switch (err && err.code) {
+    case 'needs_reauth': return `${s} 커넥터의 인증이 만료되었습니다. claude.ai 설정의 커넥터에서 다시 연결해 주세요.`;
+    case 'server_not_connected': return `${s} 커넥터가 연결되어 있지 않습니다. claude.ai 설정의 커넥터에서 GitHub를 추가해 주세요.`;
+    case 'selection_required': return `같은 이름의 ${s} 커넥터가 여러 개라 선택이 필요합니다. 안내 창에서 하나를 골라 주세요.`;
+    case 'not_in_manifest': return `이 페이지의 ${s} 커넥터 사용이 허용되지 않았습니다. 페이지의 권한 메뉴에서 허용하면 실시간 데이터를 읽습니다.`;
+    case 'blocked_by_policy': return `조직 정책이 이 페이지의 ${s} 커넥터 사용을 막고 있습니다.`;
+    case 'approval_required': return `${s} 커넥터 호출에 승인이 필요합니다.`;
+    case 'tool_error': return `저장소 파일을 읽지 못했습니다: ${err.message || ''}`;
+    case 'server_unavailable': return `${s} 커넥터 응답이 없습니다. 잠시 뒤 다시 시도합니다.`;
+    case 'not_granted': case 'capability_disabled': case 'capability_removed': return '이 화면에서는 커넥터를 쓸 수 없습니다.';
+    default: return `커넥터 오류 (${err && err.code ? err.code : 'unknown'})`;
+  }
+}
+const DENIAL = new Set(['needs_reauth', 'server_not_connected', 'selection_required', 'not_in_manifest', 'blocked_by_policy', 'not_granted', 'capability_disabled', 'capability_removed', 'server_not_found', 'consent_required']);
+let fallbackLoaded = false;
+async function loadFallback(reason) {
+  if (fallbackLoaded) return; fallbackLoaded = true;
+  const got = await Promise.all(['summary', 'history', 'brief'].map(async name => { try { const r = await fetch(LOCAL[name], { cache: 'no-store' }); if (!r.ok) return [name, null]; return [name, await r.text()]; } catch (e) { return [name, null]; } }));
+  let any = false;
+  for (const [name, text] of got) { if (text != null && (name !== 'summary' || !DATA.summary)) { if (applyFile(name, text, null)) any = true; } }
+  if (any && DATA.source !== 'live') { DATA.source = 'copy'; DATA.copyReason = reason || ''; }
+  renderAll();
+}
+function setSrc(html) { document.getElementById('src').innerHTML = html; }
+async function boot() {
+  wireTabs();
+  let mcp = null;
+  try { mcp = (window.claude && typeof window.claude.use === 'function') ? await window.claude.use('mcp') : null; } catch (e) { mcp = null; }
+  DATA.mcp = mcp;
+  if (!mcp) { await loadFallback('이 화면에서는 커넥터를 쓸 수 없어'); return; }
+  setSrc('<span class="st">GitHub 커넥터로 저장소를 읽는 중</span>');
+  let delivered = 0;
+  const watch = (name, path) => {
+    const unsub = mcp.watchTool(SERVER, 'get_file_contents', { owner: REPO.owner, repo: REPO.repo, path, ref: REPO.ref }, (ev) => {
+      if (ev.type === 'data') {
+        const text = extractText(ev.result);
+        const storedAt = ev.result && ev.result.cache && ev.result.cache.storedAt ? ev.result.cache.storedAt : Date.now();
+        if (applyFile(name, text, { source: 'live', storedAt })) { delivered++; renderAll(); } else { DATA.errors[name] = DATA.errors[name] || '파일 내용을 읽지 못했습니다'; renderAll(); }
+      } else if (ev.type === 'error') {
+        const err = ev.error || {};
+        if (name === 'brief' && err.code === 'tool_error') { DATA.brief = ''; DATA.briefMissing = true; renderAll(); return; }
+        DATA.errors[name] = errorCopy(err);
+        if (DENIAL.has(err.code)) { loadFallback(errorCopy(err)); } else { renderAll(); }
+      }
+    }, { cache: { staleTime: 60000, gcTime: 86400000 } });
+    UNSUBS.push(unsub);
+  };
+  watch('summary', FILES.summary); watch('history', FILES.history); watch('brief', FILES.brief);
+  setTimeout(() => { if (!DATA.summary) loadFallback('커넥터 응답을 기다리는 동안'); }, 12000);
+}
+function refreshLive() { if (DATA.mcp && typeof DATA.mcp.invalidate === 'function') { setSrc('<span class="st">다시 읽는 중</span>'); DATA.mcp.invalidate(SERVER, 'get_file_contents').catch(() => {}); } }
+
+/* ===== tabs ===== */
+let currentTab = 'board';
+function wireTabs() {
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => selectTab(t.dataset.tab, true)));
+  let start = 'board'; try { const s = localStorage.getItem('etf-tracker-tab'); if (s) start = s; } catch (e) {}
+  const h = (location.hash || '').replace('#', ''); if (['board', 'note', 'track', 'brief'].includes(h)) start = h;
+  selectTab(start, false);
+  window.addEventListener('hashchange', () => { const x = (location.hash || '').replace('#', ''); if (['board', 'note', 'track', 'brief'].includes(x) && x !== currentTab) selectTab(x, false); });
+}
+function selectTab(id, store) {
+  currentTab = id;
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === id)));
+  document.querySelectorAll('.panel').forEach(p => { p.hidden = (p.id !== 'panel-' + id); });
+  if (store) { try { localStorage.setItem('etf-tracker-tab', id); } catch (e) {} if (location.hash !== '#' + id) { try { history.replaceState(null, '', '#' + id); } catch (e) {} } }
+  if (id === 'track' && DATA.summary) renderTrack();
+}
+/* ===== render: header ===== */
+function renderHeader() {
+  const d = DATA.summary; if (!d) return;
+  document.getElementById('meta').textContent = `분석 기준일 ${d.today} · 리포트 생성 ${(d.generated_utc || '').replace('T', ' ').replace('Z', ' UTC')} · 보유 내역은 전 거래일(T-1) 기준`;
+  const errs = Object.values(DATA.errors);
+  let s = '';
+  if (DATA.source === 'live') s = `<span class="st live">GitHub 저장소 실시간${DATA.storedAt ? ' · 확인 ' + esc(fmt.time(DATA.storedAt)) : ''}</span>`;
+  else if (DATA.source === 'copy') s = `<span class="st copy">발행 시점 사본</span><span>${esc(DATA.copyReason || '')} 발행 당시의 파일을 보여줍니다.</span>`;
+  else s = '<span class="st">데이터 출처 확인 중</span>';
+  if (errs.length) s += `<span class="st err">${esc(errs[0])}</span>`;
+  if (DATA.mcp) s += '<button type="button" id="btn-refresh">다시 읽기</button>';
+  setSrc(s);
+  const b = document.getElementById('btn-refresh'); if (b) b.addEventListener('click', refreshLive);
+  // breach counts on the tab bar
+  for (const etf of ETFS) { /* counts are summed into the note tab badge below */ }
+  const total = ETFS.reduce((n, etf) => { const e = d.etfs[etf]; return n + (e ? ((e.caps && e.caps.breaches) || []).reduce((s2, b2) => s2 + b2.tickers.length, 0) : 0); }, 0);
+  const noteTab = document.querySelector('.tab[data-tab="board"]'); if (noteTab) noteTab.innerHTML = `보드<span class="n ${total ? 'over' : 'ok'}">${total}</span>`;
+  const briefTab = document.querySelector('.tab[data-tab="brief"]'); if (briefTab) briefTab.innerHTML = `브리핑${DATA.brief ? '' : '<span class="n">-</span>'}`;
+}
+
+/* ===== render: board ===== */
+function meterHTML(r) {
+  if (r.kind === 'count') return `<div class="count"><span>${esc(r.label)}</span><span><b>${fmt.int(r.value)}${esc(r.unit || '개')}</b> &nbsp;<span class="st ${r.status.code}">${r.status.icon} ${esc(r.status.label)}</span></span></div>`;
+  const hasLim = r.limit != null;
+  const span = hasLim ? Math.max(r.limit * 1.3, (r.value || 0) * 1.08) : Math.max((r.value || 0) * 1.25, 0.01);
+  const w = Math.min(100, ((r.value || 0) / span) * 100).toFixed(2); const lp = hasLim ? +(r.limit / span * 100).toFixed(2) : null;
+  const limText = hasLim ? `한도 ${fmt.lim(r.limit)}${r.target != null ? ` → 조정 ${fmt.lim(r.target)}` : ''}${r.trigger ? ' · 특별 리밸런스 기준' : ''}` : '';
+  return `<div class="meter ${hasLim ? 'has-lim' : ''}"><div class="n">${esc(r.label)}</div><div class="v">${fmt.pct(r.value)} <small class="st ${r.status.code}">${r.status.icon} ${esc(r.status.label)}</small></div><div class="track"><div class="fill ${hasLim ? r.status.code : ''}" style="width:${w}%"></div>${hasLim ? `<div class="lim" style="left:${lp}%"></div><div class="lim-l ${lp > 55 ? 'right' : (lp < 25 ? 'left' : '')}" style="left:${lp}%">${esc(limText)}</div>` : ''}</div></div>`;
+}
+function barsHTML(list, sell) {
+  if (!list.rows.length) return '<div class="empty">없음</div>';
+  const max = Math.max(...list.rows.map(r => Math.abs(r.delta))) || 1;
+  return `<div class="bars">${list.rows.map(r => `<div class="t">${esc(r.ticker)}</div><div><div class="b ${sell ? 'sell' : ''}" style="width:${(Math.abs(r.delta) / max * 100).toFixed(1)}%"></div></div><div class="r">${fmt.pp(r.delta)}<br>${fmt.usd(r.usd)}</div>`).join('')}</div>${list.total > list.rows.length ? `<div class="note">총 ${list.total}종목 중 상위 ${list.rows.length}개</div>` : ''}`;
+}
+function boardCard(etf, e) {
+  const rows = metricRows(etf, e); const st = worstStatus(rows); const sellers = forcedList(e, 'forced_sellers'), buyers = forcedList(e, 'forced_buyers');
+  const ev = (e.next_events || [])[0]; const d = e.decomposition; const ff = d && d.summary && d.summary.fund_flow; const sp = e.caps && e.caps.special_rebalance; const br = (e.caps && e.caps.breaches) || [];
+  const tna = e.fund && e.fund.total_net_assets; const to = e.caps && e.caps.metrics && e.caps.metrics.turnover;
+  const act = notable(e);
+  return `<section class="card"><div class="etf-head"><div><h2>${etf}</h2><div class="idx">${esc(INDEX_NAME[etf])}<br>기준일 ${esc(e.as_of)} · 주식 ${e.equity_count}종목 · 순자산 ${fmt.usd(tna)}</div></div><span class="pill ${st.code}"><span class="dot"></span>${st.icon} ${esc(st.label)}</span></div>
+    <div><h3 class="label" style="margin:0 0 8px">상한 점검 · ${esc(KIND[e.caps && e.caps.event_type] || '')} 규칙</h3>${rows.map(meterHTML).join('')}${sp ? `<div class="note">특별 리밸런스 트리거: <b>${sp.triggered ? '발동 조건 충족' : '미발동'}</b></div>` : ''}</div>
+    <div class="sec"><h3>위반 목록</h3>${br.length ? `<ul class="breach">${br.map(b => `<li><b>${esc(b.tickers.join(', '))}</b> · ${esc(describeRule(b.rule))} (최대 ${fmt.pct(b.value)}, 한도 ${fmt.pct(b.limit)})</li>`).join('')}</ul>` : '<div class="empty">없음</div>'}</div>
+    <div class="sec"><h3>상한 재적용 시 강제 매매 추정</h3><div class="two"><div><div class="label" style="margin-bottom:6px">매도 압력</div>${barsHTML(sellers, true)}</div><div><div class="label" style="margin-bottom:6px">매수 압력 (재분배)</div>${barsHTML(buyers, false)}</div></div>${to > 1e-6 ? `<div class="note">예상 일방향 회전율 ${fmt.pct(to)} (약 ${fmt.usd(to * tna)})</div>` : '<div class="note">상한을 다시 적용해도 비중이 바뀌지 않습니다.</div>'}</div>
+    <div class="sec"><h3>다음 이벤트</h3>${ev ? `<dl class="kv"><dt>종류</dt><dd>${esc(KIND[ev.kind] || ev.kind)}</dd><dt>참조일</dt><dd>${esc(ev.reference_date)} · D-${ev.trading_days_to_reference}거래일</dd><dt>매매일(종가)</dt><dd>${esc(ev.effective_trade_date)} · D-${ev.trading_days_to_trade}거래일</dd><dt>발표일</dt><dd>${ev.announcement_date ? esc(ev.announcement_date) : '미공표'}</dd></dl>` : '<div class="empty">없음</div>'}</div>
+    <div class="sec"><h3>전일 대비 변화</h3>${d ? `<dl class="kv"><dt>비교 구간</dt><dd>${esc(d.prev_as_of)} → ${esc(d.curr_as_of)}</dd><dt>자금 배율 k</dt><dd>${fmt.k(d.scale_factor)} (${ff && ff.implied_flow_usd_from_scale_factor != null ? (ff.implied_flow_usd_from_scale_factor < 0 ? '환매 ' : '설정 ') + fmt.usd(Math.abs(ff.implied_flow_usd_from_scale_factor)) : '-'})</dd><dt>가격 효과 합계</dt><dd>${fmt.ppAbs(d.summary && d.summary.gross_drift)}</dd><dt>주식수 효과 합계</dt><dd>${fmt.ppAbs(d.summary && d.summary.gross_trade)}</dd><dt>실제 매매</dt><dd>${act.length ? act.map(c => esc(c.ticker) + ' (' + esc(CLS[c.classification] || c.classification) + ')').join(', ') : '없음'}</dd></dl>` : '<div class="empty">첫 스냅샷입니다. 분해는 다음 거래일부터 시작됩니다.</div>'}</div>
+    ${(e.warnings || []).length ? `<div class="sec"><details><summary>데이터 경고 ${e.warnings.length}건</summary><ul class="warn">${e.warnings.map(w => `<li>${esc(w)}</li>`).join('')}</ul></details></div>` : ''}
+  </section>`;
+}
+function renderBoard() {
+  const d = DATA.summary; const el = document.getElementById('panel-board');
+  const dTrade = minDays('trading_days_to_trade'), dRef = minDays('trading_days_to_reference');
+  const pills = ETFS.filter(x => d.etfs[x]).map(etf => { const e = d.etfs[etf]; const st = worstStatus(metricRows(etf, e)); return `<span class="pill ${st.code}"><span class="dot"></span><b>${etf}</b> ${esc(st.label)} · ${fmt.md(e.as_of)}</span>`; }).join('');
+  const refs = ETFS.filter(x => d.etfs[x] && d.etfs[x].next_events && d.etfs[x].next_events[0]).map(etf => { const ev = d.etfs[etf].next_events[0]; return `<div class="ref"><div class="label">${etf} · ${esc(KIND[ev.kind] || ev.kind)}</div><div class="d">${esc(ev.reference_date)}</div><div class="s">참조일까지 ${ev.trading_days_to_reference}거래일 · 매매일 ${esc(ev.effective_trade_date)}</div></div>`; }).join('');
+  const tradeDate = [...new Set(ETFS.map(x => d.etfs[x] && d.etfs[x].next_events && d.etfs[x].next_events[0] && d.etfs[x].next_events[0].effective_trade_date).filter(Boolean))].join(' / ');
+  el.innerHTML = `<div class="pills" style="margin-bottom:12px">${pills}</div><div class="hero"><div class="card"><div class="label">다음 매매일(종가)까지</div><div class="big">${dTrade == null ? '-' : dTrade}<small>거래일</small></div><div class="meta">${esc(tradeDate)} 종가에 지수 추종 자금의 강제 매매가 집행됩니다. 가장 가까운 참조일까지는 ${dRef == null ? '-' : dRef}거래일입니다.</div></div><div class="card"><div class="label" style="margin-bottom:8px">비중 참조일 (상한 판정의 기준이 되는 종가)</div><div class="refs">${refs}</div></div></div><div class="grid">${ETFS.filter(x => d.etfs[x]).map(etf => boardCard(etf, d.etfs[etf])).join('')}</div>${d.errors && Object.keys(d.errors).length ? `<div class="state err">분석되지 않은 ETF: ${esc(JSON.stringify(d.errors))}</div>` : ''}`;
+}
+
+/* ===== render: note ===== */
+function tag(st) { return `<span class="tag ${st.code}">${st.icon} ${esc(st.label)}</span>`; }
+function barCell(value, limit, code) { const span = limit != null ? Math.max(limit * 1.3, (value || 0) * 1.08) : Math.max((value || 0) * 1.25, 0.01); const w = ((value || 0) / span * 100).toFixed(1); const lp = limit != null ? (limit / span * 100).toFixed(1) : null; return `<div class="bar"><i class="${code}" style="width:${w}%"></i>${lp != null ? `<b style="left:${lp}%"></b>` : ''}</div>`; }
+function dbar(v, scale) { const w = Math.min(50, Math.abs(v) / scale * 50).toFixed(1); return `<div class="dbar"><span class="mid"></span><i class="${v < 0 ? 'neg' : 'pos'}" style="width:${w}%"></i></div>`; }
+function capTable(etf, e) {
+  const rows = metricRows(etf, e);
+  return `<div class="tw"><table><thead><tr><th>지표</th><th class="num">현재값</th><th>한도</th><th>현재값 대비 한도</th><th>판정</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r.label)}${r.trigger ? ' <span class="pill info" style="padding:1px 7px">특별 리밸런스 기준</span>' : ''}</td><td class="num"><b>${r.kind === 'count' ? fmt.int(r.value) + esc(r.unit || '개') : fmt.pct(r.value)}</b></td><td>${r.limit == null ? '-' : (r.kind === 'count' ? '0' + esc(r.unit || '개') : fmt.lim(r.limit) + (r.target != null ? ` (조정 목표 ${fmt.lim(r.target)})` : ''))}</td><td>${r.kind === 'pct' ? barCell(r.value, r.limit, r.status.code) : ''}</td><td>${tag(r.status)}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function forcedTable(e) {
+  const s = forcedList(e, 'forced_sellers'), b = forcedList(e, 'forced_buyers');
+  if (!s.rows.length && !b.rows.length) return '<p class="empty">상한을 다시 적용해도 비중이 바뀌지 않으므로 예상 강제 매매가 없습니다.</p>';
+  const all = [...s.rows.map(r => ({ ...r, side: '매도' })), ...b.rows.map(r => ({ ...r, side: '매수' }))]; const scale = Math.max(...all.map(r => Math.abs(r.delta))) || 1;
+  const to = e.caps && e.caps.metrics && e.caps.metrics.turnover; const tna = e.fund && e.fund.total_net_assets;
+  return `<div class="tw"><table><thead><tr><th>방향</th><th>종목</th><th class="num">현재 비중</th><th class="num">목표 비중</th><th class="num">변화</th><th>크기</th><th class="num">추정 금액</th></tr></thead><tbody>${all.map(r => `<tr><td>${r.side}</td><td><b>${esc(r.ticker)}</b></td><td class="num">${fmt.pct(r.current)}</td><td class="num">${fmt.pct(r.current != null ? r.current + r.delta : null)}</td><td class="num">${fmt.pp(r.delta)}</td><td>${dbar(r.delta, scale)}</td><td class="num">${fmt.usd(r.usd)}</td></tr>`).join('')}</tbody></table></div><p class="empty">매도 ${s.total}종목, 매수 ${b.total}종목 중 각 상위 5개를 표시합니다.${to > 1e-6 ? ` 예상 일방향 회전율 ${fmt.pct(to)} (약 ${fmt.usd(to * tna)}).` : ''}</p>`;
+}
+function eventsTable(e) { const evs = e.next_events || []; if (!evs.length) return '<p class="empty">없음</p>'; return `<div class="tw"><table><thead><tr><th>종류</th><th>참조일</th><th>발표일</th><th>매매일(종가)</th><th>효력일</th><th class="num">참조일까지</th><th class="num">매매일까지</th></tr></thead><tbody>${evs.map(v => `<tr><td>${esc(KIND[v.kind] || v.kind)}</td><td>${esc(v.reference_date)}</td><td>${v.announcement_date ? esc(v.announcement_date) : '미공표'}</td><td>${esc(v.effective_trade_date)}</td><td>${esc(v.effective_date)}</td><td class="num">${v.trading_days_to_reference}거래일</td><td class="num">${v.trading_days_to_trade}거래일</td></tr>`).join('')}</tbody></table></div>`; }
+function decompTable(e) {
+  const d = e.decomposition; if (!d) return `<p class="empty">${esc(e.as_of)} 기준 첫 스냅샷입니다. 전일 스냅샷이 없어 분해는 다음 거래일부터 시작됩니다.</p>`;
+  const rows = topChanges(e); const scale = Math.max(...rows.map(c => Math.max(Math.abs(c.drift), Math.abs(c.trade), Math.abs(c.total_change)))) || 1e-4;
+  const ff = d.summary && d.summary.fund_flow; const flow = ff && ff.implied_flow_usd_from_scale_factor; const act = notable(e);
+  return `<p class="lede">${esc(d.prev_as_of)} → ${esc(d.curr_as_of)}. 비중 변화를 가격 효과(drift)와 주식수 효과(trade)로 나눕니다. k=${fmt.k(d.scale_factor)}이므로 전일 대비 약 ${fmt.pct(Math.abs(d.scale_factor - 1))}${flow != null ? ` (${fmt.usd(Math.abs(flow))} 상당)` : ''}의 ${d.scale_factor < 1 ? '환매(자금 유출)' : '설정(자금 유입)'}이 있었던 것으로 추정됩니다.</p>
+  <div class="tw"><table><thead><tr><th>종목</th><th class="num">비중</th><th class="num">전일</th><th class="num">변화</th><th class="num">가격 효과</th><th class="num">주식수 효과</th><th>변화 (왼쪽 음, 오른쪽 양)</th><th>분류</th></tr></thead><tbody>${rows.map(c => `<tr><td><b>${esc(c.ticker)}</b></td><td class="num">${fmt.pct(c.w_curr)}</td><td class="num">${fmt.pct(c.w_prev)}</td><td class="num">${fmt.pp(c.total_change)}</td><td class="num">${fmt.pp(c.drift)}</td><td class="num">${fmt.pp(c.trade)}</td><td>${dbar(c.total_change, scale)}</td><td>${esc(CLS[c.classification] || c.classification)}</td></tr>`).join('')}</tbody></table></div>
+  <h3>실제 매매로 분류된 종목</h3>${act.length ? `<ul class="plain">${act.map(c => `<li><b>${esc(c.ticker)}</b> ${esc(CLS[c.classification] || c.classification)} · 주식수 ${fmt.int(c.shares_prev)} → ${fmt.int(c.shares_curr)} (${c.rel_share_change != null ? (c.rel_share_change >= 0 ? '+' : '') + (c.rel_share_change * 100).toFixed(1) + '%' : '-'}) · 주식수 효과 ${fmt.pp(c.trade)}</li>`).join('')}</ul>` : '<p class="empty">없음. 주식수 변화는 설정·환매에 따른 공통 배율 안에 있습니다.</p>'}`;
+}
+function notePanel(etf, e) {
+  const rows = metricRows(etf, e); const st = worstStatus(rows); const sp = e.caps && e.caps.special_rebalance; const br = (e.caps && e.caps.breaches) || [];
+  return `<div class="sheet" data-sub="${etf}"><h2>${etf} <span style="font-size:13px;font-weight:500;color:var(--muted)">${esc(INDEX_NAME[etf])}</span></h2>
+    <p class="lede">보유 내역 기준일 ${esc(e.as_of)}, 주식 ${e.equity_count}종목, 발행주식수 ${fmt.int(e.fund && e.fund.shares_outstanding)}주, 순자산 ${fmt.usd(e.fund && e.fund.total_net_assets)}${e.fund && e.fund.nav ? `, NAV ${e.fund.nav.toFixed(2)} USD` : ''}. 종합 판정 ${tag(st)}</p>
+    <h3>상한 점검 (${esc(KIND[e.caps && e.caps.event_type] || '')} 규칙 기준)</h3>${capTable(etf, e)}
+    ${sp ? `<p class="lede">특별 리밸런스 트리거: <b>${sp.triggered ? '발동 조건 충족' : '미발동'}</b>. 최대 회사 비중 ${fmt.pct(sp.metrics && sp.metrics.max_company_weight)}(기준 24%), 4.5% 초과 회사 합계 ${fmt.pct(sp.metrics && sp.metrics.sum_over_4_5)}(기준 48%)입니다.</p>` : ''}
+    <h3>위반 목록</h3>${br.length ? `<ul class="plain">${br.map(b => `<li><b>${esc(b.tickers.join(', '))}</b>: ${esc(describeRule(b.rule))} (최대 ${fmt.pct(b.value)}, 한도 ${fmt.pct(b.limit)})</li>`).join('')}</ul>` : '<p class="empty">없음</p>'}
+    <h3>상한 재적용 시 강제 매매 추정</h3>${forcedTable(e)}
+    <h3>다음 이벤트</h3>${eventsTable(e)}
+    <h3>비중 변화 분해</h3>${decompTable(e)}
+    <h3>데이터 경고</h3>${(e.warnings || []).length ? `<ul class="plain">${e.warnings.map(w => `<li>${esc(w)}</li>`).join('')}</ul>` : '<p class="empty">없음</p>'}
+  </div>`;
+}
+let noteSub = 'ALL';
+function renderNote() {
+  const d = DATA.summary; const el = document.getElementById('panel-note');
+  try { const s = localStorage.getItem('etf-tracker-note-sub'); if (s) noteSub = s; } catch (e) {}
+  const boxes = ETFS.filter(x => d.etfs[x]).map(etf => { const e = d.etfs[etf]; const st = worstStatus(metricRows(etf, e)); const ev = (e.next_events || [])[0]; return `<div class="box ${st.code}"><div class="etf">${etf}</div><div class="hl">${headline(e)}</div><div class="sub">${tag(st)} · 기준일 ${esc(e.as_of)}${ev ? ` · 참조일 ${esc(ev.reference_date)} (D-${ev.trading_days_to_reference}거래일)` : ''}</div></div>`; }).join('');
+  const rows = ETFS.filter(x => d.etfs[x]).map(etf => { const e = d.etfs[etf]; const r = metricRows(etf, e); const key = r[0]; const ev = (e.next_events || [])[0]; const t = e.caps && e.caps.metrics && e.caps.metrics.turnover; return `<tr><td><b>${etf}</b></td><td>${esc(e.as_of)}</td><td>${esc(key.label)} ${fmt.pct(key.value)} / 한도 ${fmt.lim(key.limit)}</td><td>${tag(key.status)}</td><td class="num">${t > 1e-6 ? fmt.pct(t) : '0%'}</td><td>${ev ? esc(KIND[ev.kind] || ev.kind) + ' · ' + esc(ev.reference_date) : '-'}</td><td class="num">${ev ? ev.trading_days_to_reference + '거래일' : '-'}</td></tr>`; }).join('');
+  const subs = [['ALL', '전체 요약'], ...ETFS.filter(x => d.etfs[x]).map(x => [x, x])];
+  el.innerHTML = `<div class="subtabs" role="tablist">${subs.map(([id, label]) => `<button class="subtab" role="tab" data-sub="${id}" aria-selected="false">${esc(label)}</button>`).join('')}</div>
+    <div class="sheet" data-sub="ALL"><div class="sum">${boxes}</div><h2>한눈에 보기</h2><p class="lede">세 ETF의 핵심 상한 지표와 다음 참조일입니다. 상세 수치는 ETF별 보기에 있습니다.</p><div class="tw"><table><thead><tr><th>ETF</th><th>기준일</th><th>핵심 지표</th><th>판정</th><th class="num">예상 회전율</th><th>다음 이벤트</th><th class="num">참조일까지</th></tr></thead><tbody>${rows}</tbody></table></div></div>
+    ${ETFS.filter(x => d.etfs[x]).map(etf => notePanel(etf, d.etfs[etf])).join('')}`;
+  const apply = () => { el.querySelectorAll('.subtab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.sub === noteSub))); el.querySelectorAll('.sheet[data-sub]').forEach(s => { s.hidden = (s.dataset.sub !== noteSub); }); };
+  el.querySelectorAll('.subtab').forEach(t => t.addEventListener('click', () => { noteSub = t.dataset.sub; try { localStorage.setItem('etf-tracker-note-sub', noteSub); } catch (e) {} apply(); }));
+  if (!subs.some(s => s[0] === noteSub)) noteSub = 'ALL';
+  apply();
+}
+
+/* ===== render: track ===== */
+function timeline(d) {
+  const today = d.today; const events = [];
+  for (const etf of ETFS) { const e = d.etfs[etf]; if (!e) continue; for (const ev of (e.next_events || []).slice(0, 1)) { events.push({ etf, date: ev.reference_date, kind: 'ref', days: ev.trading_days_to_reference }); if (ev.announcement_date) events.push({ etf, date: ev.announcement_date, kind: 'ann' }); events.push({ etf, date: ev.effective_trade_date, kind: 'trade', days: ev.trading_days_to_trade }); } }
+  if (!events.length) return '<p class="empty">예정된 이벤트가 없습니다.</p>';
+  const merged = {}; for (const ev of events) { const k = ev.date + '|' + ev.kind; if (!merged[k]) merged[k] = { ...ev, etfs: [ev.etf] }; else merged[k].etfs.push(ev.etf); }
+  const items = Object.values(merged).sort((a, b) => a.date < b.date ? -1 : (a.date > b.date ? 1 : (a.kind < b.kind ? -1 : 1)));
+  const end = items[items.length - 1].date; const total = Math.max(1, dayDiff(today, end) + 6);
+  const W = Math.max(360, (document.getElementById('panel-track').clientWidth || 900) - 32), H = 92, L = 22, R = 22, y = 46;
+  const x = dd => L + (dayDiff(today, dd) / total) * (W - L - R);
+  const kindLabel = { ref: '참조일', ann: '발표', trade: '매매일(종가)' }; const col = k => k === 'trade' ? 'var(--over)' : (k === 'ref' ? 'var(--accent)' : 'var(--muted)');
+  let svg = `<svg class="tl" viewBox="0 0 ${W} ${H}" role="img" aria-label="다가오는 리밸런스 이벤트 타임라인"><line x1="${L}" y1="${y}" x2="${W - R}" y2="${y}" stroke="var(--axis)" stroke-width="2"/><circle cx="${L}" cy="${y}" r="5" fill="var(--fg)"/><text x="${L}" y="${y + 24}" font-size="11" fill="var(--fg2)" text-anchor="start">오늘 ${esc(today)}</text>`;
+  const t0 = parseDate(today); for (let m = 0; m < 4; m++) { const dt = new Date(Date.UTC(t0.getUTCFullYear(), t0.getUTCMonth() + m + 1, 1)); const iso = dt.toISOString().slice(0, 10); if (dayDiff(today, iso) > total) break; const xx = x(iso); svg += `<line x1="${xx.toFixed(1)}" y1="${y - 5}" x2="${xx.toFixed(1)}" y2="${y + 5}" stroke="var(--axis)"/><text x="${xx.toFixed(1)}" y="${y + 24}" font-size="10" fill="var(--muted)" text-anchor="middle">${dt.getUTCMonth() + 1}월</text>`; }
+  let lastX = -99, lane = 0;
+  items.forEach((it, i) => { const xx = x(it.date); lane = (xx - lastX < 22) ? lane + 1 : 0; lastX = xx; const ny = y - 16 - lane * 16; svg += `<line x1="${xx.toFixed(1)}" y1="${ny + 6}" x2="${xx.toFixed(1)}" y2="${y}" stroke="${col(it.kind)}" stroke-width="1.5"/><circle cx="${xx.toFixed(1)}" cy="${y}" r="${it.kind === 'trade' ? 6 : 5}" fill="${col(it.kind)}" stroke="var(--surface)" stroke-width="2"/><circle cx="${xx.toFixed(1)}" cy="${ny}" r="8" fill="var(--surface)" stroke="${col(it.kind)}" stroke-width="1.5"/><text x="${xx.toFixed(1)}" y="${ny + 3.5}" font-size="10" font-weight="700" fill="var(--fg)" text-anchor="middle">${i + 1}</text>`; });
+  svg += '</svg>';
+  return svg + `<ol class="tl-list">${items.map(it => `<li><span style="color:${col(it.kind)}">●</span> <b>${esc(it.date)}</b> ${esc(it.etfs.join('·'))} ${kindLabel[it.kind]}${it.days != null ? ` <span class="d">D-${it.days}거래일</span>` : ''}</li>`).join('')}</ol>`;
+}
+function lineChart(el, cfg) {
+  const { dates, series, caps = [], fmtY = v => fmt.pct(v, 1), title = '' } = cfg;
+  const W = Math.max(320, el.clientWidth || 700), H = Math.round(Math.min(360, Math.max(220, W * 0.42))); const L = 52, R = 104, T = 14, B = 30;
+  const vals = [...series.flatMap(s => s.values.filter(v => v != null)), ...caps.map(c => c.value)]; if (!vals.length) { el.innerHTML = '<p class="empty">표시할 값이 없습니다.</p>'; return; }
+  let lo = Math.min(...vals), hi = Math.max(...vals); const pad = (hi - lo) * 0.12 || 0.005; lo = Math.max(0, lo - pad); hi = hi + pad;
+  const n = dates.length; const x = i => L + (n > 1 ? (i / (n - 1)) * (W - L - R) : (W - L - R) / 2); const y = v => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
+  let g = ''; for (let k = 0; k <= 5; k++) { const v = lo + (hi - lo) * k / 5; g += `<line x1="${L}" y1="${y(v).toFixed(1)}" x2="${W - R}" y2="${y(v).toFixed(1)}" stroke="var(--grid)" stroke-width="1"/><text x="${L - 8}" y="${(y(v) + 4).toFixed(1)}" font-size="11" fill="var(--muted)" text-anchor="end">${fmtY(v)}</text>`; }
+  const step = Math.max(1, Math.ceil(n / 6)); let xl = ''; let lastTick = -1;
+  for (let i = 0; i < n; i += step) { xl += `<text x="${x(i).toFixed(1)}" y="${H - 8}" font-size="11" fill="var(--muted)" text-anchor="middle">${fmt.md(dates[i])}</text>`; lastTick = i; }
+  if (lastTick !== n - 1 && (x(n - 1) - x(lastTick)) >= 44) xl += `<text x="${x(n - 1).toFixed(1)}" y="${H - 8}" font-size="11" fill="var(--muted)" text-anchor="middle">${fmt.md(dates[n - 1])}</text>`;
+  let capsSvg = ''; for (const c of caps) capsSvg += `<line x1="${L}" y1="${y(c.value).toFixed(1)}" x2="${W - R}" y2="${y(c.value).toFixed(1)}" stroke="var(--cap)" stroke-width="1.5" stroke-dasharray="6 4"/><text x="${W - R + 6}" y="${(y(c.value) + 4).toFixed(1)}" font-size="11" fill="var(--fg2)">${esc(c.label)}</text>`;
+  let lines = '', ends = ''; const endLabels = [];
+  series.forEach((s, si) => { const col = `var(${s.color})`; let dpath = '', started = false; s.values.forEach((v, i) => { if (v == null) { started = false; return; } dpath += (started ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1); started = true; }); lines += `<path d="${dpath}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`; const last = s.values.map((v, i) => [v, i]).filter(p => p[0] != null).pop(); if (last) { ends += `<circle cx="${x(last[1]).toFixed(1)}" cy="${y(last[0]).toFixed(1)}" r="4.5" fill="${col}" stroke="var(--surface)" stroke-width="2"/>`; if (si < 4) endLabels.push({ y: y(last[0]), text: series.length > 1 ? `${s.name} ${fmt.pct(last[0], 1)}` : fmt.pct(last[0], 2) }); } });
+  endLabels.sort((a, b) => a.y - b.y); for (let i = 1; i < endLabels.length; i++) if (endLabels[i].y - endLabels[i - 1].y < 13) endLabels[i].y = endLabels[i - 1].y + 13;
+  const collide = caps.some(c => endLabels.some(l => Math.abs(l.y - y(c.value)) < 13));
+  const labels = collide ? '' : endLabels.map(l => `<text x="${W - R + 6}" y="${(l.y + 4).toFixed(1)}" font-size="11" font-weight="700" fill="var(--fg)">${esc(l.text)}</text>`).join('');
+  el.innerHTML = `<svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}">${g}${xl}${capsSvg}${lines}${ends}${labels}<line class="cross" x1="0" y1="${T}" x2="0" y2="${H - B}" stroke="var(--axis)" stroke-width="1" visibility="hidden"/><rect x="${L}" y="${T}" width="${W - L - R}" height="${H - T - B}" fill="transparent"/></svg><div class="tip" hidden></div>`;
+  const svgEl = el.querySelector('svg'), tip = el.querySelector('.tip'), cross = el.querySelector('.cross');
+  const show = (evt) => { const r = svgEl.getBoundingClientRect(); const px = (evt.clientX - r.left) * (W / r.width); let i = Math.round(((px - L) / (W - L - R)) * (n - 1)); i = Math.max(0, Math.min(n - 1, i)); cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('visibility', 'visible'); tip.innerHTML = `<div class="d">${esc(dates[i])}</div>` + series.map(s => s.values[i] == null ? '' : `<div><span style="background:var(${s.color})"></span>${esc(s.name)} ${fmt.pct(s.values[i])}</div>`).join('') + caps.map(c => `<div><span style="background:var(--cap)"></span>${esc(c.label)}</div>`).join(''); tip.hidden = false; const left = evt.clientX - r.left; tip.style.left = Math.max(0, Math.min(left + 12, r.width - tip.offsetWidth - 4)) + 'px'; tip.style.top = '8px'; };
+  svgEl.addEventListener('mousemove', show); svgEl.addEventListener('mouseleave', () => { tip.hidden = true; cross.setAttribute('visibility', 'hidden'); }); svgEl.addEventListener('touchstart', e => { if (e.touches[0]) show(e.touches[0]); }, { passive: true });
+}
+function legendHTML(series, caps) { return `<div class="legend">${series.map(s => `<span><i style="background:var(${s.color})"></i>${esc(s.name)}</span>`).join('')}${caps.map(c => `<span><i class="cap"></i>${esc(c.label)}</span>`).join('')}</div>`; }
+function tableHTML(dates, series) { return `<details class="ch-table"><summary>표로 보기</summary><div class="tw"><table><thead><tr><th>날짜</th>${series.map(s => `<th>${esc(s.name)}</th>`).join('')}</tr></thead><tbody>${dates.map((dd, i) => `<tr><td>${esc(dd)}</td>${series.map(s => `<td>${fmt.pct(s.values[i])}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`; }
+function chartSpecs(etf, h) {
+  const limits = limitsFor(etf); const top = h.tickers.slice(0, 6);
+  const topSeries = top.map((t, i) => ({ name: t, color: SERIES[i], values: h.weights[t] || [] }));
+  if (etf === 'QQQ') return [
+    { title: '상위 회사 비중 (회사 상한 24%는 축 범위 밖)', series: topSeries, caps: [] },
+    { title: '4.5% 초과 회사 합계와 최대 회사 비중', series: [{ name: '4.5% 초과 회사 합계', color: '--s1', values: h.metrics.sum_over_4_5 || [] }, { name: '최대 회사 비중', color: '--s2', values: h.metrics.max_company_weight || [] }], caps: [{ value: limits.cohort_trigger || 0.48, label: '합계 상한 48%' }, { value: limits.company_trigger || 0.24, label: '회사 상한 24%' }] },
+  ];
+  const cap = limits.single_cap; const specs = [{ title: '상위 종목 비중과 단일 상한', series: topSeries, caps: [{ value: cap, label: `단일 상한 ${fmt.lim(cap)}` }] }];
+  if (etf === 'SOXX') specs.push({ title: 'ADR 합계 비중', series: [{ name: 'ADR 합계', color: '--s1', values: h.metrics.adr_sum || [] }], caps: [{ value: limits.adr_cap || 0.10, label: 'ADR 합계 상한 10%' }] });
+  if (etf === 'IGV') specs.push({ title: '4.5% 초과 회사 합계', series: [{ name: '4.5% 초과 회사 합계', color: '--s1', values: h.metrics.sum_over_4_5 || [] }], caps: [{ value: limits.cohort_cap || 0.45, label: '합계 상한 45%' }] });
+  return specs;
+}
+function sideHTML(etf, e) {
+  const rows = metricRows(etf, e); const ev = (e.next_events || [])[0]; const s = forcedList(e, 'forced_sellers', 4), b = forcedList(e, 'forced_buyers', 4);
+  const kpis = rows.filter(r => r.kind === 'pct').slice(0, 2).map(r => `<div><div class="l">${esc(r.label)}</div><div class="v">${fmt.pct(r.value)}<small class="st ${r.status.code}">${r.status.icon} ${esc(r.status.label)}</small></div></div>`).join('');
+  return `<div class="side"><h3>오늘의 상한 지표</h3><div class="kpi">${kpis}${ev ? `<div><div class="l">참조일 ${esc(ev.reference_date)}</div><div class="v">D-${ev.trading_days_to_reference}<small>거래일</small></div></div><div><div class="l">매매일 ${esc(ev.effective_trade_date)}</div><div class="v">D-${ev.trading_days_to_trade}<small>거래일</small></div></div>` : ''}</div>
+  <h3>상한 재적용 시 매도 압력</h3><div class="chips">${s.rows.length ? s.rows.map(r => `<span class="chip sell"><b>${esc(r.ticker)}</b> ${fmt.pp(r.delta)} · ${fmt.usd(r.usd)}</span>`).join('') : '<span class="empty">없음</span>'}</div>
+  <h3>재분배 매수 압력</h3><div class="chips">${b.rows.length ? b.rows.map(r => `<span class="chip buy"><b>${esc(r.ticker)}</b> ${fmt.pp(r.delta)}</span>`).join('') : '<span class="empty">없음</span>'}</div>
+  ${e.caps && e.caps.special_rebalance ? `<div class="note">특별 리밸런스 트리거 ${e.caps.special_rebalance.triggered ? '발동 조건 충족' : '미발동'}</div>` : ''}</div>`;
+}
+function renderTrack() {
+  const d = DATA.summary; const el = document.getElementById('panel-track'); if (el.hidden) return;
+  let html = `<section class="tpanel"><h2>다가오는 리밸런스 이벤트</h2><div class="sub">참조일 종가 비중이 상한 판정의 기준이고, 매매일 종가에 지수 추종 자금의 매매가 집행됩니다.</div><div id="tl"></div></section>`;
+  for (const etf of ETFS) { const e = d.etfs[etf]; if (!e) continue; const h = DATA.history && DATA.history.etfs && DATA.history.etfs[etf]; html += `<section class="tpanel"><h2>${etf} <span style="font-size:13px;font-weight:500;color:var(--muted)">${esc(INDEX_NAME[etf])}</span></h2><div class="sub">기준일 ${esc(e.as_of)} · ${h ? `이력 ${esc(h.dates[0])}부터 ${h.dates.length}거래일` : '이력 없음'} · ${esc(KIND[e.caps && e.caps.event_type] || '')} 규칙</div><div class="row"><div id="c-${etf}"></div>${sideHTML(etf, e)}</div></section>`; }
+  el.innerHTML = html;
+  document.getElementById('tl').innerHTML = timeline(d);
+  for (const etf of ETFS) { const e = d.etfs[etf]; if (!e) continue; const h = DATA.history && DATA.history.etfs && DATA.history.etfs[etf]; const box = document.getElementById('c-' + etf);
+    if (!h || h.dates.length < 2) { const spec = h ? chartSpecs(etf, h)[0] : null; box.innerHTML = `<p class="empty">${h && h.dates.length === 1 ? `이력이 ${esc(h.dates[0])} 하루뿐입니다. 발행사가 과거 보유 내역을 제공하지 않아 매일 실행으로 쌓이며, 다음 거래일부터 추이가 그려집니다.` : '이력 데이터가 없습니다.'}</p>${spec ? `<div class="note">오늘 값: ${spec.series.map(s => `${esc(s.name)} ${fmt.pct(s.values[0])}`).join(' · ')}</div>` : ''}`; continue; }
+    for (const spec of chartSpecs(etf, h)) { const wrap = document.createElement('div'); wrap.innerHTML = `<div class="ctitle">${esc(spec.title)}</div>${legendHTML(spec.series, spec.caps)}<div class="chartbox"></div>${tableHTML(h.dates, spec.series)}`; box.appendChild(wrap); lineChart(wrap.querySelector('.chartbox'), { dates: h.dates, series: spec.series, caps: spec.caps, title: spec.title }); }
+  }
+}
+
+/* ===== render: brief ===== */
+async function loadBriefByName(name) {
+  if (!DATA.mcp) return; const el = document.getElementById('brief-body'); if (el) el.innerHTML = '<p class="empty">불러오는 중</p>';
+  try { const r = await DATA.mcp.callTool(SERVER, 'get_file_contents', { owner: REPO.owner, repo: REPO.repo, path: FILES.briefDir + name, ref: REPO.ref }); const text = extractText(r); DATA.brief = text || ''; DATA.briefName = name; renderBrief(); }
+  catch (err) { if (el) el.innerHTML = `<p class="empty">${esc(errorCopy(err))}</p>`; }
+}
+async function loadBriefList() {
+  if (!DATA.mcp || DATA.briefList) return;
+  try { const r = await DATA.mcp.callTool(SERVER, 'get_file_contents', { owner: REPO.owner, repo: REPO.repo, path: FILES.briefDir, ref: REPO.ref }, { cache: { staleTime: 60000 } }); let p = r.payload; if (typeof p === 'string') { try { p = JSON.parse(p); } catch (e) { p = null; } } if (Array.isArray(p)) { DATA.briefList = p.filter(x => x && typeof x.name === 'string' && /^\d{4}-\d{2}-\d{2}\.md$/.test(x.name)).map(x => x.name).sort().reverse(); renderBrief(); } }
+  catch (e) { DATA.briefList = []; }
+}
+function renderBrief() {
+  const el = document.getElementById('panel-brief');
+  const text = DATA.brief; const missing = DATA.briefMissing && !text;
+  const head = (text || '').split('\n').find(l => /^#\s/.test(l)) || '';
+  const list = DATA.briefList && DATA.briefList.length ? `<label>지난 브리핑 <select id="brief-pick"><option value="">최신</option>${DATA.briefList.map(n => `<option value="${esc(n)}" ${DATA.briefName === n ? 'selected' : ''}>${esc(n.replace('.md', ''))}</option>`).join('')}</select></label>` : '';
+  el.innerHTML = `<article class="brief"><div class="bmeta"><span>저장소 파일 ${esc(DATA.briefName ? FILES.briefDir + DATA.briefName : FILES.brief)}</span>${list}</div><div class="md" id="brief-body">${missing ? '<p class="empty">아직 브리핑 파일이 없습니다. 예약 작업이 설정되면 매일 이 자리에 해석이 올라옵니다.</p>' : (text ? renderMd(text) : '<p class="empty">브리핑을 기다리는 중입니다.</p>')}</div></article>`;
+  const pick = document.getElementById('brief-pick'); if (pick) pick.addEventListener('change', () => { if (pick.value) loadBriefByName(pick.value); else { DATA.briefName = null; refreshLive(); } });
+  if (DATA.mcp && !DATA.briefList) loadBriefList();
+}
+
+/* ===== render all ===== */
+function renderAll() {
+  if (DATA.summary) { renderHeader(); renderBoard(); renderNote(); renderTrack(); }
+  renderBrief();
+}
+let resizeTimer; window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { if (DATA.summary) renderTrack(); }, 200); }, { passive: true });
+boot();
+</script>
