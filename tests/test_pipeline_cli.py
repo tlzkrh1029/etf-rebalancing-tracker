@@ -760,6 +760,7 @@ def test_daily_workflow_structure_when_yaml_is_available():
         "Fetch, analyse and report",
         "Commit data and reports",
         "Redeploy the dashboard to GitHub Pages",
+        "Check the committed data against the tests",
         "Fail the job when the tracker reported an error",
     ]
     by_name = {(s.get("name") or s.get("uses")): s for s in job["steps"]}
@@ -767,6 +768,11 @@ def test_daily_workflow_structure_when_yaml_is_available():
     assert by_name["Commit data and reports"]["if"] == "always()"
     assert by_name["Commit data and reports"]["id"] == "commit"
     assert by_name["Redeploy the dashboard to GitHub Pages"]["if"] == "steps.commit.outputs.pushed == 'true'"
+    # tests pinned to the committed data never gate the fetch; they run afterwards without failing the job
+    assert by_name["Run unit tests"]["run"].strip() == 'python3 -m pytest -q -m "not committed_data"'
+    check = by_name["Check the committed data against the tests"]
+    assert check["if"] == "always()" and check["continue-on-error"] is True
+    assert check["run"].strip() == "python3 -m pytest -q -m committed_data"
     assert by_name["Fail the job when the tracker reported an error"]["if"] == "steps.run.outputs.exit_code != '0'"
     assert by_name["actions/setup-python@v5"]["with"]["python-version"] == "3.12"
     run_script = by_name["Fetch, analyse and report"]["run"]

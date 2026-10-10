@@ -751,6 +751,9 @@ RAW_DIR = REPO_ROOT / "data" / "raw"
 SOXX_ADR_BEFORE_RECON = frozenset({"ARM", "ASML", "ASX", "STM", "TSM", "UMC"})
 SOXX_ADR_AFTER_RECON = SOXX_ADR_BEFORE_RECON | {"SKHY"}
 SOXX_RECON_TRADE_DATE = date(2026, 9, 18)
+#: The following annual reconstitution trades on the third Friday of
+#: September 2027; the pinned ADR set is only asserted before it.
+SOXX_NEXT_RECON_TRADE_DATE = date(2027, 9, 17)
 TODAY = date(2026, 10, 9)  # capture date of the fixtures and raw files
 
 FOOTER_NO_BLANK = (
@@ -816,7 +819,8 @@ def test_every_raw_csv_parses_consistently(path: Path | None) -> None:
         # nominal 100.00 corrected to ~1.00 from the authoritative market value, overdrafts included
         assert cash.price == pytest.approx(cash.market_value / cash.shares)
         assert 0.99 < cash.price < 1.01, cash.ticker
-    assert validate_snapshot(snap, etf, snap.as_of, today=TODAY) == []
+    # the file's own date is the clock: the committed history keeps growing past TODAY
+    assert validate_snapshot(snap, etf, snap.as_of, today=snap.as_of) == []
     assert snap.meta["validation_warnings"] == []
 
 
@@ -826,11 +830,16 @@ def test_soxx_adr_set_is_stable_between_reconstitutions() -> None:
         pytest.skip("data/raw is not present in this checkout")
     for path in files:
         snap = parse_csv(path.read_bytes(), "SOXX")
-        expected = SOXX_ADR_AFTER_RECON if snap.as_of >= SOXX_RECON_TRADE_DATE else SOXX_ADR_BEFORE_RECON
         flagged = {h.ticker for h in snap.equities() if h.is_adr}
-        assert flagged == expected, path.name
-        assert snap.meta["adr_heuristic"] == ["TSM"], path.name
         by = snap.by_ticker()
+        if snap.as_of < SOXX_RECON_TRADE_DATE:
+            assert flagged == SOXX_ADR_BEFORE_RECON, path.name
+        elif snap.as_of < SOXX_NEXT_RECON_TRADE_DATE:
+            assert flagged == SOXX_ADR_AFTER_RECON, path.name
+        else:  # after the next reconstitution only the invariants are known
+            assert flagged <= {h.ticker for h in snap.equities()}, path.name
+        if "TSM" in by:  # the only ADR whose name carries no marker
+            assert "TSM" in flagged and "TSM" in snap.meta["adr_heuristic"], path.name
         for ticker in ("TSEM", "NVMI"):
             if ticker in by:
                 assert by[ticker].is_adr is False, f"{ticker} in {path.name}"

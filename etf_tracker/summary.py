@@ -43,8 +43,13 @@ so the order depends on the rows' content only.
 a quiet day with the largest price moves.  The rows are the
 ``TickerChange`` dictionaries unchanged.
 
-``notable`` keeps every change whose classification is not ``flow_only``,
+``notable`` keeps the changes whose classification is not ``flow_only``,
 with one exception: the ``active_trade`` label on cash and derivative lines.
+On a rebalance day almost every constituent is an active trade, so the list
+is capped at :data:`NOTABLE_MAX` rows: entries, exits and corporate-action
+suspects are always kept, then the active trades with the largest rounded
+``|trade|`` (then ``|total_change|``); the kept rows stay in source order
+and ``n_notable`` counts the rows that qualified before the cap.
 Those balances move every day (dividends, payables, margin) for reasons that
 are not trades, which is why :mod:`etf_tracker.decompose` leaves them out of
 its own active-trade statistics; listing them would make every quiet day
@@ -71,6 +76,7 @@ from etf_tracker.holdings import EQUITY
 __all__ = [
     "SUMMARY_RELPATH",
     "TOP_CHANGES",
+    "NOTABLE_MAX",
     "TRADE_DECIMALS",
     "TOP_LEVEL_KEYS",
     "ETF_KEYS",
@@ -87,6 +93,9 @@ log = logging.getLogger(__name__)
 SUMMARY_RELPATH = Path("reports") / "summary.json"
 #: How many equity change rows ``decomposition.top_changes`` holds at most.
 TOP_CHANGES = 10
+#: How many rows ``decomposition.notable`` holds at most (see the module
+#: docstring for which rows survive the cap).
+NOTABLE_MAX = 30
 #: ``|trade|`` is rounded to this many decimals (of weight fraction) before
 #: ordering ``top_changes``, so sub-basis-point noise does not outrank a
 #: larger price move.
@@ -122,6 +131,7 @@ DECOMPOSITION_KEYS: tuple[str, ...] = (
     "summary",
     "top_changes",
     "notable",
+    "n_notable",
     "n_changes",
 )
 
@@ -227,6 +237,23 @@ def _is_notable(change: Mapping[str, Any]) -> bool:
     return classification != CLASS_ACTIVE_TRADE
 
 
+def _notable_key(change: Mapping[str, Any]) -> tuple[int, float, float]:
+    """Rank for the cap: entries/exits/corporate actions first, then the biggest trades."""
+    active = 1 if change.get("classification") == CLASS_ACTIVE_TRADE else 0
+    trade = _finite(change.get("trade")) or 0.0
+    total = _finite(change.get("total_change")) or 0.0
+    return (active, -round(abs(trade), TRADE_DECIMALS), -abs(total))
+
+
+def _notable_rows(changes: Sequence[Mapping[str, Any]]) -> tuple[list[Mapping[str, Any]], int]:
+    """The notable rows in source order, capped at :data:`NOTABLE_MAX`, and the uncapped count."""
+    qualifying = [c for c in changes if _is_notable(c)]
+    if len(qualifying) <= NOTABLE_MAX:
+        return qualifying, len(qualifying)
+    keep = {id(c) for c in sorted(qualifying, key=_notable_key)[:NOTABLE_MAX]}
+    return [c for c in qualifying if id(c) in keep], len(qualifying)
+
+
 def _change_row(change: Mapping[str, Any]) -> dict[str, Any]:
     """A change row reduced to :data:`CHANGE_KEYS` (non-finite numbers become null)."""
     out: dict[str, Any] = {}
@@ -241,6 +268,7 @@ def _decomposition_block(decomposition: Any) -> dict[str, Any] | None:
         return None
     changes = _rows(decomposition.get("changes"))
     top = sorted((c for c in changes if _is_equity(c)), key=_top_change_key)[:TOP_CHANGES]
+    notable, n_notable = _notable_rows(changes)
     return {
         "prev_as_of": decomposition.get("prev_as_of"),
         "curr_as_of": decomposition.get("curr_as_of"),
@@ -248,7 +276,8 @@ def _decomposition_block(decomposition: Any) -> dict[str, Any] | None:
         "scale_factor": decomposition.get("scale_factor"),
         "summary": decomposition.get("summary"),
         "top_changes": [_change_row(c) for c in top],
-        "notable": [_change_row(c) for c in changes if _is_notable(c)],
+        "notable": [_change_row(c) for c in notable],
+        "n_notable": n_notable,
         "n_changes": len(changes),
     }
 

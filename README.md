@@ -134,7 +134,7 @@ GitHub Actions에서도 `workflow_dispatch` 입력(`etf`, `backfill_start`, `bac
 ### 2.6 일일 워크플로 (`.github/workflows/daily.yml`)
 
 - 일정: 평일 **14:10 UTC** 1차, **18:10 UTC** 재시도(GitHub cron은 UTC만 지원). 2026-10-09 측정 기준으로 세 발행사 모두 T-1 보유 내역을 거래일 T의 13:10 UTC 전에 공개했습니다. 1차 실행이 데이터를 저장하면 2차 실행은 "already stored"로 끝나므로 중복 저장이 없습니다. 새로 저장된 스냅샷이 없으면 manifest와 리포트도 건드리지 않으므로, 시각만 바뀐 불필요한 커밋이 생기지 않습니다.
-- 절차: checkout -> Python 3.12 -> `pytest -q` -> `python3 -m etf_tracker run --root .` -> `data/`, `reports/`를 `github-actions[bot]`으로 커밋(`git pull --rebase` 후 push, 3회 시도) -> 추적기 종료 코드가 0이 아니면 그때 작업을 실패로 표시(데이터 커밋은 그 전에 끝남).
+- 절차: checkout -> Python 3.12 -> `pytest -q -m "not committed_data"` -> `python3 -m etf_tracker run --root .` -> `data/`, `reports/`를 `github-actions[bot]`으로 커밋(`git pull --rebase` 후 push, 3회 시도) -> 추적기 종료 코드가 0이 아니면 그때 작업을 실패로 표시(데이터 커밋은 그 전에 끝남).
 - 미국 휴장일에도 cron은 돌지만 발행사가 같은 날짜를 다시 주므로 아무것도 저장하지 않고 0으로 끝납니다.
 
 ### 2.7 Claude 일일 브리핑에서 결과를 읽는 방법

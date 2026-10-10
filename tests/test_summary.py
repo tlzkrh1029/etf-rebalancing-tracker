@@ -18,11 +18,12 @@ from test_pipeline_cli import NOW, TODAY, fake_sources
 REPO = Path(__file__).resolve().parent.parent
 LATEST = REPO / "reports" / "latest.json"
 #: Ceiling for the committed data (3 ETFs, ~236 equities).  The contract
-#: shape measures ~70 KB on a quiet day and ~78 KB once every ETF carries a
-#: decomposition (equities ~60 KB, caps ~10 KB because every uncapped IGV
-#: name is a forced buyer); the bound guards against regressing toward
-#: latest.json (~220 KB) while leaving room for busy days.
-MAX_BYTES = 128 * 1024
+#: shape measures ~78 KB once every ETF carries a decomposition (equities
+#: ~60 KB, caps ~10 KB because every uncapped IGV name is a forced buyer,
+#: ~500 B per change row); with ``notable`` capped at NOTABLE_MAX rows a
+#: rebalance day adds at most ~45 KB, so the bound guards against regressing
+#: toward latest.json (~300 KB) on any day.
+MAX_BYTES = 160 * 1024
 
 UNCHANGED_ETF_KEYS = ("etf", "index_id", "as_of", "prev_as_of", "source", "fund", "caps", "next_events", "warnings")
 
@@ -77,17 +78,20 @@ def test_equities_are_the_equity_holdings_sorted_and_renormalised(committed: dic
         assert weights == sorted(weights, reverse=True), etf
         assert math.isclose(sum(weights), 1.0, rel_tol=0.0, abs_tol=1e-9), (etf, sum(weights))
         published = {h["ticker"]: h for h in src_equities}
-        total_mv = sum(h["market_value"] for h in src_equities)
+        # the capping rules' basis: market-value share of the equity sleeve, or the
+        # published weights when a day lacks market values (Invesco without fundDetails)
+        basis = "market_value" if all(h["market_value"] is not None for h in src_equities) else "weight"
+        total = sum(h[basis] for h in src_equities)
         for row in rows:
             src = published[row["ticker"]]
             assert row["weight_fund"] == src["weight"]
-            # the capping rules' basis: market-value share of the equity sleeve
-            assert math.isclose(row["weight_eq"], src["market_value"] / total_mv, rel_tol=1e-12)
+            assert math.isclose(row["weight_eq"], src[basis] / total, rel_tol=1e-12), (etf, basis)
             assert row["is_adr"] is src["is_adr"]
             for key in ("name",):
                 assert row[key] == src[key]
-        # cash and futures are excluded from the base, so the published equity weights sum below one
-        assert sum(r["weight_fund"] for r in rows) < 1.0 - 1e-6
+        # the published equity weights are the fund weights unchanged (they can sum to 1 or
+        # slightly above it when the USD cash line is overdrawn, as IGV did on 2026-09-18)
+        assert math.isclose(sum(r["weight_fund"] for r in rows), sum(h["weight"] for h in src_equities), abs_tol=1e-12)
     # roughly the index sizes (share classes, additions and spin-offs move them by a few)
     assert 95 <= built["etfs"]["QQQ"]["equity_count"] <= 110
     assert 28 <= built["etfs"]["SOXX"]["equity_count"] <= 35
@@ -97,7 +101,7 @@ def test_equities_are_the_equity_holdings_sorted_and_renormalised(committed: dic
         assert math.isclose(block["equities"][0]["weight_eq"], block["caps"]["metrics"]["max_weight"], abs_tol=1e-12)
 
 
-def _expected_notable(changes: list[dict]) -> list[str]:
+def _qualifying_notable(changes: list[dict]) -> list[dict]:
     """The contract's rule, restated: every non-flow equity change, and the
     entries, exits and corporate-action suspects among cash and derivatives."""
     out = []
@@ -106,8 +110,25 @@ def _expected_notable(changes: list[dict]) -> list[str]:
         if cls == CLASS_FLOW_ONLY:
             continue
         if c["asset_class"] == "equity" or cls != CLASS_ACTIVE_TRADE:
-            out.append(c["ticker"])
+            out.append(c)
     return out
+
+
+def _expected_notable(changes: list[dict]) -> list[str]:
+    """...capped at NOTABLE_MAX: non-active rows first, then the largest trades, in source order."""
+    qualifying = _qualifying_notable(changes)
+    if len(qualifying) <= summary.NOTABLE_MAX:
+        return [c["ticker"] for c in qualifying]
+
+    def rank(c):
+        return (
+            1 if c["classification"] == CLASS_ACTIVE_TRADE else 0,
+            -round(abs(c["trade"] or 0.0), summary.TRADE_DECIMALS),
+            -abs(c["total_change"] or 0.0),
+        )
+
+    keep = {id(c) for c in sorted(qualifying, key=rank)[: summary.NOTABLE_MAX]}
+    return [c["ticker"] for c in qualifying if id(c) in keep]
 
 
 def test_decomposition_is_reduced_to_top_changes_and_notable(committed: dict, built: dict):
@@ -137,11 +158,13 @@ def test_decomposition_is_reduced_to_top_changes_and_notable(committed: dict, bu
         assert keys[0] == (-round(abs(first["trade"]), summary.TRADE_DECIMALS), -abs(first["total_change"]))
         # notable follows the rule exactly, in source order, reduced to CHANGE_KEYS
         assert [c["ticker"] for c in dec["notable"]] == _expected_notable(src["changes"]), etf
+        assert dec["n_notable"] == len(_qualifying_notable(src["changes"])) >= len(dec["notable"])
         for c in dec["notable"]:
             row_src = by_ticker[c["ticker"]]
             assert set(c) == set(summary.CHANGE_KEYS) and all(c[k] == row_src.get(k) for k in summary.CHANGE_KEYS)
         # what notable leaves out among the non-flow rows is exactly the cash/derivative active trades
-        skipped = [c for c in src["changes"] if c["classification"] != CLASS_FLOW_ONLY and c["ticker"] not in _expected_notable(src["changes"])]
+        qualifying = {id(c) for c in _qualifying_notable(src["changes"])}
+        skipped = [c for c in src["changes"] if c["classification"] != CLASS_FLOW_ONLY and id(c) not in qualifying]
         assert all(c["asset_class"] != "equity" and c["classification"] == CLASS_ACTIVE_TRADE for c in skipped), etf
     assert decomposed >= 2  # SOXX and IGV have had two snapshots since the first committed day
 
@@ -156,7 +179,6 @@ def test_written_file_is_small_canonical_json(tmp_path: Path, committed: dict, b
     assert "NaN" not in text and "Infinity" not in text
     size = path.stat().st_size
     assert size < MAX_BYTES, size
-    assert size < LATEST.stat().st_size / 2
     assert not path.with_suffix(".json.tmp").exists()
 
 
@@ -527,3 +549,39 @@ def test_cli_report_subcommand_writes_summary(tmp_path: Path, monkeypatch: pytes
     data = json.loads((tmp_path / "reports" / "summary.json").read_text(encoding="utf-8"))
     assert data["today"] == "2026-10-09" and set(data["etfs"]) == {"SOXX", "QQQ", "IGV"}
     assert data["etfs"]["QQQ"]["decomposition"] is None  # a single stored snapshot
+
+
+def _active_change(ticker: str, trade: float, total: float = 0.0, classification: str = CLASS_ACTIVE_TRADE) -> dict:
+    return {
+        "ticker": ticker, "name": ticker, "asset_class": "equity", "classification": classification,
+        "w_prev": 0.01, "w_curr": 0.01 + total, "total_change": total, "drift": total - trade, "trade": trade,
+        "shares_prev": 100, "shares_curr": 110, "rel_share_change": 0.1, "price_return": 0.0,
+    }
+
+
+def test_notable_is_capped_on_a_rebalance_day_keeping_entries_and_the_largest_trades():
+    n = summary.NOTABLE_MAX + 20
+    changes = [_active_change(f"T{i:03d}", trade=0.0001 * (i + 1), total=0.0002 * (i + 1)) for i in range(n)]
+    changes.insert(5, _active_change("NEW", trade=0.00001, classification=CLASS_ENTRY))  # tiny, but always kept
+    changes.insert(9, _active_change("GONE", trade=-0.00001, classification=CLASS_EXIT))
+    changes.append({**_active_change("USD", trade=0.5), "asset_class": "cash"})  # cash active trade: never notable
+    dec = summary.build_summary({"etfs": {"SOXX": {"etf": "SOXX", "decomposition": {"changes": changes}}}})["etfs"]["SOXX"]["decomposition"]
+    rows = dec["notable"]
+    assert len(rows) == summary.NOTABLE_MAX
+    assert dec["n_notable"] == n + 2 and dec["n_changes"] == n + 3
+    tickers = [c["ticker"] for c in rows]
+    assert "NEW" in tickers and "GONE" in tickers and "USD" not in tickers
+    # the active trades kept are the ones with the largest |trade| ...
+    kept_active = [c for c in rows if c["classification"] == CLASS_ACTIVE_TRADE]
+    assert len(kept_active) == summary.NOTABLE_MAX - 2
+    assert min(abs(c["trade"]) for c in kept_active) > max(abs(c["trade"]) for c in changes[:n] if c["ticker"] not in tickers)
+    # ... and the rows stay in source order (NEW before GONE before the later tickers)
+    order = {c["ticker"]: i for i, c in enumerate(changes)}
+    assert [order[t] for t in tickers] == sorted(order[t] for t in tickers)
+    assert all(set(c) == set(summary.CHANGE_KEYS) for c in rows)
+
+
+def test_notable_below_the_cap_is_unchanged():
+    changes = [_active_change("A", trade=0.01), _active_change("B", trade=0.0, classification=CLASS_FLOW_ONLY), _active_change("C", trade=-0.02)]
+    dec = summary.build_summary({"etfs": {"IGV": {"etf": "IGV", "decomposition": {"changes": changes}}}})["etfs"]["IGV"]["decomposition"]
+    assert [c["ticker"] for c in dec["notable"]] == ["A", "C"] and dec["n_notable"] == 2

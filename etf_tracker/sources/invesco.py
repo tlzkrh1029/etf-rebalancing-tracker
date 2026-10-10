@@ -27,16 +27,19 @@ Edge behaviour verified on 2026-10-09 (see ``probe/summary.txt``):
   :data:`~etf_tracker.sources.STATUS_UNSUPPORTED`; a request for a date after
   the served one yields :data:`~etf_tracker.sources.STATUS_NO_DATA` (not yet
   published).
-* The document carries two dates.  ``effectiveBusinessDate`` is the close
-  the positions and the fundDetails total net assets are priced at (T-1 on
-  trading day T); ``effectiveDate`` is the day the list is effective for.
-  Observed 2026-10-10 11:08 UTC: ``effectiveDate`` 2026-10-10 with
+* The document carries two dates.  ``effectiveBusinessDate`` is the trading
+  session the positions and the fundDetails total net assets are priced at;
+  ``effectiveDate`` is a calendar date that can fall on a non-trading day.
+  Observed Saturday 2026-10-10 11:08 UTC: ``effectiveDate`` 2026-10-10 with
   ``effectiveBusinessDate`` 2026-10-09 (``shareclassTotalNetAssetsEffectiveDate``
-  2026-10-09 too), while the file seen on 2026-10-09 13:05 UTC carried
+  2026-10-09 too), while the file seen on Friday 2026-10-09 13:05 UTC carried
   2026-10-08 for both.  ``Snapshot.as_of`` is therefore
   ``effectiveBusinessDate`` whenever it is present, well-formed and not after
-  ``effectiveDate``; otherwise ``effectiveDate`` with a warning.  ``meta``
-  keeps both raw dates and ``as_of_basis`` names the field used.
+  ``effectiveDate``; otherwise ``effectiveDate`` with a warning.  A business
+  date more than :data:`MAX_BUSINESS_DATE_LAG` days before ``effectiveDate``
+  is still used but flagged, since the longest legitimate gap is a holiday
+  weekend.  ``meta`` keeps both raw dates and ``as_of_basis`` names the field
+  used.
 
 Security-type mapping (``securityTypeName`` / ``securityTypeCode``):
 ``Common Stock``/``COM`` -> equity; ``American Depository Receipt``
@@ -139,6 +142,9 @@ WEIGHT_SUM_MAX_PCT = 102.0
 MAX_FUTURE_DAYS = 7
 #: QQQ inception; an ``effectiveDate`` before it is rejected.
 EARLIEST_AS_OF = date(1999, 3, 10)
+#: Calendar days ``effectiveBusinessDate`` may trail ``effectiveDate`` before
+#: the document is flagged as suspicious (a holiday weekend is 4 days).
+MAX_BUSINESS_DATE_LAG = 7
 
 _DATE_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})")
 _NON_ALNUM_RE = re.compile(r"[^A-Z0-9]")
@@ -327,9 +333,9 @@ def _unique(ticker: str, seen: set[str]) -> str:
 def parse_fund_details_json(data: bytes) -> dict[str, Any]:
     """Parse the ``fundDetails`` document into plain fund-level figures.
 
-    Returns a dict with ``effective_date`` (``date`` or ``None``), ``nav``,
-    ``shares_outstanding``, ``total_net_assets``,
-    ``total_net_assets_effective_date``, ``market_value``,
+    Returns a dict with ``effective_date`` and ``effective_business_date``
+    (``date`` or ``None``), ``nav``, ``shares_outstanding``,
+    ``total_net_assets``, ``total_net_assets_effective_date``, ``market_value``,
     ``total_no_of_holdings`` and ``identifier`` (the top-level ``cusip`` /
     ``ticker`` field).  Raises ``ValueError`` when the body is not a JSON
     object.
@@ -338,6 +344,7 @@ def parse_fund_details_json(data: bytes) -> dict[str, Any]:
     return {
         "identifier": _text(obj.get("ticker") or obj.get("cusip")) or None,
         "effective_date": _parse_date(obj.get("effectiveDate")),
+        "effective_business_date": _parse_date(obj.get("effectiveBusinessDate")),
         "nav": _num(obj.get("nav")),
         "shares_outstanding": _num(obj.get("sharesOutstanding")),
         "total_net_assets": _num(obj.get("shareclassTotalNetAssets")),
@@ -379,7 +386,9 @@ def _resolve_as_of(effective_date: date, business_raw: Any) -> tuple[date, str, 
     field used.  A missing or empty ``effectiveBusinessDate`` falls back
     silently; a malformed one, or one after ``effectiveDate``, falls back
     with a warning (the pricing date can never be later than the day the
-    list is effective for).
+    list is effective for).  A business date more than
+    :data:`MAX_BUSINESS_DATE_LAG` days before ``effectiveDate`` is used but
+    flagged: nothing legitimate keeps a file that stale.
     """
     raw = _text(business_raw)
     if not raw:
@@ -394,6 +403,12 @@ def _resolve_as_of(effective_date: date, business_raw: Any) -> tuple[date, str, 
         return effective_date, "effectiveDate", [
             f"holdings: effectiveBusinessDate {business.isoformat()} is after effectiveDate "
             f"{effective_date.isoformat()}; as_of falls back to effectiveDate"
+        ]
+    lag = (effective_date - business).days
+    if lag > MAX_BUSINESS_DATE_LAG:
+        return business, "effectiveBusinessDate", [
+            f"holdings: effectiveBusinessDate {business.isoformat()} is {lag} days before effectiveDate "
+            f"{effective_date.isoformat()} (more than {MAX_BUSINESS_DATE_LAG}); the document may be stale"
         ]
     return business, "effectiveBusinessDate", []
 
@@ -477,7 +492,11 @@ def parse_holdings_json(
 
     details_date: date | None = None
     if details is not None:
-        details_date = details.get("total_net_assets_effective_date") or details.get("effective_date")
+        details_date = (
+            details.get("total_net_assets_effective_date")
+            or details.get("effective_business_date")
+            or details.get("effective_date")
+        )
         if details_date is not None and details_date != as_of:
             warnings.append(
                 f"fundDetails total net assets are as of {details_date.isoformat()} while holdings are "

@@ -383,6 +383,28 @@ def test_derivation_notes_kept_for_equities_but_not_for_cash_lines(tmp_path: Pat
     assert not any(w.startswith("NQZ6: derived") for w in a["warnings"])
 
 
+def _plain_snapshot(as_of: date, aaa_shares: float) -> Snapshot:
+    holdings = [
+        Holding("SOXX", as_of, "AAA", "AAA name", EQUITY, shares=aaa_shares, price=10.0, market_value=10.0 * aaa_shares, weight=0.5),
+        Holding("SOXX", as_of, "BBB", "BBB name", EQUITY, shares=100.0, price=10.0, market_value=1000.0, weight=0.5),
+    ]
+    return Snapshot(etf="SOXX", as_of=as_of, holdings=holdings, source="test", meta={"shares_outstanding": 1000.0})
+
+
+def test_decomposition_spanning_several_sessions_is_flagged(tmp_path: Path):
+    # Monday 2026-10-05 -> Thursday 2026-10-08: three sessions (an issuer outage in between)
+    store(tmp_path, _plain_snapshot(date(2026, 10, 5), 100.0))
+    store(tmp_path, _plain_snapshot(date(2026, 10, 8), 100.0))
+    a = analyze_etf(tmp_path, "SOXX", date(2026, 10, 9))
+    assert a["decomposition"]["prev_as_of"] == "2026-10-05" and a["decomposition"]["curr_as_of"] == "2026-10-08"
+    assert any(w.startswith("decomposition spans 3 sessions (2026-10-05 -> 2026-10-08)") for w in a["warnings"])
+    # consecutive sessions: no such warning
+    store(tmp_path, _plain_snapshot(date(2026, 10, 7), 100.0))
+    a = analyze_etf(tmp_path, "SOXX", date(2026, 10, 9))
+    assert a["decomposition"]["prev_as_of"] == "2026-10-07"
+    assert not any(w.startswith("decomposition spans") for w in a["warnings"])
+
+
 def test_analyze_etf_without_snapshots_raises(tmp_path: Path):
     with pytest.raises(NoSnapshotError):
         analyze_etf(tmp_path, "SOXX", TODAY)

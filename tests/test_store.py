@@ -258,6 +258,22 @@ def test_ingest_already_stored_leaves_manifest_file_untouched(tmp_path: Path):
     assert load_manifest(tmp_path)["updated_utc"] == "2026-10-09T14:12:03Z"
 
 
+def test_ingest_already_stored_keeps_the_manifest_describing_the_file_on_disk(tmp_path: Path):
+    """The re-served document differs in bookkeeping rows and source: nothing is written,
+    so the manifest keeps the row counts and source of the snapshot on disk."""
+    ingest(tmp_path, _ok_result(), now=NOW)
+    before = _manifest_bytes(tmp_path)
+    snap = _snapshot()
+    trimmed = Snapshot(etf=snap.etf, as_of=snap.as_of, source="fallback-source", holdings=snap.holdings[:-1], meta=dict(snap.meta))
+    reserved = FetchResult("SOXX", STATUS_OK, trimmed, {".csv": b"a,b\n1,2\n"}, "parsed", "fallback-source", AS_OF.isoformat())
+    outcome = ingest(tmp_path, reserved, now=NOW + timedelta(hours=4))
+    assert outcome.reason == REASON_ALREADY_STORED
+    assert _manifest_bytes(tmp_path) == before
+    entry = load_manifest(tmp_path)["etfs"]["SOXX"]
+    assert entry["row_count"] == 4 and entry["equity_count"] == 3 and entry["source"] == "test-source"
+    assert len(load_snapshot(snapshot_path(tmp_path, "SOXX", AS_OF)).holdings) == 4
+
+
 def test_ingest_repeated_identical_failure_leaves_manifest_untouched(tmp_path: Path):
     ingest(tmp_path, _ok_result(), now=NOW)
     failure = FetchResult("SOXX", STATUS_ERROR, None, {}, "HTTP 503", "test-source", "2026-10-09")

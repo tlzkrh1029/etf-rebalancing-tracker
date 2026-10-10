@@ -15,6 +15,7 @@ from pathlib import Path
 import pytest
 
 from etf_tracker.report import (
+    _days_text,
     BREACH_LABELS,
     CLASSIFICATION_LABELS,
     ETF_ORDER,
@@ -846,7 +847,8 @@ def test_latest_report_numbers_trace_to_latest_json(latest_analysis):
             assert f"한도 {format_pct(breach['limit'])})" in section
         for event in entry["next_events"]:
             assert f"| {event['reference_date']} |" in section
-            assert f"| {event['trading_days_to_reference']} | {event['trading_days_to_trade']} |" in section
+            # between the reference and the trade date the counts render as '0 (오늘)' / '-N (경과)'
+            assert f"| {_days_text(event['trading_days_to_reference'])} | {_days_text(event['trading_days_to_trade'])} |" in section
         if entry["decomposition"] is None:
             assert f"{entry['as_of']} 기준 첫 스냅샷을 저장했습니다." in section
         else:

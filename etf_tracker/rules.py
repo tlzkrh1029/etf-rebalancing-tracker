@@ -403,7 +403,9 @@ class IndexRules(ABC):
                 if ev.effective_trade_date >= today:
                     out.append(ev)
             year += 1
-        out.sort(key=lambda e: (e.effective_trade_date, e.kind))
+        # Same trade date: the reconstitution first, because it applies the
+        # superset of rules (see event_type_for) and dashboards show the first.
+        out.sort(key=lambda e: (e.effective_trade_date, 0 if e.kind.endswith("reconstitution") else 1, e.kind))
         return out[:n]
 
     def event_type_for(self, as_of: date) -> str:

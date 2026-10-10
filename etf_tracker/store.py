@@ -418,6 +418,13 @@ def ingest(
         "equity_count": len(snapshot.equities()),
         "source": result.source or snapshot.source,
     }
+    latest_iso = fields["latest_as_of"].isoformat() if isinstance(fields["latest_as_of"], date) else fields["latest_as_of"]
+    if not stored and old_entry.get("latest_as_of") == latest_iso:
+        # Nothing was written, so the manifest keeps describing the file on
+        # disk, not the re-served document (its bookkeeping rows come and go).
+        for key in ("row_count", "equity_count", "source"):
+            if old_entry.get(key) is not None:
+                fields[key] = old_entry[key]
     ignore = _VOLATILE_ALWAYS
     if not stored and old_entry.get("last_status") == STATUS_OK:
         # "stored" earlier today, "already stored" now: the same state.

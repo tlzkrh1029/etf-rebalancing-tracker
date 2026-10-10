@@ -637,8 +637,12 @@ def test_next_events_and_event_type_for():
     assert rules.next_events(date(2026, 12, 19), n=1)[0].effective_trade_date == date(2027, 3, 19)
     assert rules.event_type_for(date(2026, 10, 9)) == "annual_reconstitution"
     assert rules.event_type_for(date(2027, 1, 5)) == "quarterly_rebalance"
-    # IGV: the reconstitution wins when it shares the trade date with a rebalance.
+    # IGV: the reconstitution wins when it shares the trade date with a rebalance,
+    # and it is listed first so that dashboards showing next_events[0] agree.
     assert IGVRules().event_type_for(date(2026, 10, 9)) == "semiannual_reconstitution"
+    igv_next = IGVRules().next_events(date(2026, 10, 9), n=2)
+    assert [e.kind for e in igv_next] == ["semiannual_reconstitution", "quarterly_rebalance"]
+    assert igv_next[0].effective_trade_date == igv_next[1].effective_trade_date == date(2026, 12, 18)
     assert IGVRules().event_type_for(date(2027, 1, 5)) == "quarterly_rebalance"
     assert len(SOXXRules().next_events(date(2026, 1, 1), n=10)) == 10
 

@@ -21,6 +21,10 @@
 # backfill range and a force flag.  When backfill_start is given the job runs
 # `backfill` for one ETF instead of the daily `run`.
 #
+# The unit tests run before the fetch, except those that pin the committed
+# data (pytest marker committed_data): those run after the commit as a
+# non-blocking check, so a surprising day never stops the collection.
+#
 # Whatever was fetched successfully is committed BEFORE the job is marked
 # failed, so a red run (exit code 2 or 3 from the tracker) still keeps the
 # data of the ETFs that worked.  The commit step also runs after a timeout
@@ -85,8 +89,12 @@ jobs:
       - name: Install test dependencies
         run: python3 -m pip install --quiet -r requirements-dev.txt
 
+      # Tests that read the committed data/ and reports/ (marked
+      # committed_data in tests/conftest.py) run after the commit step and
+      # never block the fetch: a day whose data breaks one of their
+      # assumptions must still be collected.
       - name: Run unit tests
-        run: python3 -m pytest -q
+        run: python3 -m pytest -q -m "not committed_data"
 
       # Exit codes of the tracker: 0 ok or already up to date, 2 some ETF
       # failed (the others are stored), 3 nothing analysable, 1 usage error
@@ -156,6 +164,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run pages.yml --ref "$GITHUB_REF_NAME" || echo "pages dispatch failed (is Pages enabled?)"
+
+      # Non-blocking: a failure here means the committed data drifted from
+      # what the tests pin (see the step log), not that the run was wrong.
+      - name: Check the committed data against the tests
+        if: always()
+        continue-on-error: true
+        run: python3 -m pytest -q -m committed_data
 
       - name: Fail the job when the tracker reported an error
         if: steps.run.outputs.exit_code != '0'

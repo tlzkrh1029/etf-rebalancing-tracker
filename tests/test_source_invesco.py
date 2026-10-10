@@ -348,8 +348,8 @@ def test_parse_warns_when_fund_details_date_differs():
 
 
 def test_as_of_is_the_effective_business_date_when_the_file_is_dated_ahead_of_it():
-    # The file published before the open on trading day T is dated T while its
-    # positions and the fund total are priced at the T-1 close (observed
+    # effectiveDate is a calendar date (a Saturday here) while the positions and
+    # the fund total are priced at the last session (observed Saturday
     # 2026-10-10 11:08 UTC: effectiveDate 2026-10-10, effectiveBusinessDate
     # 2026-10-09, shareclassTotalNetAssetsEffectiveDate 2026-10-09).
     details = json.loads(FUND_DETAILS_BYTES)
@@ -381,6 +381,31 @@ def test_as_of_without_an_effective_business_date_is_the_effective_date():
     assert snap.as_of == date(2026, 10, 8)
     assert snap.meta["effective_business_date"] is None and snap.meta["as_of_basis"] == "effectiveDate"
     assert not any("effectiveBusinessDate" in w for w in snap.meta["warnings"])
+
+
+def test_a_stale_effective_business_date_is_used_but_flagged():
+    body = _holdings_doc(effectiveDate="2026-10-12", effectiveBusinessDate="2026-10-01")  # 11 days: no holiday weekend is that long
+    snap = invesco.parse_holdings_json(body, FUND_DETAILS_BYTES, "QQQ", today=date(2026, 10, 12))
+    assert snap.as_of == date(2026, 10, 1) and snap.meta["as_of_basis"] == "effectiveBusinessDate"
+    assert any("11 days before effectiveDate" in w and "may be stale" in w for w in snap.meta["warnings"])
+    # a holiday weekend (Friday close published on Tuesday) is within the bound
+    body = _holdings_doc(effectiveDate="2026-10-13", effectiveBusinessDate="2026-10-09")
+    snap = invesco.parse_holdings_json(body, FUND_DETAILS_BYTES, "QQQ", today=date(2026, 10, 13))
+    assert not any("may be stale" in w for w in snap.meta["warnings"])
+
+
+def test_fund_details_business_date_backs_up_the_total_net_assets_date():
+    # shareclassTotalNetAssetsEffectiveDate missing: the fundDetails business date,
+    # not its calendar effectiveDate, is compared with the holdings date
+    details = json.loads(FUND_DETAILS_BYTES)
+    details["effectiveDate"] = "2026-10-10"
+    details["effectiveBusinessDate"] = "2026-10-09"
+    details.pop("shareclassTotalNetAssetsEffectiveDate", None)
+    body = _holdings_doc(effectiveDate="2026-10-10", effectiveBusinessDate="2026-10-09")
+    snap = invesco.parse_holdings_json(body, json.dumps(details).encode(), "QQQ", today=date(2026, 10, 10))
+    assert snap.meta["fund_details_effective_date"] == "2026-10-09"
+    assert not any("fundDetails total net assets are as of" in w for w in snap.meta["warnings"])
+    assert invesco.parse_fund_details_json(json.dumps(details).encode())["effective_business_date"] == date(2026, 10, 9)
 
 
 @pytest.mark.parametrize(
@@ -737,7 +762,11 @@ def test_raw_qqq_files_parse_like_the_fixture():
         assert all(t.startswith("_") for t in snap.meta["synthesized_tickers"])
         assert all(by[t].asset_class != EQUITY for t in snap.meta["synthesized_tickers"])
         adrs = {h.ticker for h in snap.equities() if h.is_adr}
-        assert adrs == {t for t in ("ASML", "ARM", "PDD") if t in by}, path.name
+        # the flag follows the published security type, so derive the expectation from the document
+        doc_rows = json.loads(path.read_bytes())["holdings"]
+        depositary = {r["ticker"] for r in doc_rows if r.get("ticker") and "depositary" in str(r.get("securityTypeName", "")).lower().replace("depository", "depositary")}
+        assert adrs == depositary, path.name
+        assert {"ASML", "ARM", "PDD"} & set(by) <= adrs, path.name  # the known ADRs are among them
         if fund.is_file():
             assert snap.meta["price_derivation"] == invesco.PRICE_DERIVATION
             for h in snap.equities():

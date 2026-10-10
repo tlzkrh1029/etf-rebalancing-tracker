@@ -272,6 +272,12 @@ def _decomposition_block(prev: Snapshot | None, curr: Snapshot, warnings: list[s
         warnings.append(f"decomposition failed: {exc}")
         return None
     warnings.extend(f"decomposition: {w}" for w in result.warnings)
+    sessions = market_calendar.trading_days_between(prev.as_of, curr.as_of)
+    if sessions > 1:
+        warnings.append(
+            f"decomposition spans {sessions} sessions ({prev.as_of.isoformat()} -> {curr.as_of.isoformat()}): "
+            "the drift/trade split and the active-trade flags cover the whole gap, not one day"
+        )
     return json_safe(result.to_dict())
 
 
