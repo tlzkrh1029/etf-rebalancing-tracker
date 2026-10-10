@@ -110,7 +110,8 @@ def test_decomposition_is_reduced_to_top_changes_and_notable(committed: dict, bu
         assert keys == sorted(keys), etf
         by_ticker = {c["ticker"]: c for c in src["changes"]}
         for c in top:
-            assert c == by_ticker[c["ticker"]]  # TickerChange dicts unchanged
+            src = by_ticker[c["ticker"]]
+        assert set(c) == set(summary.CHANGE_KEYS) and all(c[k] == src.get(k) for k in summary.CHANGE_KEYS)  # reduced to CHANGE_KEYS, values unchanged
         # quiet day: the largest price moves lead, and nothing is notable
         equities = [c for c in src["changes"] if c["asset_class"] == "equity"]
         assert all(round(abs(c["trade"]), 4) == 0.0 for c in equities)
@@ -171,7 +172,8 @@ def test_notable_lists_entries_exits_and_active_trades(tmp_path: Path):
     # notable rows are the original change dicts
     changes = {c["ticker"]: c for c in analysis["etfs"]["IGV"]["decomposition"]["changes"]}
     for c in igv["notable"]:
-        assert c == changes[c["ticker"]]
+        src = changes[c["ticker"]]
+        assert set(c) == set(summary.CHANGE_KEYS) and all(c[k] == src.get(k) for k in summary.CHANGE_KEYS)
     # the file round-trips
     path = summary.write_summary(tmp_path, analysis)
     assert json.loads(path.read_text(encoding="utf-8")) == out
