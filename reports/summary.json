@@ -2,11 +2,10 @@
  "errors": {},
  "etfs": {
   "IGV": {
-   "as_of": "2026-10-28",
+   "as_of": "2026-10-29",
    "caps": {
     "binding_constraints": [
-     "IGV 8.5% single-company cap: CRWD, MSFT, PANW, PLTR",
-     "IGV aggregate 45% rule (companies >4.5%): reduced NOW"
+     "IGV 8.5% single-company cap: CRWD, MSFT, PANW, PLTR"
     ],
     "breaches": [
      {
@@ -14,463 +13,451 @@
       "limit": 0.085,
       "rule": "igv_single_cap_8_5",
       "tickers": [
-       "PANW",
-       "PLTR"
-      ],
-      "value": 0.091302757303666
-     },
-     {
-      "description": "companies above 4.5% together exceed 45%",
-      "limit": 0.45,
-      "rule": "igv_cohort_45",
-      "tickers": [
-       "PANW",
        "PLTR",
-       "CRWD",
+       "PANW",
        "MSFT",
-       "ORCL",
-       "NOW"
+       "CRWD"
       ],
-      "value": 0.46646350963691846
+      "value": 0.09304485164943177
      }
     ],
     "event_type": "semiannual_reconstitution",
     "feasible": true,
     "forced_buyers": [
      [
-      "MSFT",
-      0.001233729555460028
-     ],
-     [
       "ORCL",
-      0.0010768735648797878
+      0.0018357335663223423
      ],
      [
       "CRM",
-      0.0008417353022747986
+      0.0010644212824530014
      ],
      [
-      "FTNT",
-      0.0007310586923435017
+      "NOW",
+      0.0009414904524651796
      ],
      [
       "ADBE",
-      0.00067646885632517
+      0.0008910809749785448
      ],
      [
       "CDNS",
-      0.0006426110323492322
-     ],
-     [
-      "DDOG",
-      0.0006353271336884264
+      0.0008528028814193539
      ],
      [
       "SNPS",
-      0.0006287315536471806
+      0.0008480131424058804
      ],
      [
       "INTU",
-      0.0006116928075081407
+      0.0008184852674445534
+     ],
+     [
+      "DDOG",
+      0.0008043768236288065
+     ],
+     [
+      "FTNT",
+      0.0007745562893744715
      ],
      [
       "APP",
-      0.0004799628008245113
+      0.0006240236913715794
      ],
      [
       "MSTR",
-      0.0003606131956116927
+      0.00046648935685013326
      ],
      [
       "ADSK",
-      0.00034847820604709534
+      0.0004608185053938847
      ],
      [
       "ROP",
-      0.0002969522725477288
+      0.0004017854571618847
      ],
      [
       "WDAY",
-      0.0002798832012218099
-     ],
-     [
-      "TEAM",
-      0.00023942714868147204
+      0.00035495451666693427
      ],
      [
       "TTWO",
-      0.0002338830232423532
+      0.0003070959851324117
+     ],
+     [
+      "TEAM",
+      0.00029436515541504844
      ],
      [
       "ZS",
-      0.00018321289578705421
+      0.0002353437049605247
      ],
      [
       "ZM",
-      0.00018079693425380496
+      0.00023350642608718948
      ],
      [
       "RBRK",
-      0.00014915989606009792
+      0.0001943255859081323
      ],
      [
       "PTC",
-      0.0001441504740121672
+      0.00019096755353769593
      ],
      [
       "NTNX",
-      0.0001338523121614428
+      0.00017269449304978778
      ],
      [
       "DT",
-      0.00012368423391824392
+      0.00015922334193727277
      ],
      [
       "CRCL",
-      0.00011237079903515194
-     ],
-     [
-      "IOT",
-      0.00010924969591390339
+      0.00014586014945104989
      ],
      [
       "DOCU",
-      0.00010877034760659217
+      0.00014066826432076237
+     ],
+     [
+      "IOT",
+      0.00014027804557923112
      ],
      [
       "FICO",
-      0.00010275736110469755
+      0.00013838291478015033
      ],
      [
       "TRMB",
-      0.00010224410739838232
-     ],
-     [
-      "U",
-      9.712799731653038e-05
-     ],
-     [
-      "MANH",
-      9.523350503177347e-05
-     ],
-     [
-      "GWRE",
-      9.468825325769595e-05
-     ],
-     [
-      "TYL",
-      9.365205566146725e-05
-     ],
-     [
-      "BMNR",
-      9.063113169281364e-05
+      0.0001376534701506369
      ],
      [
       "GEN",
-      8.938479524218858e-05
+      0.00013725749940068314
+     ],
+     [
+      "TYL",
+      0.00012866724946476206
+     ],
+     [
+      "U",
+      0.0001280362059808103
+     ],
+     [
+      "MANH",
+      0.00012686932153478311
+     ],
+     [
+      "GWRE",
+      0.00012040548158174288
+     ],
+     [
+      "BMNR",
+      0.00011804742689881537
      ],
      [
       "HUBS",
-      8.458300059850654e-05
+      0.00010791484235824628
      ],
      [
       "ESTC",
-      6.635665720121278e-05
-     ],
-     [
-      "GTLB",
-      5.957514649519713e-05
+      8.528126929151442e-05
      ],
      [
       "S",
-      5.864278303206738e-05
+      7.812092220456672e-05
      ],
      [
       "IDCC",
-      5.628524954740324e-05
+      7.78392163057382e-05
      ],
      [
-      "DSGX",
-      5.3811303475093976e-05
-     ],
-     [
-      "HUT",
-      5.3088355716652495e-05
+      "GTLB",
+      7.719409064427685e-05
      ],
      [
       "QLYS",
-      5.257300374643956e-05
+      7.181103848209356e-05
+     ],
+     [
+      "DSGX",
+      7.109171750985764e-05
      ],
      [
       "PCOR",
-      5.1939841957229175e-05
+      6.783934150583022e-05
+     ],
+     [
+      "HUT",
+      6.732954584385718e-05
      ],
      [
       "ZETA",
-      5.174414019995044e-05
-     ],
-     [
-      "AUR",
-      4.973918081140364e-05
+      6.715459656801226e-05
      ],
      [
       "CVLT",
-      4.688736139153715e-05
-     ],
-     [
-      "SNAP",
-      4.5426608453092484e-05
+      6.409641172325448e-05
      ],
      [
       "OTEX",
-      4.486977429771005e-05
+      5.9363906131001606e-05
      ],
      [
-      "RNG",
-      4.318390689560031e-05
+      "SNAP",
+      5.740347543506906e-05
      ],
      [
       "BSY",
-      4.2816454244369324e-05
+      5.7094776076761604e-05
+     ],
+     [
+      "AUR",
+      5.707603948537036e-05
+     ],
+     [
+      "RNG",
+      5.5602790550830176e-05
      ],
      [
       "BOX",
-      4.04994058318172e-05
-     ],
-     [
-      "WULF",
-      4.01027007182384e-05
-     ],
-     [
-      "PATH",
-      3.978715779161409e-05
-     ],
-     [
-      "VRNS",
-      3.81673316318591e-05
-     ],
-     [
-      "ACIW",
-      3.7854877253129656e-05
-     ],
-     [
-      "BB",
-      3.769631434248134e-05
+      5.437697462930139e-05
      ],
      [
       "TENB",
-      3.665477866937063e-05
+      5.1657155474351584e-05
+     ],
+     [
+      "PATH",
+      5.1231573972359114e-05
+     ],
+     [
+      "ACIW",
+      5.065062363159467e-05
+     ],
+     [
+      "VRNS",
+      5.0525295615427585e-05
+     ],
+     [
+      "WULF",
+      5.0519329085114365e-05
+     ],
+     [
+      "BB",
+      4.886698500436502e-05
      ],
      [
       "DBX",
-      3.5482952605911996e-05
-     ],
-     [
-      "RIOT",
-      3.393586237367412e-05
+      4.677711962985465e-05
      ],
      [
       "APPF",
-      3.3556344093788526e-05
+      4.4944309778765894e-05
      ],
      [
       "TTAN",
-      3.2906672095862986e-05
+      4.356267098959573e-05
+     ],
+     [
+      "RIOT",
+      4.278624910837559e-05
      ],
      [
       "CORZ",
-      3.276515671169866e-05
+      4.17934215103952e-05
      ],
      [
       "YOU",
-      2.973282547233413e-05
-     ],
-     [
-      "QBTS",
-      2.955482316386736e-05
-     ],
-     [
-      "WK",
-      2.9141224613260172e-05
+      4.005588324194312e-05
      ],
      [
       "BRZE",
-      2.9110506361978332e-05
+      3.86155618584121e-05
      ],
      [
-      "QTWO",
-      2.8925166312558735e-05
+      "QBTS",
+      3.848889590408588e-05
      ],
      [
       "CCC",
-      2.8698545970844884e-05
+      3.810214712353767e-05
+     ],
+     [
+      "WK",
+      3.805410836686153e-05
+     ],
+     [
+      "QTWO",
+      3.6869020078452277e-05
      ],
      [
       "BILL",
-      2.6457592315545482e-05
+      3.541001199764771e-05
      ],
      [
       "DLB",
-      2.5026858619262753e-05
+      3.384981843610325e-05
      ],
      [
       "LIF",
-      2.4610424406763635e-05
+      3.357470738360848e-05
      ],
      [
       "FRSH",
-      2.3152278525310046e-05
-     ],
-     [
-      "TDC",
-      2.1813090700486485e-05
+      2.9960224455932456e-05
      ],
      [
       "ALRM",
-      2.1765567073329245e-05
+      2.9577835040854638e-05
+     ],
+     [
+      "TDC",
+      2.9141138863466188e-05
      ],
      [
       "SPSC",
-      2.1055563882943452e-05
+      2.79763720082368e-05
      ],
      [
       "PEGA",
-      2.1050249356482616e-05
-     ],
-     [
-      "CIFR",
-      2.0781188498860065e-05
+      2.691694711421744e-05
      ],
      [
       "AGYS",
-      2.013767242101702e-05
-     ],
-     [
-      "MARA",
-      1.939475269641675e-05
+      2.687423778712189e-05
      ],
      [
       "FIVN",
-      1.9206057035069937e-05
+      2.5317353171547957e-05
+     ],
+     [
+      "CIFR",
+      2.5163144523139037e-05
+     ],
+     [
+      "MARA",
+      2.5069490087971575e-05
      ],
      [
       "AVPT",
-      1.814797980420385e-05
+      2.4273631177238624e-05
      ],
      [
       "KVYO",
-      1.7816152603968016e-05
+      2.3486196576514694e-05
      ],
      [
       "ADEA",
-      1.713636363525066e-05
+      2.2451502375263723e-05
      ],
      [
       "NCNO",
-      1.6967287568983602e-05
+      2.2280244408506952e-05
      ],
      [
       "RAMP",
-      1.583829429895674e-05
+      2.1051394871354702e-05
      ],
      [
       "CLSK",
-      1.505141062999526e-05
-     ],
-     [
-      "CRWD",
-      1.5008133854590988e-05
+      1.9073757359749444e-05
      ],
      [
       "INTA",
-      1.4123274706463306e-05
+      1.81497637365875e-05
      ],
      [
       "ATEN",
-      1.3118657031545387e-05
-     ],
-     [
-      "APPN",
-      1.2659173195925526e-05
-     ],
-     [
-      "SOUN",
-      1.2655291929028023e-05
+      1.6993767331811675e-05
      ],
      [
       "PRGS",
-      1.2453668561502869e-05
+      1.668628897232374e-05
+     ],
+     [
+      "SOUN",
+      1.6477767686115508e-05
+     ],
+     [
+      "APPN",
+      1.6303429594203157e-05
      ],
      [
       "BLKB",
-      1.2188357658908782e-05
+      1.622140834156105e-05
      ],
      [
       "AI",
-      1.1774931169706649e-05
+      1.5410604621284127e-05
      ],
      [
       "NN",
-      1.141947126166525e-05
+      1.4598342353705496e-05
      ],
      [
       "BL",
-      1.1000458460644607e-05
+      1.4551585157116464e-05
      ],
      [
       "PD",
-      9.456517113718842e-06
+      1.214145957303313e-05
      ],
      [
       "LSPD",
-      8.87252447415995e-06
-     ],
-     [
-      "ASAN",
-      7.751754137433938e-06
-     ],
-     [
-      "VERX",
-      7.530439329180569e-06
+      1.1829364524484421e-05
      ],
      [
       "VYX",
-      7.507122725366729e-06
+      1.0279186978981588e-05
+     ],
+     [
+      "VERX",
+      1.001940279491629e-05
+     ],
+     [
+      "ASAN",
+      9.850220168679453e-06
      ],
      [
       "ALKT",
-      7.145443510636162e-06
+      7.742387492499928e-06
      ],
      [
       "AIP",
-      5.756366182714729e-06
+      7.332691486717688e-06
      ],
      [
       "CXM",
-      5.5912424421059904e-06
+      7.3062573205287095e-06
      ]
     ],
     "forced_sellers": [
      [
-      "PANW",
-      -0.006302757303665987
-     ],
-     [
       "PLTR",
-      -0.005036910015373916
+      -0.008044851649431778
      ],
      [
-      "NOW",
-      -0.002016244848962928
+      "PANW",
+      -0.006203816604565399
+     ],
+     [
+      "MSFT",
+      -0.0015938996869565292
+     ],
+     [
+      "CRWD",
+      -0.0011795457830465206
      ]
     ],
     "metrics": {
-     "max_weight": 0.091302757303666,
+     "max_weight": 0.09304485164943177,
      "n_constituents": 106.0,
-     "names_over_4_5": 6.0,
-     "names_over_8_5": 2.0,
-     "sum_over_4_5": 0.46646350963691846,
-     "turnover": 0.013355912168002835
+     "names_over_4_5": 5.0,
+     "names_over_8_5": 4.0,
+     "sum_over_4_5": 0.42636344861213693,
+     "turnover": 0.017022113724000185
     },
     "notes": [],
     "special_rebalance": null,
@@ -478,25 +465,25 @@
      "max_weight": 0.085,
      "names_over_4_5": 5.0,
      "names_over_8_5": 0.0,
-     "sum_over_4_5": 0.41043320872311
+     "sum_over_4_5": 0.41117706845445906
     }
    },
    "decomposition": {
-    "curr_as_of": "2026-10-28",
+    "curr_as_of": "2026-10-29",
     "mode": "shares_and_prices",
     "n_changes": 111,
     "n_notable": 0,
     "notable": [],
-    "prev_as_of": "2026-10-27",
-    "scale_factor": 1.0111408159203257,
+    "prev_as_of": "2026-10-28",
+    "scale_factor": 0.9798631840094195,
     "summary": {
      "active_trade_tickers": [],
      "classification_counts": {
-      "active_trade": 4,
+      "active_trade": 5,
       "corporate_action_suspect": 0,
       "entry": 0,
       "exit": 0,
-      "flow_only": 107
+      "flow_only": 106
      },
      "classification_counts_equity": {
       "active_trade": 0,
@@ -508,36 +495,36 @@
      "entries": [],
      "exits": [],
      "fund_flow": {
-      "flow_pct_from_scale_factor": 0.011140815920325675,
-      "flow_pct_from_shares_outstanding": 0.010481366459627273,
-      "flow_shares": 1350000.0,
-      "implied_flow_usd_from_scale_factor": 162197548.07877398,
-      "scale_factor": 1.0111408159203257,
-      "shares_outstanding_curr": 130150000.0,
-      "shares_outstanding_prev": 128800000.0
+      "flow_pct_from_scale_factor": -0.02013681599058048,
+      "flow_pct_from_shares_outstanding": 0.011140991164041436,
+      "flow_shares": 1450000.0,
+      "implied_flow_usd_from_scale_factor": -286291115.96038353,
+      "scale_factor": 0.9798631840094195,
+      "shares_outstanding_curr": 131600000.0,
+      "shares_outstanding_prev": 130150000.0
      },
-     "gross_drift": 0.009631619828141046,
-     "gross_total_change": 0.009633268630396657,
-     "gross_trade": 5.617623554464792e-06,
+     "gross_drift": 0.019663977040027036,
+     "gross_total_change": 0.019705699935823256,
+     "gross_trade": 4.6799876995242225e-05,
      "largest_drift_down": {
-      "name": "FORTINET",
-      "ticker": "FTNT",
-      "value": -0.002252473562169635
+      "name": "SERVICENOW",
+      "ticker": "NOW",
+      "value": -0.011447585983031784
      },
      "largest_drift_up": {
-      "name": "ORACLE",
-      "ticker": "ORCL",
-      "value": 0.006659701522807704
+      "name": "PALANTIR TECHNOLOGIES CLASS A",
+      "ticker": "PLTR",
+      "value": 0.003003835431440588
      },
      "largest_trade_down": {
-      "name": "INTERDIGITAL INC",
-      "ticker": "IDCC",
-      "value": -3.0323999593556e-07
-     },
-     "largest_trade_up": {
       "name": "FAIR ISAAC",
       "ticker": "FICO",
-      "value": 2.8562354323618394e-07
+      "value": -5.329360131924379e-07
+     },
+     "largest_trade_up": {
+      "name": "INTERDIGITAL INC",
+      "ticker": "IDCC",
+      "value": 6.158614197803759e-07
      },
      "n_active_trades": 0,
      "n_changes": 111,
@@ -547,907 +534,907 @@
      "n_equities": 106,
      "n_exits": 0,
      "n_prev": 111,
-     "portfolio_return": 0.000945224478220652,
-     "scale_factor": 1.0111408159203257,
-     "sum_drift": -4.148343859177936e-17,
-     "sum_trade": -2.4674916786465023e-17,
-     "total_market_value_curr": 14721053295.380001,
-     "total_market_value_prev": 14545108807.41
+     "portfolio_return": -0.03422005025591912,
+     "scale_factor": 0.9798631840094195,
+     "sum_drift": -1.0699720189716322e-17,
+     "sum_trade": 5.2418633940832376e-17,
+     "total_market_value_curr": 13930958028.24,
+     "total_market_value_prev": 14721053295.380001
     },
     "top_changes": [
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": 0.006659701522807704,
-      "name": "ORACLE",
-      "price_return": 0.1073316478970352,
-      "rel_share_change": -1.1601575694575317e-06,
-      "shares_curr": 7059869.0,
-      "shares_prev": 6982091.0,
-      "ticker": "ORCL",
-      "total_change": 0.00665962794475522,
-      "trade": -7.357805248409122e-08,
-      "w_curr": 0.0693179655548322,
-      "w_prev": 0.06265833761007698
-     },
-     {
-      "asset_class": "equity",
-      "classification": "flow_only",
-      "drift": -0.002252473562169635,
-      "name": "FORTINET",
-      "price_return": -0.059027027027027,
-      "rel_share_change": 4.933655130434644e-06,
-      "shares_curr": 2988675.0,
-      "shares_prev": 2955731.0,
-      "ticker": "FTNT",
-      "total_change": -0.0022522957104936445,
-      "trade": 1.7785167599065899e-07,
-      "w_curr": 0.035341801538296115,
-      "w_prev": 0.03759409724878976
-     },
-     {
-      "asset_class": "equity",
-      "classification": "flow_only",
-      "drift": -0.001755622126962078,
-      "name": "PALO ALTO NETWORKS",
-      "price_return": -0.017948717948717885,
-      "rel_share_change": 2.0643763762873135e-06,
-      "shares_curr": 3405230.0,
-      "shares_prev": 3367704.0,
-      "ticker": "PANW",
-      "total_change": -0.0017554247416434743,
-      "trade": 1.9738531860380437e-07,
-      "w_curr": 0.09125224640831817,
-      "w_prev": 0.09300767114996164
-     },
-     {
-      "asset_class": "equity",
-      "classification": "flow_only",
-      "drift": -0.0015012239285916024,
+      "drift": -0.011447585983031784,
       "name": "SERVICENOW",
-      "price_return": -0.03004264116810962,
-      "rel_share_change": 2.5598219051126136e-06,
-      "shares_curr": 4607645.0,
-      "shares_prev": 4556866.0,
+      "price_return": -0.2694997668687138,
+      "rel_share_change": -4.363474761404085e-06,
+      "shares_curr": 4514842.0,
+      "shares_prev": 4607645.0,
       "ticker": "NOW",
-      "total_change": -0.0015010990042680986,
-      "trade": 1.2492432350380556e-07,
-      "w_curr": 0.046990234324271817,
-      "w_prev": 0.048491333328539915
+      "total_change": -0.011447616139917481,
+      "trade": -3.015688569696362e-08,
+      "w_curr": 0.035542618184354335,
+      "w_prev": 0.046990234324271817
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": -0.0009637672212208237,
+      "drift": -0.006101035168264664,
+      "name": "FORTINET",
+      "price_return": -0.2009420955882354,
+      "rel_share_change": -8.7422004546589e-06,
+      "shares_curr": 2928467.0,
+      "shares_prev": 2988675.0,
+      "ticker": "FTNT",
+      "total_change": -0.006101188015934976,
+      "trade": -1.5284767031220614e-07,
+      "w_curr": 0.02924061352236114,
+      "w_prev": 0.035341801538296115
+     },
+     {
+      "asset_class": "equity",
+      "classification": "flow_only",
+      "drift": 0.003003835431440588,
       "name": "PALANTIR TECHNOLOGIES CLASS A",
-      "price_return": -0.00966134956976794,
-      "rel_share_change": -1.2468514571928324e-06,
-      "shares_curr": 6730882.0,
-      "shares_prev": 6656729.0,
+      "price_return": -0.0019816066256796994,
+      "rel_share_change": 2.658282831857761e-06,
+      "shares_curr": 6595361.0,
+      "shares_prev": 6730882.0,
       "ticker": "PLTR",
-      "total_change": -0.0009638705400234066,
-      "trade": -1.0331880258285242e-07,
-      "w_curr": 0.08998709941738614,
-      "w_prev": 0.09095096995740955
+      "total_change": 0.0030044094934812693,
+      "trade": 5.740620406813335e-07,
+      "w_curr": 0.09299150891086741,
+      "w_prev": 0.08998709941738614
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": -0.0005138878293727139,
-      "name": "CROWDSTRIKE HOLDINGS CLASS A",
-      "price_return": -0.005074248190433339,
-      "rel_share_change": 3.01260530011227e-06,
-      "shares_curr": 4689029.0,
-      "shares_prev": 4637351.0,
-      "ticker": "CRWD",
-      "total_change": -0.0005136235620561841,
-      "trade": 2.642673165298426e-07,
-      "w_curr": 0.08493797611156081,
-      "w_prev": 0.085451599673617
+      "drift": 0.0028243851134991393,
+      "name": "MICROSOFT",
+      "price_return": -0.0016383872243460607,
+      "rel_share_change": -4.193753376346976e-06,
+      "shares_curr": 2274200.0,
+      "shares_prev": 2320946.0,
+      "ticker": "MSFT",
+      "total_change": 0.0028243263716813127,
+      "trade": -5.874181782661303e-08,
+      "w_curr": 0.0865442552878266,
+      "w_prev": 0.08371992891614528
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": 0.0004428786010423798,
+      "drift": 0.0016190392550297014,
       "name": "SYNOPSYS",
-      "price_return": 0.01574554192487665,
-      "rel_share_change": 7.048568445355841e-06,
-      "shares_curr": 928523.0,
-      "shares_prev": 918286.0,
+      "price_return": 0.017223847766087763,
+      "rel_share_change": -1.2643310104643035e-05,
+      "shares_curr": 909814.0,
+      "shares_prev": 928523.0,
       "ticker": "SNPS",
-      "total_change": 0.00044309584055825246,
-      "trade": 2.1723951587268586e-07,
-      "w_curr": 0.030394968314558353,
-      "w_prev": 0.0299518724740001
+      "total_change": 0.001618747020448237,
+      "trade": -2.9223458146432346e-07,
+      "w_curr": 0.03201371533500659,
+      "w_prev": 0.030394968314558353
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": 0.0004355099302525388,
-      "name": "STRATEGY INC CLASS A",
-      "price_return": 0.026591230551626488,
-      "rel_share_change": 4.924775697467965e-06,
-      "shares_curr": 1767950.0,
-      "shares_prev": 1748462.0,
-      "ticker": "MSTR",
-      "total_change": 0.00043559750529560334,
-      "trade": 8.757504306455832e-08,
-      "w_curr": 0.01743323774804494,
-      "w_prev": 0.016997640242749336
+      "drift": 0.0013276753268008992,
+      "name": "INTUIT",
+      "price_return": 0.00914104634510493,
+      "rel_share_change": -1.526159992826237e-06,
+      "shares_curr": 1299715.0,
+      "shares_prev": 1326427.0,
+      "ticker": "INTU",
+      "total_change": 0.0013277367802796841,
+      "trade": 6.145347878488971e-08,
+      "w_curr": 0.03089899560227031,
+      "w_prev": 0.029571258821990624
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": -0.0003578151737245721,
-      "name": "TAKE TWO INTERACTIVE SOFTWARE",
-      "price_return": -0.02975953895071548,
-      "rel_share_change": 6.251659746103755e-06,
-      "shares_curr": 852303.0,
-      "shares_prev": 842907.0,
-      "ticker": "TTWO",
-      "total_change": -0.0003577433726635864,
-      "trade": 7.180106098569894e-08,
-      "w_curr": 0.011306680950760288,
-      "w_prev": 0.011664424323423874
+      "drift": 0.0011923078370010554,
+      "name": "CROWDSTRIKE HOLDINGS CLASS A",
+      "price_return": -0.020663016575414583,
+      "rel_share_change": -5.198671637840491e-06,
+      "shares_curr": 4594583.0,
+      "shares_prev": 4689029.0,
+      "ticker": "CRWD",
+      "total_change": 0.0011921628220060432,
+      "trade": -1.4501499501218262e-07,
+      "w_curr": 0.08613013893356686,
+      "w_prev": 0.08493797611156081
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": -0.00029515079852725917,
-      "name": "DATADOG INC CLASS A",
-      "price_return": -0.00858200982835966,
-      "rel_share_change": -2.588787788582181e-07,
-      "shares_curr": 1624007.0,
-      "shares_prev": 1606114.0,
-      "ticker": "DDOG",
-      "total_change": -0.00029515571818112055,
-      "trade": -4.9196538613738294e-09,
-      "w_curr": 0.03071382052613707,
-      "w_prev": 0.03100897624431819
+      "drift": 0.0011279851076105088,
+      "name": "CADENCE DESIGN SYSTEMS",
+      "price_return": 0.0008468142264790313,
+      "rel_share_change": 1.5166057719451231e-05,
+      "shares_curr": 1308536.0,
+      "shares_prev": 1335407.0,
+      "ticker": "CDNS",
+      "total_change": 0.0011285865266893458,
+      "trade": 6.014190788369844e-07,
+      "w_curr": 0.03219453486908986,
+      "w_prev": 0.031065948342400514
+     },
+     {
+      "asset_class": "equity",
+      "classification": "flow_only",
+      "drift": 0.0009363970561730231,
+      "name": "ADOBE INC",
+      "price_return": -0.006566303651505345,
+      "rel_share_change": 9.655459033419689e-06,
+      "shares_curr": 1888730.0,
+      "shares_prev": 1927526.0,
+      "ticker": "ADBE",
+      "total_change": 0.0009368401009564528,
+      "trade": 4.4304478342971354e-07,
+      "w_curr": 0.03363958793429842,
+      "w_prev": 0.03270274783334197
+     },
+     {
+      "asset_class": "equity",
+      "classification": "flow_only",
+      "drift": 0.0008605399601240302,
+      "name": "GEN DIGITAL",
+      "price_return": 0.1581108829568787,
+      "rel_share_change": -9.196681139522767e-06,
+      "shares_curr": 2559773.0,
+      "shares_prev": 2612402.0,
+      "ticker": "GEN",
+      "total_change": 0.0008605105193062223,
+      "trade": -2.9440817807951936e-08,
+      "w_curr": 0.00518166794083147,
+      "w_prev": 0.004321157421525248
      }
     ]
    },
    "equities": [
     {
      "is_adr": false,
-     "name": "PALO ALTO NETWORKS",
-     "ticker": "PANW",
-     "weight_eq": 0.091302757303666,
-     "weight_fund": 0.0913
-    },
-    {
-     "is_adr": false,
      "name": "PALANTIR TECHNOLOGIES CLASS A",
      "ticker": "PLTR",
-     "weight_eq": 0.09003691001537392,
-     "weight_fund": 0.09
+     "weight_eq": 0.09304485164943177,
+     "weight_fund": 0.09300000000000001
     },
     {
      "is_adr": false,
-     "name": "CROWDSTRIKE HOLDINGS CLASS A",
-     "ticker": "CRWD",
-     "weight_eq": 0.08498499186614542,
-     "weight_fund": 0.0849
+     "name": "PALO ALTO NETWORKS",
+     "ticker": "PANW",
+     "weight_eq": 0.0912038166045654,
+     "weight_fund": 0.09119999999999999
     },
     {
      "is_adr": false,
      "name": "MICROSOFT",
      "ticker": "MSFT",
-     "weight_eq": 0.08376627044453998,
-     "weight_fund": 0.0837
+     "weight_eq": 0.08659389968695654,
+     "weight_fund": 0.08650000000000001
+    },
+    {
+     "is_adr": false,
+     "name": "CROWDSTRIKE HOLDINGS CLASS A",
+     "ticker": "CRWD",
+     "weight_eq": 0.08617954578304653,
+     "weight_fund": 0.0861
     },
     {
      "is_adr": false,
      "name": "ORACLE",
      "ticker": "ORCL",
-     "weight_eq": 0.06935633515823021,
+     "weight_eq": 0.06934133488813672,
      "weight_fund": 0.0693
-    },
-    {
-     "is_adr": false,
-     "name": "SERVICENOW",
-     "ticker": "NOW",
-     "weight_eq": 0.047016244848962926,
-     "weight_fund": 0.047
     },
     {
      "is_adr": false,
      "name": "SALESFORCE",
      "ticker": "CRM",
-     "weight_eq": 0.04071480030324431,
-     "weight_fund": 0.0407
+     "weight_eq": 0.04020648418849748,
+     "weight_fund": 0.04019999999999999
     },
     {
      "is_adr": false,
-     "name": "FORTINET",
-     "ticker": "FTNT",
-     "weight_eq": 0.0353613643009586,
-     "weight_fund": 0.0353
+     "name": "SERVICENOW",
+     "ticker": "NOW",
+     "weight_eq": 0.03556300650380313,
+     "weight_fund": 0.0355
     },
     {
      "is_adr": false,
      "name": "ADOBE INC",
      "ticker": "ADBE",
-     "weight_eq": 0.03272084979946788,
-     "weight_fund": 0.0327
+     "weight_eq": 0.03365888461810976,
+     "weight_fund": 0.0336
     },
     {
      "is_adr": false,
      "name": "CADENCE DESIGN SYSTEMS",
      "ticker": "CDNS",
-     "weight_eq": 0.0310831442901976,
-     "weight_fund": 0.0311
-    },
-    {
-     "is_adr": false,
-     "name": "DATADOG INC CLASS A",
-     "ticker": "DDOG",
-     "weight_eq": 0.030730821560472,
-     "weight_fund": 0.030699999999999998
+     "weight_eq": 0.032213002626811364,
+     "weight_fund": 0.0322
     },
     {
      "is_adr": false,
      "name": "SYNOPSYS",
      "ticker": "SNPS",
-     "weight_eq": 0.030411792854490968,
-     "weight_fund": 0.0304
+     "weight_eq": 0.03203207936918121,
+     "weight_fund": 0.032
     },
     {
      "is_adr": false,
      "name": "INTUIT",
      "ticker": "INTU",
-     "weight_eq": 0.02958762741365222,
-     "weight_fund": 0.0296
+     "weight_eq": 0.030916720199533197,
+     "weight_fund": 0.030899999999999997
+    },
+    {
+     "is_adr": false,
+     "name": "DATADOG INC CLASS A",
+     "ticker": "DDOG",
+     "weight_eq": 0.030383800637933552,
+     "weight_fund": 0.0304
+    },
+    {
+     "is_adr": false,
+     "name": "FORTINET",
+     "ticker": "FTNT",
+     "weight_eq": 0.029257386821567196,
+     "weight_fund": 0.0292
     },
     {
      "is_adr": false,
      "name": "APPLOVIN CLASS A",
      "ticker": "APP",
-     "weight_eq": 0.023215837016392828,
-     "weight_fund": 0.0232
+     "weight_eq": 0.023571304984205992,
+     "weight_fund": 0.0236
     },
     {
      "is_adr": false,
      "name": "STRATEGY INC CLASS A",
      "ticker": "MSTR",
-     "weight_eq": 0.017442887575661512,
-     "weight_fund": 0.0174
+     "weight_eq": 0.01762074590154147,
+     "weight_fund": 0.0176
     },
     {
      "is_adr": false,
      "name": "AUTODESK",
      "ticker": "ADSK",
-     "weight_eq": 0.01685591721161819,
-     "weight_fund": 0.0168
+     "weight_eq": 0.01740654030158814,
+     "weight_fund": 0.0174
     },
     {
      "is_adr": false,
      "name": "ROPER TECHNOLOGIES",
      "ticker": "ROP",
-     "weight_eq": 0.014363603906953905,
-     "weight_fund": 0.0144
+     "weight_eq": 0.01517667947536633,
+     "weight_fund": 0.0152
     },
     {
      "is_adr": false,
      "name": "WORKDAY CLASS A",
      "ticker": "WDAY",
-     "weight_eq": 0.013537971634530065,
-     "weight_fund": 0.013500000000000002
-    },
-    {
-     "is_adr": false,
-     "name": "ATLASSIAN CORP CLASS A",
-     "ticker": "TEAM",
-     "weight_eq": 0.011581109310013092,
-     "weight_fund": 0.0116
+     "weight_eq": 0.013407730000583746,
+     "weight_fund": 0.0134
     },
     {
      "is_adr": false,
      "name": "TAKE TWO INTERACTIVE SOFTWARE",
      "ticker": "TTWO",
-     "weight_eq": 0.011312939542748035,
-     "weight_fund": 0.0113
+     "weight_eq": 0.011599965233805458,
+     "weight_fund": 0.0116
+    },
+    {
+     "is_adr": false,
+     "name": "ATLASSIAN CORP CLASS A",
+     "ticker": "TEAM",
+     "weight_eq": 0.011119082417785444,
+     "weight_fund": 0.0111
     },
     {
      "is_adr": false,
      "name": "ZSCALER",
      "ticker": "ZS",
-     "weight_eq": 0.008862021641232988,
+     "weight_eq": 0.00888965967549188,
      "weight_fund": 0.0089
     },
     {
      "is_adr": false,
      "name": "ZOOM COMMUNICATIONS CLASS A",
      "ticker": "ZM",
-     "weight_eq": 0.008745161398944533,
-     "weight_fund": 0.0087
+     "weight_eq": 0.008820259969578107,
+     "weight_fund": 0.0088
     },
     {
      "is_adr": false,
      "name": "RUBRIK CLASS A",
      "ticker": "RBRK",
-     "weight_eq": 0.0072148754661081555,
-     "weight_fund": 0.0072
+     "weight_eq": 0.007340278446171385,
+     "weight_fund": 0.0073
     },
     {
      "is_adr": false,
      "name": "PTC",
      "ticker": "PTC",
-     "weight_eq": 0.00697256934236001,
-     "weight_fund": 0.006999999999999999
+     "weight_eq": 0.00721343517684546,
+     "weight_fund": 0.0072
     },
     {
      "is_adr": false,
      "name": "NUTANIX CLASS A",
      "ticker": "NTNX",
-     "weight_eq": 0.0064744464739123955,
+     "weight_eq": 0.006523205162006407,
      "weight_fund": 0.006500000000000001
     },
     {
      "is_adr": false,
      "name": "DYNATRACE INC",
      "ticker": "DT",
-     "weight_eq": 0.005982615759410138,
+     "weight_eq": 0.006014358117011239,
      "weight_fund": 0.006
     },
     {
      "is_adr": false,
      "name": "CIRCLE INTERNET GROUP INC CLASS A",
      "ticker": "CRCL",
-     "weight_eq": 0.0054353840575152145,
-     "weight_fund": 0.0054
-    },
-    {
-     "is_adr": false,
-     "name": "SAMSARA CLASS A",
-     "ticker": "IOT",
-     "weight_eq": 0.005284416063225288,
-     "weight_fund": 0.0053
+     "weight_eq": 0.005509589003256783,
+     "weight_fund": 0.0055000000000000005
     },
     {
      "is_adr": false,
      "name": "DOCUSIGN",
      "ticker": "DOCU",
-     "weight_eq": 0.0052612299493066525,
+     "weight_eq": 0.0053134754429206565,
+     "weight_fund": 0.0053
+    },
+    {
+     "is_adr": false,
+     "name": "SAMSARA CLASS A",
+     "ticker": "IOT",
+     "weight_eq": 0.0052987356740715535,
      "weight_fund": 0.0053
     },
     {
      "is_adr": false,
      "name": "FAIR ISAAC",
      "ticker": "FICO",
-     "weight_eq": 0.004970381336935127,
-     "weight_fund": 0.005
+     "weight_eq": 0.005227150721981158,
+     "weight_fund": 0.0052
     },
     {
      "is_adr": false,
      "name": "TRIMBLE INC",
      "ticker": "TRMB",
-     "weight_eq": 0.004945555216299524,
+     "weight_eq": 0.005199597342086941,
+     "weight_fund": 0.0052
+    },
+    {
+     "is_adr": false,
+     "name": "GEN DIGITAL",
+     "ticker": "GEN",
+     "weight_eq": 0.005184640302088238,
+     "weight_fund": 0.0052
+    },
+    {
+     "is_adr": false,
+     "name": "TYLER TECHNOLOGIES",
+     "ticker": "TYL",
+     "weight_eq": 0.004860159991596994,
      "weight_fund": 0.0049
     },
     {
      "is_adr": false,
      "name": "UNITY SOFTWARE",
      "ticker": "U",
-     "weight_eq": 0.004698088584272721,
-     "weight_fund": 0.004699999999999999
+     "weight_eq": 0.004836323527334194,
+     "weight_fund": 0.0048
     },
     {
      "is_adr": false,
      "name": "MANHATTAN ASSOCIATES",
      "ticker": "MANH",
-     "weight_eq": 0.00460645184901706,
-     "weight_fund": 0.0046
+     "weight_eq": 0.0047922466925297506,
+     "weight_fund": 0.0048
     },
     {
      "is_adr": false,
      "name": "GUIDEWIRE SOFTWARE",
      "ticker": "GWRE",
-     "weight_eq": 0.004580077979421046,
-     "weight_fund": 0.0046
-    },
-    {
-     "is_adr": false,
-     "name": "TYLER TECHNOLOGIES",
-     "ticker": "TYL",
-     "weight_eq": 0.004529957023235496,
+     "weight_eq": 0.004548087464268209,
      "weight_fund": 0.0045000000000000005
     },
     {
      "is_adr": false,
      "name": "BITMINE IMMERSION TECHNOLOGIES",
      "ticker": "BMNR",
-     "weight_eq": 0.004383834702141611,
-     "weight_fund": 0.0044
-    },
-    {
-     "is_adr": false,
-     "name": "GEN DIGITAL",
-     "ticker": "GEN",
-     "weight_eq": 0.00432354931365822,
-     "weight_fund": 0.0043
+     "weight_eq": 0.004459016445219963,
+     "weight_fund": 0.0045000000000000005
     },
     {
      "is_adr": false,
      "name": "HUBSPOT",
      "ticker": "HUBS",
-     "weight_eq": 0.004091286143174141,
+     "weight_eq": 0.004076277386132238,
      "weight_fund": 0.0040999999999999995
     },
     {
      "is_adr": false,
      "name": "ELASTIC",
      "ticker": "ESTC",
-     "weight_eq": 0.003209676533034625,
+     "weight_eq": 0.003221337323735526,
      "weight_fund": 0.0032
-    },
-    {
-     "is_adr": false,
-     "name": "GITLAB CLASS A",
-     "ticker": "GTLB",
-     "weight_eq": 0.0028816543467207532,
-     "weight_fund": 0.0029
     },
     {
      "is_adr": false,
      "name": "SENTINELONE INC CLASS A",
      "ticker": "S",
-     "weight_eq": 0.0028365558554150233,
-     "weight_fund": 0.0028000000000000004
+     "weight_eq": 0.0029508688666674333,
+     "weight_fund": 0.0029
     },
     {
      "is_adr": false,
      "name": "INTERDIGITAL INC",
      "ticker": "IDCC",
-     "weight_eq": 0.0027225217822605427,
+     "weight_eq": 0.0029402279635271093,
+     "weight_fund": 0.0029
+    },
+    {
+     "is_adr": false,
+     "name": "GITLAB CLASS A",
+     "ticker": "GTLB",
+     "weight_eq": 0.002915859571862329,
+     "weight_fund": 0.0029
+    },
+    {
+     "is_adr": false,
+     "name": "QUALYS",
+     "ticker": "QLYS",
+     "weight_eq": 0.002712525041434786,
      "weight_fund": 0.0027
     },
     {
      "is_adr": true,
      "name": "DESCARTES SYSTEMS GROUP",
      "ticker": "DSGX",
-     "weight_eq": 0.002602856823427442,
+     "weight_eq": 0.002685354063389309,
+     "weight_fund": 0.0027
+    },
+    {
+     "is_adr": false,
+     "name": "PROCORE TECHNOLOGIES INC",
+     "ticker": "PCOR",
+     "weight_eq": 0.002562501761827266,
      "weight_fund": 0.0026
     },
     {
      "is_adr": false,
      "name": "HUT CORP",
      "ticker": "HUT",
-     "weight_eq": 0.002567887785613447,
-     "weight_fund": 0.0026
-    },
-    {
-     "is_adr": false,
-     "name": "QUALYS",
-     "ticker": "QLYS",
-     "weight_eq": 0.0025429601717942485,
-     "weight_fund": 0.0025
-    },
-    {
-     "is_adr": false,
-     "name": "PROCORE TECHNOLOGIES INC",
-     "ticker": "PCOR",
-     "weight_eq": 0.002512334088110125,
+     "weight_eq": 0.0025432452028309512,
      "weight_fund": 0.0025
     },
     {
      "is_adr": false,
      "name": "ZETA GLOBAL HOLDINGS CLASS A",
      "ticker": "ZETA",
-     "weight_eq": 0.0025028679792929603,
+     "weight_eq": 0.002536636827548524,
      "weight_fund": 0.0025
-    },
-    {
-     "is_adr": false,
-     "name": "AURORA INNOVATION CLASS A",
-     "ticker": "AUR",
-     "weight_eq": 0.0024058879418628948,
-     "weight_fund": 0.0024
     },
     {
      "is_adr": false,
      "name": "COMMVAULT SYSTEMS",
      "ticker": "CVLT",
-     "weight_eq": 0.0022679452205976846,
-     "weight_fund": 0.0023
-    },
-    {
-     "is_adr": false,
-     "name": "SNAP INC CLASS A",
-     "ticker": "SNAP",
-     "weight_eq": 0.002197288490363823,
-     "weight_fund": 0.0022
+     "weight_eq": 0.002421119726722729,
+     "weight_fund": 0.0024
     },
     {
      "is_adr": true,
      "name": "OPEN TEXT",
      "ticker": "OTEX",
-     "weight_eq": 0.0021703543801071335,
+     "weight_eq": 0.0022423583524401832,
+     "weight_fund": 0.0022
+    },
+    {
+     "is_adr": false,
+     "name": "SNAP INC CLASS A",
+     "ticker": "SNAP",
+     "weight_eq": 0.0021683068212672847,
+     "weight_fund": 0.0022
+    },
+    {
+     "is_adr": false,
+     "name": "BENTLEY SYSTEMS CLASS B",
+     "ticker": "BSY",
+     "weight_eq": 0.0021566462916692854,
+     "weight_fund": 0.0022
+    },
+    {
+     "is_adr": false,
+     "name": "AURORA INNOVATION CLASS A",
+     "ticker": "AUR",
+     "weight_eq": 0.002155938552658475,
      "weight_fund": 0.0022
     },
     {
      "is_adr": false,
      "name": "RINGCENTRAL CLASS A",
      "ticker": "RNG",
-     "weight_eq": 0.0020888088462211866,
-     "weight_fund": 0.0021
-    },
-    {
-     "is_adr": false,
-     "name": "BENTLEY SYSTEMS CLASS B",
-     "ticker": "BSY",
-     "weight_eq": 0.0020710351336593507,
+     "weight_eq": 0.0021002893835101555,
      "weight_fund": 0.0021
     },
     {
      "is_adr": false,
      "name": "BOX INC CLASS A",
      "ticker": "BOX",
-     "weight_eq": 0.001958959326508268,
-     "weight_fund": 0.002
+     "weight_eq": 0.0020539865245956983,
+     "weight_fund": 0.0021
     },
     {
      "is_adr": false,
-     "name": "TERAWULF",
-     "ticker": "WULF",
-     "weight_eq": 0.0019397706701278499,
-     "weight_fund": 0.0019
+     "name": "TENABLE HOLDINGS INC",
+     "ticker": "TENB",
+     "weight_eq": 0.0019512505424692905,
+     "weight_fund": 0.002
     },
     {
      "is_adr": false,
      "name": "UIPATH INC CLASS A",
      "ticker": "PATH",
-     "weight_eq": 0.0019245078348756153,
+     "weight_eq": 0.0019351750127773787,
+     "weight_fund": 0.0019
+    },
+    {
+     "is_adr": false,
+     "name": "ACI WORLDWIDE",
+     "ticker": "ACIW",
+     "weight_eq": 0.0019132307214753386,
      "weight_fund": 0.0019
     },
     {
      "is_adr": false,
      "name": "VARONIS SYSTEMS",
      "ticker": "VRNS",
-     "weight_eq": 0.0018461567208826906,
-     "weight_fund": 0.0018
+     "weight_eq": 0.001908496694653928,
+     "weight_fund": 0.0019
     },
     {
      "is_adr": false,
-     "name": "ACI WORLDWIDE",
-     "ticker": "ACIW",
-     "weight_eq": 0.001831043278925983,
-     "weight_fund": 0.0018
+     "name": "TERAWULF",
+     "ticker": "WULF",
+     "weight_eq": 0.0019082713203489887,
+     "weight_fund": 0.0019
     },
     {
      "is_adr": true,
      "name": "BLACKBERRY",
      "ticker": "BB",
-     "weight_eq": 0.0018233735789322974,
-     "weight_fund": 0.0018
-    },
-    {
-     "is_adr": false,
-     "name": "TENABLE HOLDINGS INC",
-     "ticker": "TENB",
-     "weight_eq": 0.0017729944195637585,
+     "weight_eq": 0.0018458571735710334,
      "weight_fund": 0.0018
     },
     {
      "is_adr": false,
      "name": "DROPBOX INC CLASS A",
      "ticker": "DBX",
-     "weight_eq": 0.0017163131041491564,
-     "weight_fund": 0.0017000000000000001
-    },
-    {
-     "is_adr": false,
-     "name": "RIOT PLATFORMS",
-     "ticker": "RIOT",
-     "weight_eq": 0.0016414802324774545,
-     "weight_fund": 0.0016
+     "weight_eq": 0.0017669164942352162,
+     "weight_fund": 0.0018
     },
     {
      "is_adr": false,
      "name": "APPFOLIO CLASS A",
      "ticker": "APPF",
-     "weight_eq": 0.0016231229045440621,
-     "weight_fund": 0.0016
+     "weight_eq": 0.001697685597114765,
+     "weight_fund": 0.0017000000000000001
     },
     {
      "is_adr": false,
      "name": "SERVICETITAN CLASS A",
      "ticker": "TTAN",
-     "weight_eq": 0.0015916982208143283,
+     "weight_eq": 0.0016454968265154366,
+     "weight_fund": 0.0016
+    },
+    {
+     "is_adr": false,
+     "name": "RIOT PLATFORMS",
+     "ticker": "RIOT",
+     "weight_eq": 0.0016161689705194075,
      "weight_fund": 0.0016
     },
     {
      "is_adr": false,
      "name": "CORE SCIENTIFIC INC",
      "ticker": "CORZ",
-     "weight_eq": 0.0015848531109674245,
+     "weight_eq": 0.0015786668012391207,
      "weight_fund": 0.0016
     },
     {
      "is_adr": false,
      "name": "CLEAR SECURE CLASS A",
      "ticker": "YOU",
-     "weight_eq": 0.0014381790193255975,
-     "weight_fund": 0.0014000000000000002
+     "weight_eq": 0.0015130346064783837,
+     "weight_fund": 0.0015
+    },
+    {
+     "is_adr": false,
+     "name": "BRAZE CLASS A",
+     "ticker": "BRZE",
+     "weight_eq": 0.0014586292127795244,
+     "weight_fund": 0.0015
     },
     {
      "is_adr": false,
      "name": "D WAVE QUANTUM",
      "ticker": "QBTS",
-     "weight_eq": 0.0014295690341875737,
+     "weight_eq": 0.0014538446478954963,
+     "weight_fund": 0.0015
+    },
+    {
+     "is_adr": false,
+     "name": "CCC INTELLIGENT SOLUTIONS HOLDINGS",
+     "ticker": "CCC",
+     "weight_eq": 0.0014392359502056098,
      "weight_fund": 0.0014000000000000002
     },
     {
      "is_adr": false,
      "name": "WORKIVA CLASS A",
      "ticker": "WK",
-     "weight_eq": 0.001409563240978961,
-     "weight_fund": 0.0014000000000000002
-    },
-    {
-     "is_adr": false,
-     "name": "BRAZE CLASS A",
-     "ticker": "BRZE",
-     "weight_eq": 0.0014080773968386203,
+     "weight_eq": 0.0014374213777777842,
      "weight_fund": 0.0014000000000000002
     },
     {
      "is_adr": false,
      "name": "Q2 HOLDINGS INC",
      "ticker": "QTWO",
-     "weight_eq": 0.0013991124846151077,
-     "weight_fund": 0.0014000000000000002
-    },
-    {
-     "is_adr": false,
-     "name": "CCC INTELLIGENT SOLUTIONS HOLDINGS",
-     "ticker": "CCC",
-     "weight_eq": 0.001388150841527829,
+     "weight_eq": 0.001392656927540474,
      "weight_fund": 0.0014000000000000002
     },
     {
      "is_adr": false,
      "name": "BILL HOLDINGS",
      "ticker": "BILL",
-     "weight_eq": 0.0012797557435465714,
+     "weight_eq": 0.0013375456794859734,
      "weight_fund": 0.0013
     },
     {
      "is_adr": false,
      "name": "DOLBY LABORATORIES CLASS A",
      "ticker": "DLB",
-     "weight_eq": 0.0012105510463289912,
-     "weight_fund": 0.0012
+     "weight_eq": 0.0012786123428481858,
+     "weight_fund": 0.0013
     },
     {
      "is_adr": false,
      "name": "LIFE360",
      "ticker": "LIF",
-     "weight_eq": 0.0011904080919399901,
-     "weight_fund": 0.0012
+     "weight_eq": 0.0012682205474523608,
+     "weight_fund": 0.0013
     },
     {
      "is_adr": false,
      "name": "FRESHWORKS CLASS A",
      "ticker": "FRSH",
-     "weight_eq": 0.0011198774652501774,
-     "weight_fund": 0.0011
-    },
-    {
-     "is_adr": false,
-     "name": "TERADATA",
-     "ticker": "TDC",
-     "weight_eq": 0.0010551008487664946,
+     "weight_eq": 0.0011316903473549947,
      "weight_fund": 0.0011
     },
     {
      "is_adr": false,
      "name": "ALARM.COM HOLDINGS",
      "ticker": "ALRM",
-     "weight_eq": 0.0010528021273226338,
+     "weight_eq": 0.0011172463163828348,
+     "weight_fund": 0.0011
+    },
+    {
+     "is_adr": false,
+     "name": "TERADATA",
+     "ticker": "TDC",
+     "weight_eq": 0.001100750951022535,
      "weight_fund": 0.0011
     },
     {
      "is_adr": false,
      "name": "SPS COMMERCE",
      "ticker": "SPSC",
-     "weight_eq": 0.0010184592192455922,
-     "weight_fund": 0.001
+     "weight_eq": 0.0010567541041724372,
+     "weight_fund": 0.0011
     },
     {
      "is_adr": false,
      "name": "PEGASYSTEMS",
      "ticker": "PEGA",
-     "weight_eq": 0.0010182021551982902,
-     "weight_fund": 0.001
-    },
-    {
-     "is_adr": false,
-     "name": "CIPHER DIGITAL INC",
-     "ticker": "CIFR",
-     "weight_eq": 0.0010051876611430676,
+     "weight_eq": 0.0010167363490293537,
      "weight_fund": 0.001
     },
     {
      "is_adr": false,
      "name": "AGILYSYS INC",
      "ticker": "AGYS",
-     "weight_eq": 0.000974060739733814,
+     "weight_eq": 0.001015123085641189,
+     "weight_fund": 0.001
+    },
+    {
+     "is_adr": false,
+     "name": "FIVE9",
+     "ticker": "FIVN",
+     "weight_eq": 0.0009563147381275686,
+     "weight_fund": 0.001
+    },
+    {
+     "is_adr": false,
+     "name": "CIPHER DIGITAL INC",
+     "ticker": "CIFR",
+     "weight_eq": 0.0009504898004960189,
      "weight_fund": 0.001
     },
     {
      "is_adr": false,
      "name": "MARA HOLDINGS",
      "ticker": "MARA",
-     "weight_eq": 0.0009381256564045375,
-     "weight_fund": 0.0009
-    },
-    {
-     "is_adr": false,
-     "name": "FIVE9",
-     "ticker": "FIVN",
-     "weight_eq": 0.0009289984329780511,
+     "weight_eq": 0.0009469521827981987,
      "weight_fund": 0.0009
     },
     {
      "is_adr": false,
      "name": "AVEPOINT CLASS A",
      "ticker": "AVPT",
-     "weight_eq": 0.0008778191572084608,
+     "weight_eq": 0.0009168901300770072,
      "weight_fund": 0.0009
     },
     {
      "is_adr": false,
      "name": "KLAVIYO SERIES A",
      "ticker": "KVYO",
-     "weight_eq": 0.0008617686504086611,
+     "weight_eq": 0.0008871462896020017,
      "weight_fund": 0.0009
     },
     {
      "is_adr": false,
      "name": "ADEIA",
      "ticker": "ADEA",
-     "weight_eq": 0.0008288872065214116,
+     "weight_eq": 0.000848062689219026,
      "weight_fund": 0.0008
     },
     {
      "is_adr": false,
      "name": "NCINO",
      "ticker": "NCNO",
-     "weight_eq": 0.0008207089843944303,
+     "weight_eq": 0.0008415937460984164,
      "weight_fund": 0.0008
     },
     {
      "is_adr": false,
      "name": "LIVERAMP HOLDINGS INC",
      "ticker": "RAMP",
-     "weight_eq": 0.000766099494441206,
+     "weight_eq": 0.0007951762981386206,
      "weight_fund": 0.0008
     },
     {
      "is_adr": false,
      "name": "CLEANSPARK",
      "ticker": "CLSK",
-     "weight_eq": 0.0007280378717944277,
+     "weight_eq": 0.0007204748123155481,
      "weight_fund": 0.0007000000000000001
     },
     {
      "is_adr": false,
      "name": "INTAPP",
      "ticker": "INTA",
-     "weight_eq": 0.000683143866899128,
+     "weight_eq": 0.0006855727151737919,
      "weight_fund": 0.0007000000000000001
     },
     {
      "is_adr": false,
      "name": "A10 NETWORKS",
      "ticker": "ATEN",
-     "weight_eq": 0.0006345504338984566,
-     "weight_fund": 0.0006
-    },
-    {
-     "is_adr": false,
-     "name": "APPIAN CORP CLASS A",
-     "ticker": "APPN",
-     "weight_eq": 0.0006123251659795828,
-     "weight_fund": 0.0006
-    },
-    {
-     "is_adr": false,
-     "name": "SOUNDHOUND AI CLASS A",
-     "ticker": "SOUN",
-     "weight_eq": 0.0006121374288058789,
+     "weight_eq": 0.0006419071553651148,
      "weight_fund": 0.0006
     },
     {
      "is_adr": false,
      "name": "PROGRESS SOFTWARE CORP",
      "ticker": "PRGS",
-     "weight_eq": 0.0006023848912527172,
+     "weight_eq": 0.0006302927466691813,
+     "weight_fund": 0.0006
+    },
+    {
+     "is_adr": false,
+     "name": "SOUNDHOUND AI CLASS A",
+     "ticker": "SOUN",
+     "weight_eq": 0.0006224162527141077,
+     "weight_fund": 0.0006
+    },
+    {
+     "is_adr": false,
+     "name": "APPIAN CORP CLASS A",
+     "ticker": "APPN",
+     "weight_eq": 0.0006158309637392637,
      "weight_fund": 0.0006
     },
     {
      "is_adr": false,
      "name": "BLACKBAUD",
      "ticker": "BLKB",
-     "weight_eq": 0.0005895517828061614,
+     "weight_eq": 0.0006127327673278964,
      "weight_fund": 0.0006
     },
     {
      "is_adr": false,
      "name": "C3 AI CLASS A",
      "ticker": "AI",
-     "weight_eq": 0.0005695543122207565,
+     "weight_eq": 0.0005821062029245989,
      "weight_fund": 0.0006
     },
     {
      "is_adr": false,
      "name": "NEXTNAV",
      "ticker": "NN",
-     "weight_eq": 0.0005523606895550522,
+     "weight_eq": 0.0005514245446782959,
      "weight_fund": 0.0006
     },
     {
      "is_adr": false,
      "name": "BLACKLINE",
      "ticker": "BL",
-     "weight_eq": 0.0005320930086440205,
+     "weight_eq": 0.0005496583807389361,
      "weight_fund": 0.0005
     },
     {
      "is_adr": false,
      "name": "PAGERDUTY",
      "ticker": "PD",
-     "weight_eq": 0.0004574124487932889,
+     "weight_eq": 0.0004586204826940718,
      "weight_fund": 0.0005
     },
     {
      "is_adr": true,
      "name": "LIGHTSPEED COMMERCE",
      "ticker": "LSPD",
-     "weight_eq": 0.0004291646806006691,
-     "weight_fund": 0.0004
-    },
-    {
-     "is_adr": false,
-     "name": "ASANA CLASS A",
-     "ticker": "ASAN",
-     "weight_eq": 0.00037495293455380767,
-     "weight_fund": 0.0004
-    },
-    {
-     "is_adr": false,
-     "name": "VERTEX CLASS A",
-     "ticker": "VERX",
-     "weight_eq": 0.0003642479205216828,
+     "weight_eq": 0.0004468316873724843,
      "weight_fund": 0.0004
     },
     {
      "is_adr": false,
      "name": "NCR VOYIX",
      "ticker": "VYX",
-     "weight_eq": 0.00036312009462978267,
+     "weight_eq": 0.000388276686641018,
+     "weight_fund": 0.0004
+    },
+    {
+     "is_adr": false,
+     "name": "VERTEX CLASS A",
+     "ticker": "VERX",
+     "weight_eq": 0.0003784638344731491,
+     "weight_fund": 0.0004
+    },
+    {
+     "is_adr": false,
+     "name": "ASANA CLASS A",
+     "ticker": "ASAN",
+     "weight_eq": 0.0003720732833831864,
      "weight_fund": 0.0004
     },
     {
      "is_adr": false,
      "name": "ALKAMI TECHNOLOGY",
      "ticker": "ALKT",
-     "weight_eq": 0.00034562564362862957,
+     "weight_eq": 0.00029245392348885545,
      "weight_fund": 0.0003
     },
     {
      "is_adr": false,
      "name": "ARTERIS INC",
      "ticker": "AIP",
-     "weight_eq": 0.0002784358681027076,
+     "weight_eq": 0.00027697843812406463,
      "weight_fund": 0.0003
     },
     {
      "is_adr": false,
      "name": "SPRINKLR CLASS A",
      "ticker": "CXM",
-     "weight_eq": 0.0002704488202670751,
+     "weight_eq": 0.00027597993790386615,
      "weight_fund": 0.0003
     }
    ],
@@ -1455,9 +1442,9 @@
    "etf": "IGV",
    "fund": {
     "nav": null,
-    "prev_shares_outstanding": 128800000.0,
-    "shares_outstanding": 130150000.0,
-    "total_net_assets": 14720906980.039999
+    "prev_shares_outstanding": 130150000.0,
+    "shares_outstanding": 131600000.0,
+    "total_net_assets": 13930764755.169996
    },
    "index_id": "IGV",
    "next_events": [
@@ -1468,8 +1455,8 @@
      "kind": "semiannual_reconstitution",
      "notes": "Semi-annual membership reconstitution; eligibility as of the last trading day of the prior month; effective with the quarterly rebalance (pricing reference 2026-12-10).",
      "reference_date": "2026-11-30",
-     "trading_days_to_reference": 21,
-     "trading_days_to_trade": 35
+     "trading_days_to_reference": 20,
+     "trading_days_to_trade": 34
     },
     {
      "announcement_date": null,
@@ -1478,8 +1465,8 @@
      "kind": "quarterly_rebalance",
      "notes": "Quarterly re-capping (8.5% single, 4.5%/45% aggregate); index shares computed from closing prices on the Thursday before the second Friday; applied after the close on the third Friday. Announcement rule not published.",
      "reference_date": "2026-12-10",
-     "trading_days_to_reference": 29,
-     "trading_days_to_trade": 35
+     "trading_days_to_reference": 28,
+     "trading_days_to_trade": 34
     },
     {
      "announcement_date": null,
@@ -1488,16 +1475,16 @@
      "kind": "quarterly_rebalance",
      "notes": "Quarterly re-capping (8.5% single, 4.5%/45% aggregate); index shares computed from closing prices on the Thursday before the second Friday; applied after the close on the third Friday. Announcement rule not published.",
      "reference_date": "2027-03-11",
-     "trading_days_to_reference": 90,
-     "trading_days_to_trade": 96
+     "trading_days_to_reference": 89,
+     "trading_days_to_trade": 95
     }
    ],
-   "prev_as_of": "2026-10-27",
+   "prev_as_of": "2026-10-28",
    "source": "blackrock-fund-document-csv",
    "warnings": []
   },
   "QQQ": {
-   "as_of": "2026-10-28",
+   "as_of": "2026-10-29",
    "caps": {
     "binding_constraints": [],
     "breaches": [],
@@ -1506,49 +1493,49 @@
     "forced_buyers": [],
     "forced_sellers": [],
     "metrics": {
-     "max_company_weight": 0.08040357100258413,
-     "max_security_weight": 0.08040357100258413,
+     "max_company_weight": 0.08087618060643027,
+     "max_security_weight": 0.08087618060643027,
      "n_companies": 100.0,
      "n_constituents": 101.0,
      "names_over_4_5": 5.0,
-     "sum_over_4_5": 0.3237831424025561,
-     "top5_security_sum": 0.3092336593522798,
-     "turnover": 3.3610267347050637e-18
+     "sum_over_4_5": 0.3190953644274245,
+     "top5_security_sum": 0.3097311247063729,
+     "turnover": 9.432558900623889e-18
     },
     "notes": [],
     "special_rebalance": {
      "metrics": {
-      "max_company_weight": 0.08040357100258413,
-      "sum_over_4_5": 0.3237831424025561
+      "max_company_weight": 0.08087618060643027,
+      "sum_over_4_5": 0.3190953644274245
      },
      "reasons": [],
      "triggered": false
     },
     "target_metrics": {
-     "max_company_weight": 0.08040357100258413,
-     "max_security_weight": 0.08040357100258413,
+     "max_company_weight": 0.08087618060643027,
+     "max_security_weight": 0.08087618060643027,
      "n_companies": 100.0,
      "names_over_4_5": 5.0,
-     "sum_over_4_5": 0.3237831424025561,
-     "top5_security_sum": 0.3092336593522798
+     "sum_over_4_5": 0.3190953644274245,
+     "top5_security_sum": 0.3097311247063729
     }
    },
    "decomposition": {
-    "curr_as_of": "2026-10-28",
+    "curr_as_of": "2026-10-29",
     "mode": "shares_and_prices",
     "n_changes": 106,
     "n_notable": 0,
     "notable": [],
-    "prev_as_of": "2026-10-27",
-    "scale_factor": 1.0088849437469816,
+    "prev_as_of": "2026-10-28",
+    "scale_factor": 0.995263625281703,
     "summary": {
      "active_trade_tickers": [],
      "classification_counts": {
-      "active_trade": 4,
+      "active_trade": 2,
       "corporate_action_suspect": 0,
       "entry": 0,
       "exit": 0,
-      "flow_only": 102
+      "flow_only": 104
      },
      "classification_counts_equity": {
       "active_trade": 0,
@@ -1560,42 +1547,42 @@
      "entries": [],
      "exits": [],
      "fund_flow": {
-      "flow_pct_from_net_assets": 0.0089832423958508,
-      "flow_pct_from_scale_factor": 0.008884943746981566,
-      "flow_pct_from_shares_outstanding": 0.008885238557455377,
-      "flow_shares": 5950000.0,
-      "implied_flow_usd_from_net_assets": 4338659502.913025,
-      "implied_flow_usd_from_scale_factor": 4314410673.800443,
-      "implied_flow_usd_from_shares_outstanding": 4314765914.900001,
-      "net_assets_curr": 489925353233.6,
-      "net_assets_prev": 482972551750.02,
-      "portfolio_return": 0.005412609828850057,
-      "scale_factor": 1.0088849437469816,
-      "shares_outstanding_curr": 675600000.0,
-      "shares_outstanding_prev": 669650000.0
+      "flow_pct_from_net_assets": -0.004661499210734602,
+      "flow_pct_from_scale_factor": -0.004736374718297021,
+      "flow_pct_from_shares_outstanding": -0.004736530491415092,
+      "flow_shares": -3200000.0,
+      "implied_flow_usd_from_net_assets": -2283786647.4172974,
+      "implied_flow_usd_from_scale_factor": -2288474672.3791866,
+      "implied_flow_usd_from_shares_outstanding": -2288572630.4,
+      "net_assets_curr": 480886323695.28,
+      "net_assets_prev": 489925353233.6,
+      "portfolio_return": -0.01378831049733753,
+      "scale_factor": 0.995263625281703,
+      "shares_outstanding_curr": 672400000.0,
+      "shares_outstanding_prev": 675600000.0
      },
-     "gross_drift": 0.008911863601400252,
-     "gross_total_change": 0.008961363393500255,
-     "gross_trade": 7.631484594957402e-05,
+     "gross_drift": 0.014331746108537843,
+     "gross_total_change": 0.014355949638000682,
+     "gross_trade": 3.302592228737426e-05,
      "largest_drift_down": {
-      "name": "NVIDIA Corp",
-      "ticker": "NVDA",
-      "value": -0.0013936721371342192
+      "name": "Alphabet Inc Class A",
+      "ticker": "GOOGL",
+      "value": -0.003367850992275212
      },
      "largest_drift_up": {
-      "name": "Micron Technology Inc",
-      "ticker": "MU",
-      "value": 0.002384435190910139
+      "name": "Apple Inc",
+      "ticker": "AAPL",
+      "value": 0.0022457422929893084
      },
      "largest_trade_down": {
-      "name": "NVIDIA Corp",
-      "ticker": "NVDA",
-      "value": -3.952975906676426e-06
+      "name": "Apple Inc",
+      "ticker": "AAPL",
+      "value": -8.146662727748222e-07
      },
      "largest_trade_up": {
-      "name": "Axon Enterprise Inc",
-      "ticker": "AXON",
-      "value": -4.4336253109599974e-08
+      "name": "MercadoLibre Inc",
+      "ticker": "MELI",
+      "value": 7.126696073339253e-08
      },
      "n_active_trades": 0,
      "n_changes": 106,
@@ -1605,163 +1592,163 @@
      "n_equities": 101,
      "n_exits": 0,
      "n_prev": 105,
-     "portfolio_return": 0.005412609828850057,
-     "scale_factor": 1.0088849437469816,
-     "sum_drift": 4.164691595059944e-17,
-     "sum_trade": 4.573977915173222e-17,
-     "total_market_value_curr": 489925348334.34644,
-     "total_market_value_prev": 482972575898.64764
+     "portfolio_return": -0.01378831049733753,
+     "scale_factor": 0.995263625281703,
+     "sum_drift": -1.474514954580286e-17,
+     "sum_trade": 5.102526474259905e-17,
+     "total_market_value_curr": 480886333313.0065,
+     "total_market_value_prev": 489925348334.34644
     },
     "top_changes": [
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": 0.002384435190910139,
-      "name": "Micron Technology Inc",
-      "price_return": 0.05864199510760826,
-      "rel_share_change": 2.148421350600671e-06,
-      "shares_curr": 23627552.0,
-      "shares_prev": 23419421.0,
-      "ticker": "MU",
-      "total_change": 0.002382192726097597,
-      "trade": -2.2424648125421442e-06,
-      "w_curr": 0.0474201204742012,
-      "w_prev": 0.045037927748103605
+      "drift": -0.003367850992275212,
+      "name": "Alphabet Inc Class A",
+      "price_return": -0.1264348237361742,
+      "rel_share_change": -1.6957119763905126e-07,
+      "shares_curr": 44257246.0,
+      "shares_prev": 44467870.0,
+      "ticker": "GOOGL",
+      "total_change": -0.003368110817196193,
+      "trade": -2.598249209811998e-07,
+      "w_curr": 0.02611716947765661,
+      "w_prev": 0.029485280294852804
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": -0.0013936721371342192,
-      "name": "NVIDIA Corp",
-      "price_return": -0.011741856890149616,
-      "rel_share_change": 2.0080462359572948e-07,
-      "shares_curr": 182643583.0,
-      "shares_prev": 181035060.0,
-      "ticker": "NVDA",
-      "total_change": -0.0013976251130408957,
-      "trade": -3.952975906676426e-06,
-      "w_curr": 0.08028463080284631,
-      "w_prev": 0.08168225591588721
+      "drift": -0.0030457182340870304,
+      "name": "Alphabet Inc Class C",
+      "price_return": -0.12295334609194042,
+      "rel_share_change": -5.413641626095256e-07,
+      "shares_curr": 41685413.0,
+      "shares_prev": 41883813.0,
+      "ticker": "GOOG",
+      "total_change": -0.0030459707645434896,
+      "trade": -2.525304564592046e-07,
+      "w_curr": 0.02446945951061081,
+      "w_prev": 0.0275154302751543
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": -0.00116190951446081,
+      "drift": 0.0022457422929893084,
       "name": "Apple Inc",
-      "price_return": -0.009416286877117375,
-      "rel_share_change": 7.890029953827593e-07,
-      "shares_curr": 110603048.0,
-      "shares_prev": 109628914.0,
+      "price_return": 0.014747915778766885,
+      "rel_share_change": -4.226020012820797e-07,
+      "shares_curr": 110079144.0,
+      "shares_prev": 110603048.0,
       "ticker": "AAPL",
-      "total_change": -0.001165685284945886,
-      "trade": -3.7757704850760465e-06,
-      "w_curr": 0.07761283077612831,
-      "w_prev": 0.0787785160610742
+      "total_change": 0.0022449276267165336,
+      "trade": -8.146662727748222e-07,
+      "w_curr": 0.07985775840284484,
+      "w_prev": 0.07761283077612831
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": 0.0010560414282614478,
-      "name": "Advanced Micro Devices Inc",
-      "price_return": 0.032453998758692926,
-      "rel_share_change": 1.8399356029874525e-06,
-      "shares_curr": 34152387.0,
-      "shares_prev": 33851555.0,
-      "ticker": "AMD",
-      "total_change": 0.001054122366390707,
-      "trade": -1.9190618707407014e-06,
-      "w_curr": 0.0403182804031828,
-      "w_prev": 0.03926415803679209
+      "drift": -0.0017394821222168552,
+      "name": "Micron Technology Inc",
+      "price_return": -0.049964886715537116,
+      "rel_share_change": -1.1507255779363845e-06,
+      "shares_curr": 23515616.0,
+      "shares_prev": 23627552.0,
+      "ticker": "MU",
+      "total_change": -0.001739981387803978,
+      "trade": -4.992655871227658e-07,
+      "w_curr": 0.045680139086397224,
+      "w_prev": 0.0474201204742012
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": -0.0007608115721166112,
-      "name": "Space Exploration Technologies Corp",
-      "price_return": -0.02254224701837204,
-      "rel_share_change": 3.1191591531865015e-07,
-      "shares_curr": 89746505.0,
-      "shares_prev": 88956107.0,
-      "ticker": "SPCX",
-      "total_change": -0.0007621183658394655,
-      "trade": -1.3067937228543325e-06,
-      "w_curr": 0.026600910266009106,
-      "w_prev": 0.02736302863184857
+      "drift": -0.001235823359182306,
+      "name": "Amazon.com Inc",
+      "price_return": -0.04248396667213661,
+      "rel_share_change": 1.2988336650643362e-07,
+      "shares_curr": 81351871.0,
+      "shares_prev": 81739007.0,
+      "ticker": "AMZN",
+      "total_change": -0.0012362212494580818,
+      "trade": -3.9789027577591396e-07,
+      "w_curr": 0.041236529175269425,
+      "w_prev": 0.04247275042472751
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": 0.0006234173348795592,
-      "name": "Lam Research Corp",
-      "price_return": 0.05385567039301509,
-      "rel_share_change": -1.924740440140127e-06,
-      "shares_curr": 26179276.0,
-      "shares_prev": 25948773.0,
-      "ticker": "LRCX",
-      "total_change": 0.0006227207825509704,
-      "trade": -6.965523285887981e-07,
-      "w_curr": 0.013561450135614501,
-      "w_prev": 0.012938729353063531
+      "drift": -0.001135432962491141,
+      "name": "Marvell Technology Inc",
+      "price_return": -0.13259580291205242,
+      "rel_share_change": -7.52079238441894e-07,
+      "shares_curr": 18260088.0,
+      "shares_prev": 18347000.0,
+      "ticker": "MRVL",
+      "total_change": -0.0011355202600437982,
+      "trade": -8.72975526571701e-08,
+      "w_curr": 0.008289619834207604,
+      "w_prev": 0.009425140094251402
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": 0.0006075506721483718,
-      "name": "Applied Materials Inc",
-      "price_return": 0.05069513954489735,
-      "rel_share_change": 1.918008607937338e-06,
-      "shares_curr": 16603210.0,
-      "shares_prev": 16456959.0,
-      "ticker": "AMAT",
-      "total_change": 0.0006068808154393712,
-      "trade": -6.698567090006324e-07,
-      "w_curr": 0.014096390140963902,
-      "w_prev": 0.013489509325524531
+      "drift": -0.0010349244853276249,
+      "name": "Fortinet Inc",
+      "price_return": -0.2009623853549074,
+      "rel_share_change": -5.555753492814119e-07,
+      "shares_curr": 15275641.0,
+      "shares_prev": 15348345.0,
+      "ticker": "FTNT",
+      "total_change": -0.0010349701428896997,
+      "trade": -4.565756207483562e-08,
+      "w_curr": 0.004417999911640002,
+      "w_prev": 0.005452970054529702
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": 0.0005806634600115396,
-      "name": "Sandisk Corp",
-      "price_return": 0.07658854754787603,
-      "rel_share_change": 1.1525966215675254e-05,
-      "shares_curr": 3063351.0,
-      "shares_prev": 3036338.0,
-      "ticker": "SNDK",
-      "total_change": 0.0005803304979412807,
-      "trade": -3.329620702589853e-07,
-      "w_curr": 0.008782630087826301,
-      "w_prev": 0.00820229958988502
-     },
-     {
-      "asset_class": "equity",
-      "classification": "flow_only",
-      "drift": 0.0005613530692390595,
-      "name": "Broadcom Inc",
-      "price_return": 0.02769731115835694,
-      "rel_share_change": -4.547725108716705e-07,
-      "shares_curr": 36053047.0,
-      "shares_prev": 35735555.0,
-      "ticker": "AVGO",
-      "total_change": 0.0005600615251851356,
-      "trade": -1.2915440539239265e-06,
-      "w_curr": 0.0258864702588647,
-      "w_prev": 0.025326408733679563
-     },
-     {
-      "asset_class": "equity",
-      "classification": "flow_only",
-      "drift": -0.0005083908913394268,
+      "drift": 0.000954034462996696,
       "name": "Meta Platforms Inc",
-      "price_return": -0.012411074844545622,
-      "rel_share_change": 1.958560205350679e-06,
-      "shares_curr": 22533790.0,
-      "shares_prev": 22335298.0,
+      "price_return": 0.01961414137043671,
+      "rel_share_change": -1.0490333991475254e-06,
+      "shares_curr": 22427038.0,
+      "shares_prev": 22533790.0,
       "ticker": "META",
-      "total_change": -0.0005097282844341647,
-      "trade": -1.3373930947378765e-06,
-      "w_curr": 0.028167990281679905,
-      "w_prev": 0.02867771856611407
+      "total_change": 0.0009537191358859123,
+      "trade": -3.153271107836364e-07,
+      "w_curr": 0.029121709417565818,
+      "w_prev": 0.028167990281679905
+     },
+     {
+      "asset_class": "equity",
+      "classification": "flow_only",
+      "drift": 0.0008663052015042277,
+      "name": "Walmart Inc",
+      "price_return": 0.020853882274370683,
+      "rel_share_change": -2.4753901983753934e-07,
+      "shares_curr": 101261494.0,
+      "shares_prev": 101743414.0,
+      "ticker": "WMT",
+      "total_change": 0.0008660492428064076,
+      "trade": -2.559586978201356e-07,
+      "w_curr": 0.02552846948943061,
+      "w_prev": 0.0246624202466242
+     },
+     {
+      "asset_class": "equity",
+      "classification": "flow_only",
+      "drift": 0.0007497022897694494,
+      "name": "Microsoft Corp",
+      "price_return": -0.0016647639579761009,
+      "rel_share_change": -4.93019961966823e-07,
+      "shares_curr": 56006941.0,
+      "shares_prev": 56273501.0,
+      "ticker": "MSFT",
+      "total_change": 0.0007490681554422063,
+      "trade": -6.341343272431299e-07,
+      "w_curr": 0.06173494876530102,
+      "w_prev": 0.060985880609858815
      }
     ]
    },
@@ -1770,717 +1757,717 @@
      "is_adr": false,
      "name": "NVIDIA Corp",
      "ticker": "NVDA",
-     "weight_eq": 0.08040357100258413,
-     "weight_fund": 0.08028463000000001
+     "weight_eq": 0.08087618060643027,
+     "weight_fund": 0.08075405999999999
     },
     {
      "is_adr": false,
      "name": "Apple Inc",
      "ticker": "AAPL",
-     "weight_eq": 0.07772781275340611,
-     "weight_fund": 0.07761283
+     "weight_eq": 0.07997852517365647,
+     "weight_fund": 0.07985776
     },
     {
      "is_adr": false,
      "name": "Microsoft Corp",
      "ticker": "MSFT",
-     "weight_eq": 0.061076230067138325,
-     "weight_fund": 0.060985880000000006
+     "weight_eq": 0.06182830889157701,
+     "weight_fund": 0.06173495
     },
     {
      "is_adr": false,
      "name": "Micron Technology Inc",
      "ticker": "MU",
-     "weight_eq": 0.04749037250805115,
-     "weight_fund": 0.047420119999999996
+     "weight_eq": 0.045749219949647375,
+     "weight_fund": 0.04568014
     },
     {
      "is_adr": false,
      "name": "Amazon.com Inc",
      "ticker": "AMZN",
-     "weight_eq": 0.04253567302110011,
-     "weight_fund": 0.042472750000000004
+     "weight_eq": 0.04129889008506175,
+     "weight_fund": 0.04123653
     },
     {
      "is_adr": false,
      "name": "Advanced Micro Devices Inc",
      "ticker": "AMD",
-     "weight_eq": 0.040378011191956255,
-     "weight_fund": 0.04031828
+     "weight_eq": 0.04009149695766117,
+     "weight_fund": 0.040030960000000004
     },
     {
      "is_adr": false,
      "name": "Tesla Inc",
      "ticker": "TSLA",
-     "weight_eq": 0.03289044483504448,
-     "weight_fund": 0.03284179
-    },
-    {
-     "is_adr": false,
-     "name": "Alphabet Inc Class A",
-     "ticker": "GOOGL",
-     "weight_eq": 0.02952896219377325,
-     "weight_fund": 0.02948528
+     "weight_eq": 0.033274213063499494,
+     "weight_fund": 0.03322397
     },
     {
      "is_adr": false,
      "name": "Meta Platforms Inc",
      "ticker": "META",
-     "weight_eq": 0.02820972063974237,
-     "weight_fund": 0.02816799
-    },
-    {
-     "is_adr": false,
-     "name": "Alphabet Inc Class C",
-     "ticker": "GOOG",
-     "weight_eq": 0.027556193877603132,
-     "weight_fund": 0.027515429999999997
+     "weight_eq": 0.029165749406631532,
+     "weight_fund": 0.02912171
     },
     {
      "is_adr": false,
      "name": "Space Exploration Technologies Corp",
      "ticker": "SPCX",
-     "weight_eq": 0.026640319023932102,
-     "weight_fund": 0.02660091
+     "weight_eq": 0.026763391918895776,
+     "weight_fund": 0.02672298
+    },
+    {
+     "is_adr": false,
+     "name": "Alphabet Inc Class A",
+     "ticker": "GOOGL",
+     "weight_eq": 0.026156665780628783,
+     "weight_fund": 0.026117170000000002
     },
     {
      "is_adr": false,
      "name": "Broadcom Inc",
      "ticker": "AVGO",
-     "weight_eq": 0.025924820587094485,
-     "weight_fund": 0.025886469999999998
+     "weight_eq": 0.02577829445127259,
+     "weight_fund": 0.025739369999999998
     },
     {
      "is_adr": false,
      "name": "Walmart Inc",
      "ticker": "WMT",
-     "weight_eq": 0.02469895716733764,
-     "weight_fund": 0.024662419999999997
+     "weight_eq": 0.02556707551701843,
+     "weight_fund": 0.025528469999999998
+    },
+    {
+     "is_adr": false,
+     "name": "Alphabet Inc Class C",
+     "ticker": "GOOG",
+     "weight_eq": 0.024506464025484564,
+     "weight_fund": 0.024469460000000002
     },
     {
      "is_adr": false,
      "name": "Intel Corp",
      "ticker": "INTC",
-     "weight_eq": 0.021464101845860582,
-     "weight_fund": 0.02143235
+     "weight_eq": 0.020975792817881218,
+     "weight_fund": 0.02094412
     },
     {
      "is_adr": false,
      "name": "Palantir Technologies Inc",
      "ticker": "PLTR",
-     "weight_eq": 0.01936249293579993,
-     "weight_fund": 0.01933385
+     "weight_eq": 0.019594196649114267,
+     "weight_fund": 0.01956461
     },
     {
      "is_adr": false,
      "name": "Costco Wholesale Corp",
      "ticker": "COST",
-     "weight_eq": 0.018636549047005235,
-     "weight_fund": 0.01860898
+     "weight_eq": 0.01915366145418598,
+     "weight_fund": 0.01912474
     },
     {
      "is_adr": false,
      "name": "Cisco Systems Inc",
      "ticker": "CSCO",
-     "weight_eq": 0.018588327713186116,
-     "weight_fund": 0.01856083
+     "weight_eq": 0.018557581391173233,
+     "weight_fund": 0.01852956
     },
     {
      "is_adr": false,
      "name": "Applied Materials Inc",
      "ticker": "AMAT",
-     "weight_eq": 0.014117273682959201,
-     "weight_fund": 0.01409639
-    },
-    {
-     "is_adr": false,
-     "name": "Palo Alto Networks Inc",
-     "ticker": "PANW",
-     "weight_eq": 0.013748778568135842,
-     "weight_fund": 0.01372844
+     "weight_eq": 0.014509318635860592,
+     "weight_fund": 0.014487410000000001
     },
     {
      "is_adr": false,
      "name": "Lam Research Corp",
      "ticker": "LRCX",
-     "weight_eq": 0.013581541173858487,
-     "weight_fund": 0.01356145
+     "weight_eq": 0.013802291045409837,
+     "weight_fund": 0.013781449999999999
+    },
+    {
+     "is_adr": false,
+     "name": "Palo Alto Networks Inc",
+     "ticker": "PANW",
+     "weight_eq": 0.013448997582880222,
+     "weight_fund": 0.01342869
     },
     {
      "is_adr": false,
      "name": "Texas Instruments Inc",
      "ticker": "TXN",
-     "weight_eq": 0.012100159766342352,
-     "weight_fund": 0.012082260000000001
+     "weight_eq": 0.012392432200850319,
+     "weight_fund": 0.01237372
     },
     {
      "is_adr": false,
      "name": "Crowdstrike Holdings Inc",
      "ticker": "CRWD",
-     "weight_eq": 0.011676332799109724,
-     "weight_fund": 0.01165906
+     "weight_eq": 0.011594887932932089,
+     "weight_fund": 0.01157738
     },
     {
      "is_adr": false,
      "name": "Netflix Inc",
      "ticker": "NFLX",
-     "weight_eq": 0.01103837907416441,
-     "weight_fund": 0.01102205
+     "weight_eq": 0.011203476914035889,
+     "weight_fund": 0.011186560000000002
     },
     {
      "is_adr": false,
      "name": "Amgen Inc",
      "ticker": "AMGN",
-     "weight_eq": 0.010445892608936401,
-     "weight_fund": 0.010430440000000001
+     "weight_eq": 0.01080051845885732,
+     "weight_fund": 0.01078421
     },
     {
      "is_adr": false,
      "name": "Linde PLC",
      "ticker": "LIN",
-     "weight_eq": 0.01001740875276797,
-     "weight_fund": 0.01000259
-    },
-    {
-     "is_adr": false,
-     "name": "Marvell Technology Inc",
-     "ticker": "MRVL",
-     "weight_eq": 0.009439103265460595,
-     "weight_fund": 0.00942514
-    },
-    {
-     "is_adr": false,
-     "name": "Analog Devices Inc",
-     "ticker": "ADI",
-     "weight_eq": 0.008874548119032483,
-     "weight_fund": 0.00886142
+     "weight_eq": 0.010057246139953945,
+     "weight_fund": 0.010042059999999998
     },
     {
      "is_adr": false,
      "name": "KLA Corp",
      "ticker": "KLAC",
-     "weight_eq": 0.008870962815292663,
-     "weight_fund": 0.00885784
+     "weight_eq": 0.00948556291543542,
+     "weight_fund": 0.009471239999999999
     },
     {
      "is_adr": false,
-     "name": "Sandisk Corp",
-     "ticker": "SNDK",
-     "weight_eq": 0.008795641392311647,
-     "weight_fund": 0.00878263
-    },
-    {
-     "is_adr": false,
-     "name": "Shopify Inc",
-     "ticker": "SHOP",
-     "weight_eq": 0.008694151257955895,
-     "weight_fund": 0.008681290000000001
+     "name": "Analog Devices Inc",
+     "ticker": "ADI",
+     "weight_eq": 0.009103866565397753,
+     "weight_fund": 0.00909012
     },
     {
      "is_adr": false,
      "name": "Gilead Sciences Inc",
      "ticker": "GILD",
-     "weight_eq": 0.008441257151704516,
-     "weight_fund": 0.00842877
+     "weight_eq": 0.008903854553259786,
+     "weight_fund": 0.00889041
+    },
+    {
+     "is_adr": false,
+     "name": "Shopify Inc",
+     "ticker": "SHOP",
+     "weight_eq": 0.008745966146502235,
+     "weight_fund": 0.008732760000000001
+    },
+    {
+     "is_adr": false,
+     "name": "Sandisk Corp",
+     "ticker": "SNDK",
+     "weight_eq": 0.008444130383555258,
+     "weight_fund": 0.00843138
     },
     {
      "is_adr": false,
      "name": "QUALCOMM Inc",
      "ticker": "QCOM",
-     "weight_eq": 0.008217395993893768,
-     "weight_fund": 0.00820524
+     "weight_eq": 0.008443359219120095,
+     "weight_fund": 0.00843061
+    },
+    {
+     "is_adr": false,
+     "name": "Marvell Technology Inc",
+     "ticker": "MRVL",
+     "weight_eq": 0.008302156006505142,
+     "weight_fund": 0.00828962
     },
     {
      "is_adr": false,
      "name": "PepsiCo Inc",
      "ticker": "PEP",
-     "weight_eq": 0.007739999781677035,
-     "weight_fund": 0.00772855
-    },
-    {
-     "is_adr": false,
-     "name": "T-Mobile US Inc",
-     "ticker": "TMUS",
-     "weight_eq": 0.006792367949908298,
-     "weight_fund": 0.00678232
+     "weight_eq": 0.007916804136742357,
+     "weight_fund": 0.00790485
     },
     {
      "is_adr": false,
      "name": "Seagate Technology Holdings PLC",
      "ticker": "STX",
-     "weight_eq": 0.006764687001481292,
-     "weight_fund": 0.00675468
+     "weight_eq": 0.006883784307791236,
+     "weight_fund": 0.00687339
     },
     {
      "is_adr": false,
      "name": "Intuitive Surgical Inc",
      "ticker": "ISRG",
-     "weight_eq": 0.00671038667500834,
-     "weight_fund": 0.00670046
+     "weight_eq": 0.006874320016996064,
+     "weight_fund": 0.00686394
+    },
+    {
+     "is_adr": false,
+     "name": "T-Mobile US Inc",
+     "ticker": "TMUS",
+     "weight_eq": 0.0068505441160989855,
+     "weight_fund": 0.006840199999999999
     },
     {
      "is_adr": true,
      "name": "ASML Holding NV",
      "ticker": "ASML",
-     "weight_eq": 0.006693722022988607,
-     "weight_fund": 0.00668382
+     "weight_eq": 0.006839597587168696,
+     "weight_fund": 0.006829269999999999
     },
     {
      "is_adr": false,
      "name": "Western Digital Corp",
      "ticker": "WDC",
-     "weight_eq": 0.006110949928228829,
-     "weight_fund": 0.00610191
+     "weight_eq": 0.00618058249414869,
+     "weight_fund": 0.0061712500000000005
     },
     {
      "is_adr": false,
      "name": "Vertex Pharmaceuticals Inc",
      "ticker": "VRTX",
-     "weight_eq": 0.005740241539309099,
-     "weight_fund": 0.00573175
-    },
-    {
-     "is_adr": false,
-     "name": "Fortinet Inc",
-     "ticker": "FTNT",
-     "weight_eq": 0.005461048529089082,
-     "weight_fund": 0.0054529700000000006
+     "weight_eq": 0.005933789844651729,
+     "weight_fund": 0.00592483
     },
     {
      "is_adr": false,
      "name": "Starbucks Corp",
      "ticker": "SBUX",
-     "weight_eq": 0.005030201176600545,
-     "weight_fund": 0.005022759999999999
+     "weight_eq": 0.005214663986179212,
+     "weight_fund": 0.00520679
     },
     {
      "is_adr": false,
      "name": "Automatic Data Processing Inc",
      "ticker": "ADP",
-     "weight_eq": 0.004847140374756377,
-     "weight_fund": 0.00483997
+     "weight_eq": 0.0049271097879665365,
+     "weight_fund": 0.00491967
     },
     {
      "is_adr": false,
      "name": "Booking Holdings Inc",
      "ticker": "BKNG",
-     "weight_eq": 0.00475275074417586,
-     "weight_fund": 0.00474572
-    },
-    {
-     "is_adr": true,
-     "name": "ARM Holdings PLC",
-     "ticker": "ARM",
-     "weight_eq": 0.0043987270369056945,
-     "weight_fund": 0.00439222
+     "weight_eq": 0.004900289289818948,
+     "weight_fund": 0.0048928899999999996
     },
     {
      "is_adr": false,
      "name": "Marriott International Inc/MD",
      "ticker": "MAR",
-     "weight_eq": 0.00439731494800258,
-     "weight_fund": 0.00439081
+     "weight_eq": 0.004518102198777087,
+     "weight_fund": 0.0045112799999999995
+    },
+    {
+     "is_adr": false,
+     "name": "Fortinet Inc",
+     "ticker": "FTNT",
+     "weight_eq": 0.004424681135774586,
+     "weight_fund": 0.004418
+    },
+    {
+     "is_adr": true,
+     "name": "ARM Holdings PLC",
+     "ticker": "ARM",
+     "weight_eq": 0.004325401226089358,
+     "weight_fund": 0.00431887
     },
     {
      "is_adr": false,
      "name": "Adobe Inc",
      "ticker": "ADBE",
-     "weight_eq": 0.004244799331651312,
-     "weight_fund": 0.00423852
+     "weight_eq": 0.0042758664300333584,
+     "weight_fund": 0.00426941
     },
     {
      "is_adr": false,
      "name": "CSX Corp",
      "ticker": "CSX",
-     "weight_eq": 0.004117080397031328,
-     "weight_fund": 0.00411099
+     "weight_eq": 0.004195495071693405,
+     "weight_fund": 0.00418916
     },
     {
      "is_adr": false,
      "name": "Cadence Design Systems Inc",
      "ticker": "CDNS",
-     "weight_eq": 0.004032375092474298,
-     "weight_fund": 0.00402641
-    },
-    {
-     "is_adr": false,
-     "name": "Datadog Inc",
-     "ticker": "DDOG",
-     "weight_eq": 0.003986597373494611,
-     "weight_fund": 0.0039807
+     "weight_eq": 0.0040922091129943486,
+     "weight_fund": 0.00408603
     },
     {
      "is_adr": false,
      "name": "Synopsys Inc",
      "ticker": "SNPS",
-     "weight_eq": 0.003948450943480691,
-     "weight_fund": 0.00394261
+     "weight_eq": 0.00407256945770405,
+     "weight_fund": 0.00406642
     },
     {
      "is_adr": false,
      "name": "Constellation Energy Corp",
      "ticker": "CEG",
-     "weight_eq": 0.003910164306057951,
-     "weight_fund": 0.0039043800000000003
-    },
-    {
-     "is_adr": false,
-     "name": "Intuit Inc",
-     "ticker": "INTU",
-     "weight_eq": 0.0038382879794079386,
-     "weight_fund": 0.00383261
+     "weight_eq": 0.004064657510901736,
+     "weight_fund": 0.0040585199999999995
     },
     {
      "is_adr": false,
      "name": "Monster Beverage Corp",
      "ticker": "MNST",
-     "weight_eq": 0.0038186389125433253,
-     "weight_fund": 0.00381299
+     "weight_eq": 0.003930514959673658,
+     "weight_fund": 0.0039245799999999996
+    },
+    {
+     "is_adr": false,
+     "name": "Intuit Inc",
+     "ticker": "INTU",
+     "weight_eq": 0.003927530453158356,
+     "weight_fund": 0.0039216
+    },
+    {
+     "is_adr": false,
+     "name": "Datadog Inc",
+     "ticker": "DDOG",
+     "weight_eq": 0.003859818209702104,
+     "weight_fund": 0.00385399
     },
     {
      "is_adr": false,
      "name": "Moderna Inc",
      "ticker": "MRNA",
-     "weight_eq": 0.0036560884516465206,
-     "weight_fund": 0.00365068
+     "weight_eq": 0.003855972402648828,
+     "weight_fund": 0.00385015
     },
     {
      "is_adr": false,
      "name": "Cintas Corp",
      "ticker": "CTAS",
-     "weight_eq": 0.0036411663774221204,
-     "weight_fund": 0.00363578
+     "weight_eq": 0.003783302673537962,
+     "weight_fund": 0.00377759
     },
     {
      "is_adr": false,
      "name": "MercadoLibre Inc",
      "ticker": "MELI",
-     "weight_eq": 0.0036265948217197694,
-     "weight_fund": 0.0036212299999999996
+     "weight_eq": 0.0036488997291239857,
+     "weight_fund": 0.0036433900000000003
     },
     {
      "is_adr": false,
      "name": "Regeneron Pharmaceuticals Inc",
      "ticker": "REGN",
-     "weight_eq": 0.0035168725095033083,
-     "weight_fund": 0.00351167
+     "weight_eq": 0.0035900909296009698,
+     "weight_fund": 0.00358467
     },
     {
      "is_adr": false,
      "name": "Lumentum Holdings Inc",
      "ticker": "LITE",
-     "weight_eq": 0.0035052152649414276,
-     "weight_fund": 0.00350003
-    },
-    {
-     "is_adr": false,
-     "name": "AppLovin Corp",
-     "ticker": "APP",
-     "weight_eq": 0.0033839759155719056,
-     "weight_fund": 0.0033789700000000002
+     "weight_eq": 0.0035758894858469443,
+     "weight_fund": 0.00357049
     },
     {
      "is_adr": false,
      "name": "Mondelez International Inc",
      "ticker": "MDLZ",
-     "weight_eq": 0.0033762645080868126,
-     "weight_fund": 0.00337127
+     "weight_eq": 0.003459964442509256,
+     "weight_fund": 0.00345474
     },
     {
      "is_adr": false,
      "name": "Comcast Corp",
      "ticker": "CMCSA",
-     "weight_eq": 0.003264028477326509,
-     "weight_fund": 0.0032592
+     "weight_eq": 0.0034170496424486088,
+     "weight_fund": 0.0034118900000000003
     },
     {
      "is_adr": false,
-     "name": "O'Reilly Automotive Inc",
-     "ticker": "ORLY",
-     "weight_eq": 0.00312813745373531,
-     "weight_fund": 0.00312351
+     "name": "AppLovin Corp",
+     "ticker": "APP",
+     "weight_eq": 0.003364490279387166,
+     "weight_fund": 0.0033594099999999997
     },
     {
      "is_adr": false,
      "name": "Ross Stores Inc",
      "ticker": "ROST",
-     "weight_eq": 0.0031268455426111848,
-     "weight_fund": 0.00312222
-    },
-    {
-     "is_adr": false,
-     "name": "American Electric Power Co Inc",
-     "ticker": "AEP",
-     "weight_eq": 0.0029844949633993562,
-     "weight_fund": 0.00298008
-    },
-    {
-     "is_adr": false,
-     "name": "Airbnb Inc",
-     "ticker": "ABNB",
-     "weight_eq": 0.002978415970745524,
-     "weight_fund": 0.0029740100000000005
-    },
-    {
-     "is_adr": false,
-     "name": "Honeywell International Inc",
-     "ticker": "HON",
-     "weight_eq": 0.0029712253336360473,
-     "weight_fund": 0.0029668299999999997
+     "weight_eq": 0.0032306181364675224,
+     "weight_fund": 0.0032257400000000004
     },
     {
      "is_adr": false,
      "name": "DoorDash Inc",
      "ticker": "DASH",
-     "weight_eq": 0.0029645053928276095,
-     "weight_fund": 0.00296012
+     "weight_eq": 0.003174613571254187,
+     "weight_fund": 0.00316982
+    },
+    {
+     "is_adr": false,
+     "name": "O'Reilly Automotive Inc",
+     "ticker": "ORLY",
+     "weight_eq": 0.0030887439106427536,
+     "weight_fund": 0.0030840800000000003
+    },
+    {
+     "is_adr": false,
+     "name": "American Electric Power Co Inc",
+     "ticker": "AEP",
+     "weight_eq": 0.003053110104664741,
+     "weight_fund": 0.0030485
+    },
+    {
+     "is_adr": false,
+     "name": "Honeywell International Inc",
+     "ticker": "HON",
+     "weight_eq": 0.003052308894861975,
+     "weight_fund": 0.0030477
+    },
+    {
+     "is_adr": false,
+     "name": "Airbnb Inc",
+     "ticker": "ABNB",
+     "weight_eq": 0.0030274213153635597,
+     "weight_fund": 0.00302285
     },
     {
      "is_adr": false,
      "name": "NXP Semiconductors NV",
      "ticker": "NXPI",
-     "weight_eq": 0.002713724412523446,
-     "weight_fund": 0.00270971
-    },
-    {
-     "is_adr": false,
-     "name": "Monolithic Power Systems Inc",
-     "ticker": "MPWR",
-     "weight_eq": 0.0025450348700833143,
-     "weight_fund": 0.00254127
+     "weight_eq": 0.0029081111606091854,
+     "weight_fund": 0.0029037200000000003
     },
     {
      "is_adr": false,
      "name": "Fastenal Co",
      "ticker": "FAST",
-     "weight_eq": 0.0025371632255595704,
-     "weight_fund": 0.00253341
+     "weight_eq": 0.0026274073062101584,
+     "weight_fund": 0.0026234400000000003
+    },
+    {
+     "is_adr": false,
+     "name": "Monolithic Power Systems Inc",
+     "ticker": "MPWR",
+     "weight_eq": 0.0025541767302373563,
+     "weight_fund": 0.00255032
     },
     {
      "is_adr": false,
      "name": "Diamondback Energy Inc",
      "ticker": "FANG",
-     "weight_eq": 0.002469072498947693,
-     "weight_fund": 0.0024654200000000003
-    },
-    {
-     "is_adr": false,
-     "name": "Honeywell Aerospace Inc",
-     "ticker": "HONA",
-     "weight_eq": 0.002398177624159419,
-     "weight_fund": 0.00239463
+     "weight_eq": 0.002506114157193938,
+     "weight_fund": 0.0025023299999999997
     },
     {
      "is_adr": false,
      "name": "Baker Hughes Co",
      "ticker": "BKR",
-     "weight_eq": 0.0023200420381870902,
-     "weight_fund": 0.00231661
+     "weight_eq": 0.002346012408356246,
+     "weight_fund": 0.00234247
     },
     {
      "is_adr": false,
      "name": "PACCAR Inc",
      "ticker": "PCAR",
-     "weight_eq": 0.0023050498602582804,
-     "weight_fund": 0.00230164
-    },
-    {
-     "is_adr": false,
-     "name": "Strategy Inc",
-     "ticker": "MSTR",
-     "weight_eq": 0.0022628975042780788,
-     "weight_fund": 0.00225955
+     "weight_eq": 0.0023342947149907946,
+     "weight_fund": 0.0023307700000000002
     },
     {
      "is_adr": true,
      "name": "PDD Holdings Inc",
      "ticker": "PDD",
-     "weight_eq": 0.002212292644509022,
-     "weight_fund": 0.00220902
+     "weight_eq": 0.00229576653860029,
+     "weight_fund": 0.0022922999999999997
     },
     {
      "is_adr": false,
-     "name": "Astera Labs Inc",
-     "ticker": "ALAB",
-     "weight_eq": 0.0022045912518388455,
-     "weight_fund": 0.00220133
+     "name": "Strategy Inc",
+     "ticker": "MSTR",
+     "weight_eq": 0.002238570173805341,
+     "weight_fund": 0.0022351899999999997
+    },
+    {
+     "is_adr": false,
+     "name": "Honeywell Aerospace Inc",
+     "ticker": "HONA",
+     "weight_eq": 0.002198309381216355,
+     "weight_fund": 0.00219499
     },
     {
      "is_adr": false,
      "name": "Autodesk Inc",
      "ticker": "ADSK",
-     "weight_eq": 0.002165263073664872,
-     "weight_fund": 0.00216206
+     "weight_eq": 0.002189656315346484,
+     "weight_fund": 0.00218635
     },
     {
      "is_adr": false,
-     "name": "Teradyne Inc",
-     "ticker": "TER",
-     "weight_eq": 0.002093917532205391,
-     "weight_fund": 0.0020908199999999997
-    },
-    {
-     "is_adr": false,
-     "name": "PayPal Holdings Inc",
-     "ticker": "PYPL",
-     "weight_eq": 0.002067768850460486,
-     "weight_fund": 0.00206471
-    },
-    {
-     "is_adr": false,
-     "name": "Coca-Cola Europacific Partners PLC",
-     "ticker": "CCEP",
-     "weight_eq": 0.002066286657852962,
-     "weight_fund": 0.00206323
+     "name": "Astera Labs Inc",
+     "ticker": "ALAB",
+     "weight_eq": 0.0021844584667510404,
+     "weight_fund": 0.00218116
     },
     {
      "is_adr": false,
      "name": "Xcel Energy Inc",
      "ticker": "XEL",
-     "weight_eq": 0.0020611089985415423,
-     "weight_fund": 0.00205806
+     "weight_eq": 0.0021402817612510366,
+     "weight_fund": 0.00213705
+    },
+    {
+     "is_adr": false,
+     "name": "PayPal Holdings Inc",
+     "ticker": "PYPL",
+     "weight_eq": 0.002111498299086672,
+     "weight_fund": 0.00210831
+    },
+    {
+     "is_adr": false,
+     "name": "Coca-Cola Europacific Partners PLC",
+     "ticker": "CCEP",
+     "weight_eq": 0.0020917785228160967,
+     "weight_fund": 0.00208862
     },
     {
      "is_adr": false,
      "name": "Keurig Dr Pepper Inc",
      "ticker": "KDP",
-     "weight_eq": 0.0020317555760236117,
-     "weight_fund": 0.00202875
+     "weight_eq": 0.0020819737178547496,
+     "weight_fund": 0.0020788300000000003
     },
     {
      "is_adr": false,
      "name": "Exelon Corp",
      "ticker": "EXC",
-     "weight_eq": 0.001975352138418362,
-     "weight_fund": 0.00197243
+     "weight_eq": 0.0020539614201255467,
+     "weight_fund": 0.00205086
+    },
+    {
+     "is_adr": false,
+     "name": "Teradyne Inc",
+     "ticker": "TER",
+     "weight_eq": 0.002007881841343974,
+     "weight_fund": 0.00200485
     },
     {
      "is_adr": false,
      "name": "IDEXX Laboratories Inc",
      "ticker": "IDXX",
-     "weight_eq": 0.001895534063540195,
-     "weight_fund": 0.00189273
-    },
-    {
-     "is_adr": false,
-     "name": "Thomson Reuters Corp",
-     "ticker": "TRI",
-     "weight_eq": 0.001869715870687508,
-     "weight_fund": 0.00186695
+     "weight_eq": 0.001966649581869135,
+     "weight_fund": 0.0019636799999999998
     },
     {
      "is_adr": false,
      "name": "Roper Technologies Inc",
      "ticker": "ROP",
-     "weight_eq": 0.0018628256780255032,
-     "weight_fund": 0.0018600700000000001
-    },
-    {
-     "is_adr": false,
-     "name": "Nebius Group NV",
-     "ticker": "NBIS",
-     "weight_eq": 0.0018596109224375617,
-     "weight_fund": 0.0018568599999999999
+     "weight_eq": 0.0019274003166561413,
+     "weight_fund": 0.00192449
     },
     {
      "is_adr": false,
      "name": "Microchip Technology Inc",
      "ticker": "MCHP",
-     "weight_eq": 0.0018482140630634895,
-     "weight_fund": 0.0018454799999999998
+     "weight_eq": 0.00190911270290801,
+     "weight_fund": 0.0019062299999999999
     },
     {
      "is_adr": false,
-     "name": "Workday Inc",
-     "ticker": "WDAY",
-     "weight_eq": 0.0017120626542844828,
-     "weight_fund": 0.00170953
+     "name": "Thomson Reuters Corp",
+     "ticker": "TRI",
+     "weight_eq": 0.0019000990926268937,
+     "weight_fund": 0.00189723
     },
     {
      "is_adr": false,
      "name": "Ferrovial NV",
      "ticker": "FER",
-     "weight_eq": 0.0017004454689822656,
-     "weight_fund": 0.00169793
+     "weight_eq": 0.001799777610198071,
+     "weight_fund": 0.00179706
+    },
+    {
+     "is_adr": false,
+     "name": "Nebius Group NV",
+     "ticker": "NBIS",
+     "weight_eq": 0.0017785755957923787,
+     "weight_fund": 0.00177589
     },
     {
      "is_adr": false,
      "name": "Paychex Inc",
      "ticker": "PAYX",
-     "weight_eq": 0.0016630601649019396,
-     "weight_fund": 0.0016606000000000001
+     "weight_eq": 0.0017042734017083774,
+     "weight_fund": 0.0017016999999999998
+    },
+    {
+     "is_adr": false,
+     "name": "Workday Inc",
+     "ticker": "WDAY",
+     "weight_eq": 0.0016603971498844112,
+     "weight_fund": 0.00165789
     },
     {
      "is_adr": false,
      "name": "Take-Two Interactive Software Inc",
      "ticker": "TTWO",
-     "weight_eq": 0.001560788874982762,
-     "weight_fund": 0.0015584799999999999
+     "weight_eq": 0.0015672164498227391,
+     "weight_fund": 0.0015648500000000002
     },
     {
      "is_adr": false,
      "name": "Old Dominion Freight Line Inc",
      "ticker": "ODFL",
-     "weight_eq": 0.0015361724599199595,
-     "weight_fund": 0.0015339
-    },
-    {
-     "is_adr": false,
-     "name": "Rocket Lab Corp",
-     "ticker": "RKLB",
-     "weight_eq": 0.0014989974669528633,
-     "weight_fund": 0.00149678
+     "weight_eq": 0.0015489188209520729,
+     "weight_fund": 0.0015465799999999999
     },
     {
      "is_adr": false,
      "name": "Axon Enterprise Inc",
      "ticker": "AXON",
-     "weight_eq": 0.0014694237185067871,
-     "weight_fund": 0.00146725
+     "weight_eq": 0.0015423288703243236,
+     "weight_fund": 0.00154
+    },
+    {
+     "is_adr": false,
+     "name": "Rocket Lab Corp",
+     "ticker": "RKLB",
+     "weight_eq": 0.0015329146551418245,
+     "weight_fund": 0.0015306
     },
     {
      "is_adr": false,
      "name": "GE HealthCare Technologies Inc",
      "ticker": "GEHC",
-     "weight_eq": 0.0014645965777174174,
-     "weight_fund": 0.00146243
-    },
-    {
-     "is_adr": false,
-     "name": "Alnylam Pharmaceuticals Inc",
-     "ticker": "ALNY",
-     "weight_eq": 0.00132921630968692,
-     "weight_fund": 0.00132725
+     "weight_eq": 0.001496810138404687,
+     "weight_fund": 0.00149455
     },
     {
      "is_adr": false,
      "name": "Dexcom Inc",
      "ticker": "DXCM",
-     "weight_eq": 0.0012681159238862047,
-     "weight_fund": 0.0012662399999999999
+     "weight_eq": 0.0013072639293153483,
+     "weight_fund": 0.00130529
     },
     {
      "is_adr": false,
      "name": "CoreWeave Inc",
      "ticker": "CRWV",
-     "weight_eq": 0.0012545558644903405,
-     "weight_fund": 0.0012526999999999998
+     "weight_eq": 0.0012086149723497988,
+     "weight_fund": 0.00120679
     },
     {
      "is_adr": false,
      "name": "Copart Inc",
      "ticker": "CPRT",
-     "weight_eq": 0.0011460153004339319,
-     "weight_fund": 0.00114432
+     "weight_eq": 0.0011857103871132293,
+     "weight_fund": 0.00118392
+    },
+    {
+     "is_adr": false,
+     "name": "Alnylam Pharmaceuticals Inc",
+     "ticker": "ALNY",
+     "weight_eq": 0.00100910371633856,
+     "weight_fund": 0.00100758
     }
    ],
    "equity_count": 101,
    "etf": "QQQ",
    "fund": {
-    "nav": 725.170742,
-    "prev_shares_outstanding": 669650000.0,
-    "shares_outstanding": 675600000.0,
-    "total_net_assets": 489925353233.6
+    "nav": 715.178947,
+    "prev_shares_outstanding": 675600000.0,
+    "shares_outstanding": 672400000.0,
+    "total_net_assets": 480886323695.28
    },
    "index_id": "QQQ",
    "next_events": [
@@ -2491,8 +2478,8 @@
      "kind": "annual_reconstitution",
      "notes": "Annual reconstitution and rebalance: company-level (24%/20%, 4.5%/48%/40%) then security-level (15%/14%, top-5 40%/38.5%) constraints; announced after the close on the sixth trading day prior to the effective date; effective at market open on the first trading day following the third Friday (trades at the third-Friday close).",
      "reference_date": "2026-11-30",
-     "trading_days_to_reference": 21,
-     "trading_days_to_trade": 35
+     "trading_days_to_reference": 20,
+     "trading_days_to_trade": 34
     },
     {
      "announcement_date": "2027-03-12",
@@ -2501,8 +2488,8 @@
      "kind": "quarterly_rebalance",
      "notes": "Quarterly rebalance: company-level constraints (24%/20%, 4.5%/48%/40%); announced after the close on the sixth trading day prior to the effective date; effective at market open on the first trading day following the third Friday (trades at the third-Friday close).",
      "reference_date": "2027-02-26",
-     "trading_days_to_reference": 81,
-     "trading_days_to_trade": 96
+     "trading_days_to_reference": 80,
+     "trading_days_to_trade": 95
     },
     {
      "announcement_date": "2027-06-10",
@@ -2511,16 +2498,16 @@
      "kind": "quarterly_rebalance",
      "notes": "Quarterly rebalance: company-level constraints (24%/20%, 4.5%/48%/40%); announced after the close on the sixth trading day prior to the effective date; effective at market open on the first trading day following the third Friday (trades at the third-Friday close).",
      "reference_date": "2027-05-28",
-     "trading_days_to_reference": 145,
-     "trading_days_to_trade": 158
+     "trading_days_to_reference": 144,
+     "trading_days_to_trade": 157
     }
    ],
-   "prev_as_of": "2026-10-27",
+   "prev_as_of": "2026-10-28",
    "source": "invesco-dng-api",
    "warnings": []
   },
   "SOXX": {
-   "as_of": "2026-10-28",
+   "as_of": "2026-10-29",
    "caps": {
     "binding_constraints": [
      "SOXX 8% single-name cap: AMD, INTC, MU, NVDA",
@@ -2536,19 +2523,34 @@
        "AMD",
        "INTC"
       ],
-      "value": 0.09567173758340895
+      "value": 0.095139790220686
      },
      {
       "description": "constituent outside the initial top-5 above the 4% cap",
       "limit": 0.04,
       "rule": "soxx_outside_top5_cap_4",
       "tickers": [
-       "MRVL",
        "TXN",
        "ADI",
-       "QCOM"
+       "QCOM",
+       "MRVL"
       ],
-      "value": 0.046282201107303855
+      "value": 0.0474152734836408
+     },
+     {
+      "description": "cumulative ADR weight above 10%",
+      "limit": 0.1,
+      "rule": "soxx_adr_aggregate_10",
+      "tickers": [
+       "ARM",
+       "ASML",
+       "ASX",
+       "SKHY",
+       "STM",
+       "TSM",
+       "UMC"
+      ],
+      "value": 0.10025120112234556
      }
     ],
     "event_type": "quarterly_rebalance",
@@ -2556,162 +2558,162 @@
     "forced_buyers": [
      [
       "AVGO",
-      0.006040808098758704
+      0.005519741104628356
      ],
      [
       "NVDA",
-      0.004050086734916775
-     ],
-     [
-      "AMAT",
-      0.0032412266916652804
-     ],
-     [
-      "KLAC",
-      0.0032319748539494098
-     ],
-     [
-      "NXPI",
-      0.0031305210278413168
-     ],
-     [
-      "LRCX",
-      0.003006850417755412
-     ],
-     [
-      "MPWR",
-      0.0028351132768733057
-     ],
-     [
-      "TER",
-      0.0024007171629964914
-     ],
-     [
-      "MCHP",
-      0.0020975262941772925
-     ],
-     [
-      "ALAB",
-      0.002086709888916665
-     ],
-     [
-      "CRDO",
-      0.0014490526876754055
-     ],
-     [
-      "ON",
-      0.0014443766115045248
-     ],
-     [
-      "ENTG",
-      0.0011950128010323902
-     ],
-     [
-      "TSEM",
-      0.0010033505367410163
-     ],
-     [
-      "MTSI",
-      0.000916601136342907
-     ],
-     [
-      "CBRS",
-      0.0005338272417654052
+      0.0034855869733565054
      ],
      [
       "MU",
-      0.00015611479227989333
+      0.002952751317027477
      ],
      [
-      "TSM",
-      8.392159556815104e-05
+      "NXPI",
+      0.0027444213559905464
      ],
      [
-      "SKHY",
-      7.935961939428346e-05
+      "AMAT",
+      0.002725191027219971
      ],
      [
-      "ASML",
-      3.8873237483192866e-05
+      "LRCX",
+      0.0024997963371367407
      ],
      [
-      "ASX",
-      2.5542744894611197e-05
+      "MPWR",
+      0.0023276347508411482
      ],
      [
-      "UMC",
-      1.5096334573509555e-05
+      "KLAC",
+      0.0022746057104925874
      ],
      [
-      "ARM",
-      1.1740470748577807e-05
+      "TER",
+      0.0018832651264728134
      ],
      [
-      "STM",
-      1.0973577949931028e-05
+      "MCHP",
+      0.001772462275038765
+     ],
+     [
+      "ALAB",
+      0.0016915045226170225
+     ],
+     [
+      "ON",
+      0.0011919375077009409
+     ],
+     [
+      "CRDO",
+      0.0011438646605832683
+     ],
+     [
+      "ENTG",
+      0.0009954979245155402
+     ],
+     [
+      "TSEM",
+      0.0008081991117080013
+     ],
+     [
+      "MTSI",
+      0.0007355562821500308
+     ],
+     [
+      "CBRS",
+      0.00045303980738475597
      ]
     ],
     "forced_sellers": [
      [
       "AMD",
-      -0.01567173758340895
-     ],
-     [
-      "MRVL",
-      -0.0062822011073038544
+      -0.015139790220685997
      ],
      [
       "TXN",
-      -0.006225608769167515
+      -0.007415273483640801
      ],
      [
       "ADI",
-      -0.006036473452283232
-     ],
-     [
-      "INTC",
-      -0.003090514103287645
+      -0.007298949069687213
      ],
      [
       "QCOM",
-      -0.0017788428203533366
+      -0.0029939846899955935
+     ],
+     [
+      "INTC",
+      -0.0013257248032293584
+     ],
+     [
+      "MRVL",
+      -0.0007801324052800485
+     ],
+     [
+      "TSM",
+      -7.881277175481732e-05
+     ],
+     [
+      "SKHY",
+      -7.465534992030787e-05
+     ],
+     [
+      "ASML",
+      -3.74448594009074e-05
+     ],
+     [
+      "ASX",
+      -2.476575808335428e-05
+     ],
+     [
+      "UMC",
+      -1.3832067547787756e-05
+     ],
+     [
+      "ARM",
+      -1.0883209844760218e-05
+     ],
+     [
+      "STM",
+      -1.0807105793621957e-05
      ]
     ],
     "metrics": {
-     "adr_sum": 0.09973449241938775,
-     "max_weight": 0.09567173758340895,
+     "adr_sum": 0.10025120112234556,
+     "max_weight": 0.095139790220686,
      "n_constituents": 30.0,
      "names_over_4_outside_top5": 4.0,
      "names_over_8": 2.0,
-     "top5_sum": 0.40851524206074125,
-     "turnover": 0.03908537783580449
+     "top5_sum": 0.403682007896667,
+     "turnover": 0.03520505579486452
     },
     "notes": [],
     "special_rebalance": null,
     "target_metrics": {
-     "adr_sum": 0.10000000000000002,
+     "adr_sum": 0.1,
      "max_weight": 0.08,
      "names_over_4_outside_top5": 0.0,
      "names_over_8": 0.0,
-     "top5_sum": 0.4
+     "top5_sum": 0.399174572267764
     }
    },
    "decomposition": {
-    "curr_as_of": "2026-10-28",
+    "curr_as_of": "2026-10-29",
     "mode": "shares_and_prices",
     "n_changes": 34,
     "n_notable": 0,
     "notable": [],
-    "prev_as_of": "2026-10-27",
-    "scale_factor": 0.9689784878338192,
+    "prev_as_of": "2026-10-28",
+    "scale_factor": 1.0048835637349731,
     "summary": {
      "active_trade_tickers": [],
      "classification_counts": {
-      "active_trade": 4,
+      "active_trade": 2,
       "corporate_action_suspect": 0,
       "entry": 0,
       "exit": 0,
-      "flow_only": 30
+      "flow_only": 32
      },
      "classification_counts_equity": {
       "active_trade": 0,
@@ -2723,36 +2725,36 @@
      "entries": [],
      "exits": [],
      "fund_flow": {
-      "flow_pct_from_scale_factor": -0.031021512166180765,
-      "flow_pct_from_shares_outstanding": 0.005285412262156397,
-      "flow_shares": 500000.0,
-      "implied_flow_usd_from_scale_factor": -1539488764.658127,
-      "scale_factor": 0.9689784878338192,
-      "shares_outstanding_curr": 95100000.0,
-      "shares_outstanding_prev": 94600000.0
+      "flow_pct_from_scale_factor": 0.004883563734973118,
+      "flow_pct_from_shares_outstanding": -0.031019978969505813,
+      "flow_shares": -2950000.0,
+      "implied_flow_usd_from_scale_factor": 231245538.51291278,
+      "scale_factor": 1.0048835637349731,
+      "shares_outstanding_curr": 92150000.0,
+      "shares_outstanding_prev": 95100000.0
      },
-     "gross_drift": 0.011579083807662316,
-     "gross_total_change": 0.01158736842768374,
-     "gross_trade": 2.8578204268682752e-05,
+     "gross_drift": 0.013270815163817316,
+     "gross_total_change": 0.013283260000047304,
+     "gross_trade": 1.849906094139358e-05,
      "largest_drift_down": {
-      "name": "NVIDIA",
-      "ticker": "NVDA",
-      "value": -0.0025389170831283947
+      "name": "MARVELL TECHNOLOGY",
+      "ticker": "MRVL",
+      "value": -0.005500082230095564
      },
      "largest_drift_up": {
-      "name": "SK HYNIX AMERICAN DEPOSITARY SHARE",
-      "ticker": "SKHY",
-      "value": 0.002938853808801517
+      "name": "NXP SEMICONDUCTORS NV",
+      "ticker": "NXPI",
+      "value": 0.0024991906940823178
      },
      "largest_trade_down": {
-      "name": "ADVANCED MICRO DEVICES",
-      "ticker": "AMD",
-      "value": -9.636836232757018e-07
+      "name": "STMICROELECTRONICS ADR",
+      "ticker": "STM",
+      "value": 4.912233739565175e-08
      },
      "largest_trade_up": {
-      "name": "MONOLITHIC POWER SYSTEMS INC",
-      "ticker": "MPWR",
-      "value": 3.1353375525705607e-07
+      "name": "ADVANCED MICRO DEVICES",
+      "ticker": "AMD",
+      "value": 1.0633217263078532e-06
      },
      "n_active_trades": 0,
      "n_changes": 34,
@@ -2762,163 +2764,163 @@
      "n_equities": 30,
      "n_exits": 0,
      "n_prev": 34,
-     "portfolio_return": 0.021303063754859464,
-     "scale_factor": 0.9689784878338192,
-     "sum_drift": 7.060358428543495e-17,
-     "sum_trade": -2.2925793750384893e-17,
-     "total_market_value_curr": 48087473564.57,
-     "total_market_value_prev": 48591345512.4
+     "portfolio_return": -0.015298630507554423,
+     "scale_factor": 1.0048835637349731,
+     "sum_drift": -8.672685643642056e-17,
+     "sum_trade": 1.0149656993769379e-16,
+     "total_market_value_curr": 47582517807.6,
+     "total_market_value_prev": 48087473564.57
     },
     "top_changes": [
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": 0.002938853808801517,
-      "name": "SK HYNIX AMERICAN DEPOSITARY SHARE",
-      "price_return": 0.13304898183819458,
-      "rel_share_change": -5.961987440405991e-07,
-      "shares_curr": 8700192.0,
-      "shares_prev": 8978731.0,
-      "ticker": "SKHY",
-      "total_change": 0.002938543380272239,
-      "trade": -3.104285292779285e-07,
-      "w_curr": 0.029798230519969573,
-      "w_prev": 0.026859687139697334
+      "drift": -0.005500082230095564,
+      "name": "MARVELL TECHNOLOGY",
+      "price_return": -0.1323663818795947,
+      "rel_share_change": 4.3575915542604093e-08,
+      "shares_curr": 8883564.0,
+      "shares_prev": 8840391.0,
+      "ticker": "MRVL",
+      "total_change": -0.005499627434465262,
+      "trade": 4.5479563030165204e-07,
+      "w_curr": 0.0407636555005964,
+      "w_prev": 0.04626328293506166
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": 0.0028154586506799195,
+      "drift": -0.0027959779957765774,
       "name": "MICRON TECHNOLOGY",
-      "price_return": 0.05864808992635351,
-      "rel_share_change": 8.432143376868595e-07,
-      "shares_curr": 3903381.0,
-      "shares_prev": 4028343.0,
+      "price_return": -0.04979506321003224,
+      "rel_share_change": -1.0450001197703784e-07,
+      "shares_curr": 3922443.0,
+      "shares_prev": 3903381.0,
       "ticker": "MU",
-      "total_change": 0.0028147420848224913,
-      "trade": -7.165658574281863e-07,
-      "w_curr": 0.07981124846321128,
-      "w_prev": 0.07699650637838878
+      "total_change": -0.002795130139504623,
+      "trade": 8.478562719543836e-07,
+      "w_curr": 0.07701611832370665,
+      "w_prev": 0.07981124846321128
      },
      {
       "asset_class": "equity",
       "classification": "flow_only",
-      "drift": -0.0025389170831283947,
-      "name": "NVIDIA",
-      "price_return": -0.011746352207029465,
-      "rel_share_change": 1.9245032041315113e-06,
-      "shares_curr": 16950258.0,
-      "shares_prev": 17492881.0,
-      "ticker": "NVDA",
-      "total_change": -0.002539516611391665,
-      "trade": -5.995282632703658e-07,
-      "w_curr": 0.07591886820874294,
-      "w_prev": 0.0784583848201346
-     },
-     {
-      "asset_class": "equity",
-      "classification": "flow_only",
-      "drift": -0.001447530445465809,
-      "name": "TERADYNE",
-      "price_return": -0.03225407810182901,
-      "rel_share_change": -2.8211801308408724e-06,
-      "shares_curr": 4015327.0,
-      "shares_prev": 4143888.0,
-      "ticker": "TER",
-      "total_change": -0.0014478611238495295,
-      "trade": -3.3067838372050073e-07,
-      "w_curr": 0.02615568954337198,
-      "w_prev": 0.027603550667221508
-     },
-     {
-      "asset_class": "equity",
-      "classification": "flow_only",
-      "drift": -0.0011693884894094855,
-      "name": "QUALCOMM",
-      "price_return": -0.006515719172503598,
-      "rel_share_change": 3.283689530730882e-06,
-      "shares_curr": 10975667.0,
-      "shares_prev": 11327012.0,
-      "ticker": "QCOM",
-      "total_change": -0.0011696615181169684,
-      "trade": -2.7302870748285857e-07,
-      "w_curr": 0.04176176542719473,
-      "w_prev": 0.0429314269453117
-     },
-     {
-      "asset_class": "equity",
-      "classification": "flow_only",
-      "drift": 0.0010324449566129351,
-      "name": "ADVANCED MICRO DEVICES",
-      "price_return": 0.032449220004997725,
-      "rel_share_change": -2.554521276731947e-07,
-      "shares_curr": 7950231.0,
-      "shares_prev": 8204757.0,
-      "ticker": "AMD",
-      "total_change": 0.0010314812729896594,
-      "trade": -9.636836232757018e-07,
-      "w_curr": 0.09563263109393762,
-      "w_prev": 0.09460114982094796
-     },
-     {
-      "asset_class": "equity",
-      "classification": "flow_only",
-      "drift": 0.0010117793019820062,
-      "name": "LAM RESEARCH",
-      "price_return": 0.05385094457131001,
-      "rel_share_change": -2.2961766443785336e-06,
-      "shares_curr": 6206448.0,
-      "shares_prev": 6405160.0,
-      "ticker": "LRCX",
-      "total_change": 0.001011382332992597,
-      "trade": -3.969689894092743e-07,
-      "w_curr": 0.03275948005970246,
-      "w_prev": 0.03174809772670986
-     },
-     {
-      "asset_class": "equity",
-      "classification": "flow_only",
-      "drift": 0.0009877109327979597,
-      "name": "APPLIED MATERIAL INC",
-      "price_return": 0.05069077867299776,
-      "rel_share_change": -2.6432542254983815e-07,
-      "shares_curr": 4082002.0,
-      "shares_prev": 4212687.0,
-      "ticker": "AMAT",
-      "total_change": 0.0009873547727399928,
-      "trade": -3.561600579668478e-07,
-      "w_curr": 0.035312997463254954,
-      "w_prev": 0.03432564269051496
-     },
-     {
-      "asset_class": "equity",
-      "classification": "flow_only",
-      "drift": -0.0009812526645437483,
-      "name": "ON SEMICONDUCTOR CORP",
-      "price_return": -0.038642430405491424,
-      "rel_share_change": 1.4613711496469506e-06,
-      "shares_curr": 10005608.0,
-      "shares_prev": 10325919.0,
-      "ticker": "ON",
-      "total_change": -0.000981384222414776,
-      "trade": -1.3155787102758776e-07,
-      "w_curr": 0.015736408610111323,
-      "w_prev": 0.0167177928325261
-     },
-     {
-      "asset_class": "equity",
-      "classification": "flow_only",
-      "drift": -0.0009770916100730123,
+      "drift": 0.0024991906940823178,
       "name": "NXP SEMICONDUCTORS NV",
-      "price_return": -0.007140039447731783,
-      "rel_share_change": -5.455684343180778e-07,
-      "shares_curr": 6516401.0,
-      "shares_prev": 6725025.0,
+      "price_return": 0.05685565576701501,
+      "rel_share_change": 1.130678835004062e-07,
+      "shares_curr": 6548225.0,
+      "shares_prev": 6516401.0,
       "ticker": "NXPI",
-      "total_change": -0.0009774451977315052,
-      "trade": -3.535876584928599e-07,
-      "w_curr": 0.0341068649715548,
-      "w_prev": 0.03508431016928631
+      "total_change": 0.002499601652239343,
+      "trade": 4.1095815702524296e-07,
+      "w_curr": 0.036606466623794146,
+      "w_prev": 0.0341068649715548
+     },
+     {
+      "asset_class": "equity",
+      "classification": "flow_only",
+      "drift": 0.002497532334172478,
+      "name": "KLA",
+      "price_return": 0.05454430937834598,
+      "rel_share_change": 2.7598594520839015e-08,
+      "shares_curr": 10716980.0,
+      "shares_prev": 10664897.0,
+      "ticker": "KLAC",
+      "total_change": 0.002497952459694766,
+      "trade": 4.2012552228798405e-07,
+      "w_curr": 0.03771015162870181,
+      "w_prev": 0.035212199169007044
+     },
+     {
+      "asset_class": "equity",
+      "classification": "flow_only",
+      "drift": -0.0017645682682058544,
+      "name": "INTEL CORPORATION",
+      "price_return": -0.036218988799330165,
+      "rel_share_change": -2.4213475025014475e-07,
+      "shares_curr": 42012808.0,
+      "shares_prev": 41808643.0,
+      "ticker": "INTC",
+      "total_change": -0.0017636845186103645,
+      "trade": 8.837495954899799e-07,
+      "w_curr": 0.0812928657579817,
+      "w_prev": 0.08305655027659206
+     },
+     {
+      "asset_class": "equity",
+      "classification": "flow_only",
+      "drift": 0.001261633392161579,
+      "name": "ANALOG DEVICES",
+      "price_return": 0.01169822775352003,
+      "rel_share_change": 5.020277276113205e-07,
+      "shares_curr": 5192240.0,
+      "shares_prev": 5167004.0,
+      "ticker": "ADI",
+      "total_change": 0.0012621825634028527,
+      "trade": 5.491712412736272e-07,
+      "w_curr": 0.04727983828633535,
+      "w_prev": 0.046017655722932496
+     },
+     {
+      "asset_class": "equity",
+      "classification": "flow_only",
+      "drift": 0.0012143911770668286,
+      "name": "QUALCOMM",
+      "price_return": 0.013335519484068303,
+      "rel_share_change": -4.868254762646629e-07,
+      "shares_curr": 11029262.0,
+      "shares_prev": 10975667.0,
+      "ticker": "QCOM",
+      "total_change": 0.0012148478678120703,
+      "trade": 4.56690745241628e-07,
+      "w_curr": 0.0429766132950068,
+      "w_prev": 0.04176176542719473
+     },
+     {
+      "asset_class": "equity",
+      "classification": "flow_only",
+      "drift": 0.0011889000072125358,
+      "name": "TEXAS INSTRUMENT",
+      "price_return": 0.010037762644030668,
+      "rel_share_change": -5.225023100852155e-07,
+      "shares_curr": 7206578.0,
+      "shares_prev": 7171559.0,
+      "ticker": "TXN",
+      "total_change": 0.001189401970849581,
+      "trade": 5.01963637045133e-07,
+      "w_curr": 0.047396115700287504,
+      "w_prev": 0.04620671372943792
+     },
+     {
+      "asset_class": "equity",
+      "classification": "flow_only",
+      "drift": 0.001036558926654517,
+      "name": "APPLIED MATERIAL INC",
+      "price_return": 0.013605769230769393,
+      "rel_share_change": 6.900806415188754e-08,
+      "shares_curr": 4101937.0,
+      "shares_prev": 4082002.0,
+      "ticker": "AMAT",
+      "total_change": 0.0010369654036478243,
+      "trade": 4.0647699330736975e-07,
+      "w_curr": 0.03634996286690278,
+      "w_prev": 0.035312997463254954
+     },
+     {
+      "asset_class": "equity",
+      "classification": "flow_only",
+      "drift": -0.00103604699082167,
+      "name": "TERADYNE",
+      "price_return": -0.0543034095262418,
+      "rel_share_change": 4.6956846211365644e-07,
+      "shares_curr": 4034938.0,
+      "shares_prev": 4015327.0,
+      "ticker": "TER",
+      "total_change": -0.001035756029700522,
+      "trade": 2.90961121147959e-07,
+      "w_curr": 0.025119933513671457,
+      "w_prev": 0.02615568954337198
      }
     ]
    },
@@ -2927,220 +2929,220 @@
      "is_adr": false,
      "name": "ADVANCED MICRO DEVICES",
      "ticker": "AMD",
-     "weight_eq": 0.09567173758340895,
-     "weight_fund": 0.0956
+     "weight_eq": 0.09513979022068599,
+     "weight_fund": 0.0951
     },
     {
      "is_adr": false,
      "name": "INTEL CORPORATION",
      "ticker": "INTC",
-     "weight_eq": 0.08309051410328765,
-     "weight_fund": 0.08310000000000001
+     "weight_eq": 0.08132572480322935,
+     "weight_fund": 0.08130000000000001
     },
     {
      "is_adr": false,
      "name": "MICRON TECHNOLOGY",
      "ticker": "MU",
-     "weight_eq": 0.07984388520772011,
-     "weight_fund": 0.07980000000000001
+     "weight_eq": 0.07704724868297251,
+     "weight_fund": 0.077
     },
     {
      "is_adr": false,
      "name": "NVIDIA",
      "ticker": "NVDA",
-     "weight_eq": 0.07594991326508323,
-     "weight_fund": 0.0759
+     "weight_eq": 0.07651441302664348,
+     "weight_fund": 0.0765
     },
     {
      "is_adr": false,
      "name": "BROADCOM INC",
      "ticker": "AVGO",
-     "weight_eq": 0.0739591919012413,
-     "weight_fund": 0.0739
-    },
-    {
-     "is_adr": false,
-     "name": "MARVELL TECHNOLOGY",
-     "ticker": "MRVL",
-     "weight_eq": 0.046282201107303855,
-     "weight_fund": 0.0463
+     "weight_eq": 0.07365483116313559,
+     "weight_fund": 0.0736
     },
     {
      "is_adr": false,
      "name": "TEXAS INSTRUMENT",
      "ticker": "TXN",
-     "weight_eq": 0.046225608769167516,
-     "weight_fund": 0.0462
+     "weight_eq": 0.047415273483640795,
+     "weight_fund": 0.047400000000000005
     },
     {
      "is_adr": false,
      "name": "ANALOG DEVICES",
      "ticker": "ADI",
-     "weight_eq": 0.04603647345228323,
-     "weight_fund": 0.046
+     "weight_eq": 0.04729894906968721,
+     "weight_fund": 0.0473
     },
     {
      "is_adr": false,
      "name": "QUALCOMM",
      "ticker": "QCOM",
-     "weight_eq": 0.04177884282035334,
-     "weight_fund": 0.0418
+     "weight_eq": 0.04299398468999559,
+     "weight_fund": 0.043
     },
     {
      "is_adr": false,
-     "name": "APPLIED MATERIAL INC",
-     "ticker": "AMAT",
-     "weight_eq": 0.035327437799651654,
-     "weight_fund": 0.0353
+     "name": "MARVELL TECHNOLOGY",
+     "ticker": "MRVL",
+     "weight_eq": 0.04078013240528004,
+     "weight_fund": 0.0408
     },
     {
      "is_adr": false,
      "name": "KLA",
      "ticker": "KLAC",
-     "weight_eq": 0.03522659828655002,
-     "weight_fund": 0.0352
+     "weight_eq": 0.03772539428950741,
+     "weight_fund": 0.0377
     },
     {
      "is_adr": false,
      "name": "NXP SEMICONDUCTORS NV",
      "ticker": "NXPI",
-     "weight_eq": 0.03412081209128426,
-     "weight_fund": 0.0341
+     "weight_eq": 0.03662126316875455,
+     "weight_fund": 0.0366
+    },
+    {
+     "is_adr": false,
+     "name": "APPLIED MATERIAL INC",
+     "ticker": "AMAT",
+     "weight_eq": 0.0363646557315651,
+     "weight_fund": 0.0364
     },
     {
      "is_adr": false,
      "name": "LAM RESEARCH",
      "ticker": "LRCX",
-     "weight_eq": 0.032772876201243126,
-     "weight_fund": 0.032799999999999996
+     "weight_eq": 0.03335701324825596,
+     "weight_fund": 0.0333
     },
     {
      "is_adr": true,
      "name": "TAIWAN SEMICONDUCTOR MANUFACTURING",
      "ticker": "TSM",
-     "weight_eq": 0.031524063146194756,
-     "weight_fund": 0.0315
+     "weight_eq": 0.03145318364196128,
+     "weight_fund": 0.031400000000000004
     },
     {
      "is_adr": false,
      "name": "MONOLITHIC POWER SYSTEMS INC",
      "ticker": "MPWR",
-     "weight_eq": 0.030901043793468665,
-     "weight_fund": 0.030899999999999997
+     "weight_eq": 0.031059707571954132,
+     "weight_fund": 0.031
     },
     {
      "is_adr": true,
      "name": "SK HYNIX AMERICAN DEPOSITARY SHARE",
      "ticker": "SKHY",
-     "weight_eq": 0.029810415735149417,
+     "weight_eq": 0.029794008998989947,
      "weight_fund": 0.0298
     },
     {
      "is_adr": false,
      "name": "TERADYNE",
      "ticker": "TER",
-     "weight_eq": 0.02616638523569,
-     "weight_fund": 0.0262
+     "weight_eq": 0.02513008713569287,
+     "weight_fund": 0.025099999999999997
     },
     {
      "is_adr": false,
      "name": "MICROCHIP TECHNOLOGY INC",
      "ticker": "MCHP",
-     "weight_eq": 0.022861785595320688,
-     "weight_fund": 0.0229
+     "weight_eq": 0.023651545812817115,
+     "weight_fund": 0.0236
     },
     {
      "is_adr": false,
      "name": "ASTERA LABS",
      "ticker": "ALAB",
-     "weight_eq": 0.022743893229123888,
-     "weight_fund": 0.0227
-    },
-    {
-     "is_adr": false,
-     "name": "CREDO TECHNOLOGY GROUP HOLDING LTD",
-     "ticker": "CRDO",
-     "weight_eq": 0.015793810048494276,
-     "weight_fund": 0.0158
+     "weight_eq": 0.022571254278677854,
+     "weight_fund": 0.0226
     },
     {
      "is_adr": false,
      "name": "ON SEMICONDUCTOR CORP",
      "ticker": "ON",
-     "weight_eq": 0.015742843607147256,
-     "weight_fund": 0.015700000000000002
+     "weight_eq": 0.015905085804315502,
+     "weight_fund": 0.0159
+    },
+    {
+     "is_adr": false,
+     "name": "CREDO TECHNOLOGY GROUP HOLDING LTD",
+     "ticker": "CRDO",
+     "weight_eq": 0.01526360690686971,
+     "weight_fund": 0.015300000000000001
     },
     {
      "is_adr": true,
      "name": "ASML HOLDING ADR REPRESENTING",
      "ticker": "ASML",
-     "weight_eq": 0.01460222943595179,
-     "weight_fund": 0.0146
+     "weight_eq": 0.014943771332495817,
+     "weight_fund": 0.0149
     },
     {
      "is_adr": false,
      "name": "ENTEGRIS INC",
      "ticker": "ENTG",
-     "weight_eq": 0.013024926799109247,
-     "weight_fund": 0.013000000000000001
+     "weight_eq": 0.013283817150764866,
+     "weight_fund": 0.013300000000000001
     },
     {
      "is_adr": false,
      "name": "TOWER SEMICONDUCTOR",
      "ticker": "TSEM",
-     "weight_eq": 0.010935922429959387,
-     "weight_fund": 0.0109
-    },
-    {
-     "is_adr": false,
-     "name": "MACOM TECHNOLOGY SOLUTIONS",
-     "ticker": "MTSI",
-     "weight_eq": 0.00999040570488678,
-     "weight_fund": 0.01
+     "weight_eq": 0.010784521953236962,
+     "weight_fund": 0.0108
     },
     {
      "is_adr": true,
      "name": "ASE TECHNOLOGY HOLDING ADR REPRESE",
      "ticker": "ASX",
-     "weight_eq": 0.009594802118973263,
-     "weight_fund": 0.0096
+     "weight_eq": 0.009883701837711008,
+     "weight_fund": 0.009899999999999999
+    },
+    {
+     "is_adr": false,
+     "name": "MACOM TECHNOLOGY SOLUTIONS",
+     "ticker": "MTSI",
+     "weight_eq": 0.009815183854785504,
+     "weight_fund": 0.0098
     },
     {
      "is_adr": false,
      "name": "CEREBRAS SYSTEMS INC CLASS A",
      "ticker": "CBRS",
-     "weight_eq": 0.005818398548833901,
-     "weight_fund": 0.0058
+     "weight_eq": 0.0060453144251863085,
+     "weight_fund": 0.006
     },
     {
      "is_adr": true,
      "name": "UNITED MICRO ELECTRONICS ADR REP",
      "ticker": "UMC",
-     "weight_eq": 0.00567074304473813,
-     "weight_fund": 0.005699999999999999
+     "weight_eq": 0.005520203782225154,
+     "weight_fund": 0.0055000000000000005
     },
     {
      "is_adr": true,
      "name": "ARM HOLDINGS AMERICAN DEPOSITARY S",
      "ticker": "ARM",
-     "weight_eq": 0.004410156155142381,
-     "weight_fund": 0.0044
+     "weight_eq": 0.004343351848176963,
+     "weight_fund": 0.0043
     },
     {
      "is_adr": true,
      "name": "STMICROELECTRONICS ADR",
      "ticker": "STM",
-     "weight_eq": 0.004122082783238021,
-     "weight_fund": 0.0040999999999999995
+     "weight_eq": 0.004312979680785371,
+     "weight_fund": 0.0043
     }
    ],
    "equity_count": 30,
    "etf": "SOXX",
    "fund": {
     "nav": null,
-    "prev_shares_outstanding": 94600000.0,
-    "shares_outstanding": 95100000.0,
-    "total_net_assets": 48087222053.96001
+    "prev_shares_outstanding": 95100000.0,
+    "shares_outstanding": 92150000.0,
+    "total_net_assets": 47582269370.89
    },
    "index_id": "SOXX",
    "next_events": [
@@ -3151,8 +3153,8 @@
      "kind": "quarterly_rebalance",
      "notes": "Quarterly re-capping, no constituent changes; input data as of the last trading day of the preceding month; announced after the close of the first Friday of the rebalance month.",
      "reference_date": "2026-11-30",
-     "trading_days_to_reference": 21,
-     "trading_days_to_trade": 35
+     "trading_days_to_reference": 20,
+     "trading_days_to_trade": 34
     },
     {
      "announcement_date": "2027-03-05",
@@ -3161,8 +3163,8 @@
      "kind": "quarterly_rebalance",
      "notes": "Quarterly re-capping, no constituent changes; input data as of the last trading day of the preceding month; announced after the close of the first Friday of the rebalance month.",
      "reference_date": "2027-02-26",
-     "trading_days_to_reference": 81,
-     "trading_days_to_trade": 96
+     "trading_days_to_reference": 80,
+     "trading_days_to_trade": 95
     },
     {
      "announcement_date": "2027-06-04",
@@ -3171,11 +3173,11 @@
      "kind": "quarterly_rebalance",
      "notes": "Quarterly re-capping, no constituent changes; input data as of the last trading day of the preceding month; announced after the close of the first Friday of the rebalance month.",
      "reference_date": "2027-05-28",
-     "trading_days_to_reference": 145,
-     "trading_days_to_trade": 158
+     "trading_days_to_reference": 144,
+     "trading_days_to_trade": 157
     }
    ],
-   "prev_as_of": "2026-10-27",
+   "prev_as_of": "2026-10-28",
    "source": "blackrock-fund-document-csv",
    "warnings": [
     "ADR flag inferred from listing location for: TSM",
@@ -3183,6 +3185,6 @@
    ]
   }
  },
- "generated_utc": "2026-10-29T19:36:10Z",
- "today": "2026-10-29"
+ "generated_utc": "2026-10-30T19:18:51Z",
+ "today": "2026-10-30"
 }
