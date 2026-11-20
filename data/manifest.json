@@ -2,9 +2,9 @@
   "etfs": {
     "IGV": {
       "equity_count": 105,
-      "last_fetch_utc": "2026-11-20T21:47:13Z",
-      "last_message": "stored",
-      "last_status": "ok",
+      "last_fetch_utc": "2026-11-20T23:59:19Z",
+      "last_message": "IGV: all routes failed: CSV: HTTP 503; JSON: HTTP 503",
+      "last_status": "error",
       "latest_as_of": "2026-11-19",
       "row_count": 110,
       "source": "blackrock-fund-document-csv"
@@ -20,13 +20,13 @@
     },
     "SOXX": {
       "equity_count": 30,
-      "last_fetch_utc": "2026-11-20T21:47:11Z",
-      "last_message": "stored",
-      "last_status": "ok",
+      "last_fetch_utc": "2026-11-20T23:58:04Z",
+      "last_message": "SOXX: all routes failed: CSV: HTTP 503; JSON: HTTP 503",
+      "last_status": "error",
       "latest_as_of": "2026-11-19",
       "row_count": 34,
       "source": "blackrock-fund-document-csv"
     }
   },
-  "updated_utc": "2026-11-20T21:47:13Z"
+  "updated_utc": "2026-11-20T23:59:19Z"
 }
