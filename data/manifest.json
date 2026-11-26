@@ -2,31 +2,31 @@
   "etfs": {
     "IGV": {
       "equity_count": 105,
-      "last_fetch_utc": "2026-11-25T23:03:59Z",
+      "last_fetch_utc": "2026-11-26T22:57:59Z",
       "last_message": "stored",
       "last_status": "ok",
-      "latest_as_of": "2026-11-24",
-      "row_count": 110,
+      "latest_as_of": "2026-11-25",
+      "row_count": 111,
       "source": "blackrock-fund-document-csv"
     },
     "QQQ": {
       "equity_count": 101,
-      "last_fetch_utc": "2026-11-25T23:03:59Z",
+      "last_fetch_utc": "2026-11-26T22:57:59Z",
       "last_message": "stored",
       "last_status": "ok",
-      "latest_as_of": "2026-11-24",
+      "latest_as_of": "2026-11-25",
       "row_count": 106,
       "source": "invesco-dng-api"
     },
     "SOXX": {
       "equity_count": 30,
-      "last_fetch_utc": "2026-11-25T23:03:56Z",
+      "last_fetch_utc": "2026-11-26T22:57:57Z",
       "last_message": "stored",
       "last_status": "ok",
-      "latest_as_of": "2026-11-24",
-      "row_count": 34,
+      "latest_as_of": "2026-11-25",
+      "row_count": 35,
       "source": "blackrock-fund-document-csv"
     }
   },
-  "updated_utc": "2026-11-25T23:03:59Z"
+  "updated_utc": "2026-11-26T22:57:59Z"
 }
